@@ -1,6 +1,12 @@
 <template>
   <div id="Postit">
-    <iframe name="dummyframe" id="dummyframe" style="display: none"></iframe>
+    <iframe
+      width="1px"
+      height="1px"
+      name="dummyframe"
+      id="dummyframe"
+      style="display: none"
+    ></iframe>
     <transition name="slide-fade">
       <div id="Formen" v-if="!show">
         <h1>Lägg till Projekt</h1>
@@ -56,7 +62,7 @@
 </template>
 <style scoped>
 #Addbtn {
-  position: absolute;
+  position: fixed;
   font-size: 40px;
   font-weight: bolder;
   background-color: chartreuse;
@@ -66,8 +72,9 @@
   margin: 0;
   border-radius: 100px;
   box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.39);
-  right: 10%;
-  top: 90%;
+  right: 5vw;
+  top: 80vh;
+  z-index: 3;
 }
 #Addbtn:active {
   background-color: rgb(6, 143, 36);
@@ -85,14 +92,12 @@
   opacity: 0;
 }
 #Postit {
-  position: absolute;
-  display: flex;
-
-  justify-content: center;
 }
 #Formen {
   position: absolute;
+  z-index: 1;
   top: 25%;
+  left: 40%;
   background: rgb(255, 255, 255);
   width: 20vw;
   height: 50vh;
