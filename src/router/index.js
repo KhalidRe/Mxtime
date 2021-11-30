@@ -4,29 +4,34 @@ import Home from "../views/Home.vue";
 import Histor from "../views/Histor.vue";
 import Charts from "../views/Charts.vue";
 import Users from "../views/Users.vue";
-
+import Login from "../views/Login.vue";
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
+    path: "/Home",
     name: "Home",
     component: Home,
   },
   {
-    path: "/",
+    path: "/Charts",
     name: "Charts",
     component: Charts,
   },
   {
-    path: "/",
+    path: "/Users",
     name: "Users",
     component: Users,
   },
   {
-    path: "/",
+    path: "/Histor",
     name: "Histor",
     component: Histor,
+  },
+  {
+    path: "/",
+    name: "Login",
+    component: Login,
   },
 ];
 

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Navbar />
+    <Navbar v-if="!isLogin" />
     <router-view />
   </div>
 </template>
@@ -12,6 +12,11 @@ export default {
   name: "Home",
   components: {
     Navbar,
+  },
+  computed: {
+    isLogin() {
+      return this.$route.name === "Login";
+    },
   },
 };
 </script>

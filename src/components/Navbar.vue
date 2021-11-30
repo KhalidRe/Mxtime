@@ -1,9 +1,9 @@
 <template>
   <div id="Navbar">
-    <router-link class="links" to="/">projects</router-link>
-    <router-link class="links" to="/charts">Charts</router-link>
-    <router-link class="links" to="/users">Users</router-link>
-    <router-link class="links" to="/history">History</router-link>
+    <router-link class="links" to="/Home">projects</router-link>
+    <router-link class="links" to="/Charts">Charts</router-link>
+    <router-link class="links" to="/Users">Users</router-link>
+    <router-link class="links" to="/History">History</router-link>
   </div>
 </template>
 <script></script>

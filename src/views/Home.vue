@@ -7,7 +7,7 @@
             style="color: blue; float: left"
             v-bind:id="projects.id"
             class="edit"
-            @click="Edit(projects.id)"
+            @click="Edit(projects.id), (T = !T)"
           >
             edit
           </span>
@@ -27,25 +27,120 @@
         <p class="Deadline">{{ projects.Deadline }}</p>
         <p class="Completed">{{ projects.Completed }}</p>
       </div>
-      <div id="Deleteform" v-if="!R">
-        <iframe
-          width="1px"
-          height="1px"
-          name="dummyframe"
-          id="dummyframe"
-          style="display: none"
-        ></iframe>
-        <form
-          action="http://localhost:3000/deleteproject"
-          target="dummyframe"
-          method="POST"
-        >
-          <p>Är du säker att du vill radera detta project?</p>
-          <input type="text" name="id" id="id" :value="this.x" />
-          <button @click="R = !R">Nej</button>
-          <input type="submit" value="JA" @click="reloadPage" />
-        </form>
-      </div>
+      <transition name="slide-fade">
+        <div id="Deleteform" v-if="!R">
+          <iframe
+            width="1px"
+            height="1px"
+            name="dummyframe"
+            id="dummyframe"
+            style="display: none"
+          ></iframe>
+          <form
+            action="http://localhost:3000/deleteproject"
+            target="dummyframe"
+            method="POST"
+          >
+            <p>Är du säker att du vill radera detta project?</p>
+            <input
+              type="text"
+              name="id"
+              id="id"
+              :value="this.x"
+              style="display: none"
+            />
+            <button @click="R = !R">Nej</button>
+            <input type="submit" value="JA" @click="reloadPage" />
+          </form>
+        </div>
+      </transition>
+      <transition name="slide-fade">
+        <div v-if="!T" id="Editform">
+          <iframe
+            width="1px"
+            height="1px"
+            name="dummyframe"
+            id="dummyframe"
+            style="display: none"
+          ></iframe>
+          <h2>Redigera projekt</h2>
+          <form
+            id="inputsStyle"
+            action="http://localhost:3000/editproject"
+            method="POST"
+            target="dummyframe"
+          >
+            <span class="e">
+              <span>Projekt namn: </span
+              ><input
+                type="text"
+                name="title"
+                id="title"
+                :value="this.etitle"
+                required
+              />
+            </span>
+            <span class="e">
+              <span>Skapare: </span
+              ><input
+                type="text"
+                name="author"
+                id="author"
+                :value="this.eauthor"
+                required
+              />
+            </span>
+            <span class="e">
+              <span>Arbetare: </span
+              ><select name="workers" id="workers">
+                <option value="Ljung">Ljung</option>
+                <option value="Kvist">Kvist</option>
+                <option value="Anders">Anders</option>
+                <option value="Philip">Philip</option>
+                <option value="Khalid">Khalid</option>
+              </select>
+            </span>
+            <span class="e">
+              <span>Datum: </span>
+              <input
+                type="date"
+                name="date"
+                id="date"
+                :value="this.edate"
+                required
+              />
+            </span>
+            <span>
+              <span>Deadline: </span
+              ><input
+                type="date"
+                name="deadline"
+                :value="this.edeadline"
+                id="deadline"
+              />
+            </span>
+            <input
+              type="text"
+              name="id"
+              id="id"
+              :value="this.z"
+              style="display: none"
+            />
+            <span class="e">
+              <span>Avklarat: </span>
+              <span
+                ><input type="radio" value="JA" name="completed" /><span
+                  >JA</span
+                >
+                |<input type="radio" checked value="NEJ" name="completed" />
+                NEJ</span
+              >
+            </span>
+
+            <input type="submit" @click="reloadPage" />
+          </form>
+        </div>
+      </transition>
     </div>
     <Postit />
   </div>
@@ -64,7 +159,7 @@
 #Home {
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: scroll;
 }
 .Grid {
   display: grid;
@@ -80,6 +175,60 @@
   border-radius: 10px;
   box-shadow: 0px 10px 10px 1px rgba(68, 68, 68, 0.37);
 }
+.slide-fade-enter-active {
+  transition: all 0.6s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+#Editform {
+  position: absolute;
+  z-index: 1;
+  top: 25%;
+  left: 40%;
+  background: rgb(255, 255, 255);
+  width: 20vw;
+  height: 50vh;
+  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.377);
+  border-radius: 10px;
+}
+#inputsStyle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  grid-gap: 4%;
+  text-align: center;
+}
+input[type="text"] {
+  background-color: rgb(238, 238, 238);
+  border: none;
+  border-radius: 5px;
+  height: 25px;
+  box-shadow: inset 0px 0px 1px 1px rgb(15, 130, 196);
+}
+select {
+  border: none;
+  background-color: rgb(27, 162, 185);
+  padding: 10px;
+  border-radius: 10px 10px 0px 0px;
+  font-weight: bolder;
+}
+input[type="date"] {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0px 0px 5px 1px black;
+}
+.e {
+  width: 100%;
+}
 </style>
 <script>
 import Postit from "../components/Postit.vue";
@@ -87,6 +236,7 @@ export default {
   components: { Postit },
   data() {
     return {
+      T: true,
       R: true,
       project: "",
       x: "",
@@ -108,6 +258,7 @@ export default {
   },
   methods: {
     Edit(id) {
+      this.z = id;
       this.x = id - 1;
       console.log(this.x);
       this.etitle = this.project[this.x].Title;
