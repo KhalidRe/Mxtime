@@ -37,7 +37,8 @@
           />
         </div>
       </form>
-      <button style="margin: 5px" @click="addTask">Forgot password</button>
+      <button style="margin: 5px" @click="count">Forgot password</button>
+      <button @click="doneTodosCount">send</button>
     </div>
   </div>
 </template>
@@ -67,9 +68,20 @@ export default {
     };
   },
   created() {},
+  computed: {
+    count() {
+      return this.$store.count;
+    },
+  },
   methods: {
-    addTask() {
-      console.log(this.Username);
+    doneTodosCount() {
+      store.commit({
+        type: "increment",
+        auth: "hej",
+      });
+    },
+    les() {
+      console.log(this.$store.state.auth);
     },
   },
 };

@@ -9,12 +9,12 @@ const vuexLocalStorage = new VuexPersist({
 });
 export default new Vuex.Store({
   listObjects: {},
-  state: {},
+  state: {
+    count: 12,
+  },
   mutations: {
-    addList(state, payload) {
-      Vue.set(state.listObjects, {
-        Loggedin: payload.auth,
-      });
+    increment(state) {
+      state.count++;
     },
   },
   actions: {},
