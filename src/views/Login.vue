@@ -15,8 +15,9 @@
             type="text"
             id="Username"
             name="Username"
+            value="hej"
             placeholder="Username"
-            v-model="Username"
+            v-model="someValue"
           />
         </div>
         <br />
@@ -29,16 +30,10 @@
           />
         </div>
         <div>
-          <input
-            style="margin: 5px"
-            type="Submit"
-            value="Logga in"
-            @click="logger()"
-          />
+          <input style="margin: 5px" type="submit" />
         </div>
       </form>
-      <button style="margin: 5px" @click="count">Forgot password</button>
-      <button @click="doneTodosCount">send</button>
+      <button style="margin: 5px">Forgot password</button>
     </div>
   </div>
 </template>
@@ -64,25 +59,21 @@
 export default {
   data() {
     return {
+      auth: "",
       Username: "",
     };
   },
   created() {},
   computed: {
-    count() {
-      return this.$store.count;
+    someValue: {
+      get() {
+        return this.$store.state.someValue;
+      },
+      set(someValue) {
+        this.$store.commit("setSomeValue", someValue);
+      },
     },
   },
-  methods: {
-    doneTodosCount() {
-      store.commit({
-        type: "increment",
-        auth: "hej",
-      });
-    },
-    les() {
-      console.log(this.$store.state.auth);
-    },
-  },
+  methods: {},
 };
 </script>

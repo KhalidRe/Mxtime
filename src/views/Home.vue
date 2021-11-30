@@ -1,5 +1,6 @@
 <template>
   <div id="Home">
+    <Workernav />
     <div class="Grid">
       <div class="Card" v-for="projects in project" :key="projects.id">
         <div>
@@ -19,7 +20,6 @@
           >
         </div>
 
-        <p class="id">{{ projects.id }}</p>
         <p class="title">{{ projects.Title }}</p>
         <p class="Author">{{ projects.Author }}</p>
         <p class="Workers">{{ projects.Workers }}</p>
@@ -47,6 +47,13 @@
               name="id"
               id="id"
               :value="this.x"
+              style="display: none"
+            />
+            <input
+              type="text"
+              name="username"
+              id="username"
+              :value="this.$store.state.someValue"
               style="display: none"
             />
             <button @click="R = !R">Nej</button>
@@ -160,6 +167,7 @@
   width: 100vw;
   height: 100vh;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 .Grid {
   display: grid;
@@ -232,8 +240,9 @@ input[type="date"] {
 </style>
 <script>
 import Postit from "../components/Postit.vue";
+import Workernav from "@/components/Workernav.vue";
 export default {
-  components: { Postit },
+  components: { Postit, Workernav },
   data() {
     return {
       T: true,

@@ -1,22 +1,21 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import VuexPersist from "vuex-persist";
+import createPersistedState from "vuex-persistedstate";
+
 Vue.use(Vuex);
 
-const vuexLocalStorage = new VuexPersist({
-  key: "vuex",
-  storage: window.localStorage,
-});
 export default new Vuex.Store({
-  listObjects: {},
-  state: {
-    count: 12,
-  },
-  mutations: {
-    increment(state) {
-      state.count++;
+    plugins: [createPersistedState()],
+    listObjects: {},
+
+    state: {
+        someValue: "Ett exempel med v-model",
     },
-  },
-  actions: {},
-  modules: {},
+    mutations: {
+        setSomeValue(state, someValue) {
+            state.someValue = someValue;
+        },
+    },
+    actions: {},
+    modules: {},
 });

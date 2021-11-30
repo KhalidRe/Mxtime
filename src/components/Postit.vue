@@ -21,8 +21,12 @@
             ><input type="text" name="title" id="title" required />
           </span>
           <span class="e">
-            <span>Skapare: </span
-            ><input type="text" name="author" id="author" required />
+            <input
+              type="hidden"
+              :value="loggedin.Name"
+              name="author"
+              id="author"
+            />
           </span>
           <span class="e">
             <span>Arbetare: </span
@@ -144,6 +148,34 @@ export default {
       hej: "",
       show: true,
     };
+  },
+  created() {
+    fetch("http://localhost:3000/getusers")
+      .then((response) => response.json())
+      .then((result) => {
+        this.users = result;
+        console.log(this.users);
+        switch (this.$store.state.someValue) {
+          case "MXkhalid":
+            this.loggedin = this.users[0];
+            break;
+          case "MXboss":
+            this.loggedin = this.users[1];
+            break;
+          case "MXkvist":
+            this.loggedin = this.users[2];
+            break;
+          case "MXanders":
+            this.loggedin = this.users[3];
+            break;
+          case "MXphilip":
+            this.loggedin = this.users[4];
+            break;
+          default:
+            console.log("Inte inloggad");
+        }
+        console.log(this.loggedin);
+      });
   },
   methods: {
     reloadPage() {
