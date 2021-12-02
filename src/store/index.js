@@ -5,17 +5,17 @@ import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-    plugins: [createPersistedState()],
-    listObjects: {},
+  plugins: [createPersistedState()],
+  listObjects: {},
 
-    state: {
-        someValue: "Ett exempel med v-model",
+  state: {
+    someValue: "",
+  },
+  mutations: {
+    setSomeValue(state, someValue) {
+      state.someValue = someValue;
     },
-    mutations: {
-        setSomeValue(state, someValue) {
-            state.someValue = someValue;
-        },
-    },
-    actions: {},
-    modules: {},
+  },
+  actions: {},
+  modules: {},
 });

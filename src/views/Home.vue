@@ -19,7 +19,6 @@
             >X</span
           >
         </div>
-
         <p class="title">{{ projects.Title }}</p>
         <p class="Author">{{ projects.Author }}</p>
         <p class="Workers">{{ projects.Workers }}</p>
@@ -47,6 +46,20 @@
               name="id"
               id="id"
               :value="this.x"
+              style="display: none"
+            />
+            <input
+              type="text"
+              name="author"
+              id="author"
+              :value="this.rauthor"
+              style="display: none"
+            />
+            <input
+              type="text"
+              name="workers"
+              id="workers"
+              :value="this.rworker"
               style="display: none"
             />
             <input
@@ -84,36 +97,6 @@
                 name="title"
                 id="title"
                 :value="this.etitle"
-                required
-              />
-            </span>
-            <span class="e">
-              <span>Skapare: </span
-              ><input
-                type="text"
-                name="author"
-                id="author"
-                :value="this.eauthor"
-                required
-              />
-            </span>
-            <span class="e">
-              <span>Arbetare: </span
-              ><select name="workers" id="workers">
-                <option value="Ljung">Ljung</option>
-                <option value="Kvist">Kvist</option>
-                <option value="Anders">Anders</option>
-                <option value="Philip">Philip</option>
-                <option value="Khalid">Khalid</option>
-              </select>
-            </span>
-            <span class="e">
-              <span>Datum: </span>
-              <input
-                type="date"
-                name="date"
-                id="date"
-                :value="this.edate"
                 required
               />
             </span>
@@ -270,23 +253,18 @@ export default {
       this.z = id;
       this.x = id - 1;
       console.log(this.x);
-      this.etitle = this.project[this.x].Title;
-      this.eworkers = this.project[this.x].Workers;
-      this.eauthor = this.project[this.x].Author;
-      this.edate = this.project[this.x].Date;
+
       this.edeadline = this.project[this.x].Deadline;
       this.ecompleted = this.project[this.x].Completed;
-      console.log(
-        this.etitle,
-        this.eworkers,
-        this.eauthor,
-        this.edate,
-        this.edeadline,
-        this.ecompleted
-      );
+      this.eauthor = this.project[this.x].Author;
+      console.log(this.eauthor);
     },
     Remove(id) {
+      this.z = id - 1;
       this.x = id;
+      this.rauthor = this.project[this.z].Author;
+      this.rworker = this.project[this.z].Workers;
+      console.log(this.rworker);
     },
     reloadPage() {
       window.location.reload();

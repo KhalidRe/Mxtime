@@ -23,19 +23,35 @@
           <span class="e">
             <input
               type="hidden"
-              :value="loggedin.Name"
+              :value="this.loggedin.Name"
               name="author"
               id="author"
+            />
+            <input
+              type="hidden"
+              id="userid"
+              name="userid"
+              :value="this.loggedin.id"
             />
           </span>
           <span class="e">
             <span>Arbetare: </span
             ><select name="workers" id="workers">
-              <option value="Ljung">Ljung</option>
-              <option value="Kvist">Kvist</option>
-              <option value="Anders">Anders</option>
-              <option value="Philip">Philip</option>
-              <option value="Khalid">Khalid</option>
+              <option v-if="this.loggedin.Name != 'Ljung'" value="Ljung">
+                Ljung
+              </option>
+              <option v-if="this.loggedin.Name != 'Kvist'" value="Kvist">
+                Kvist
+              </option>
+              <option v-if="this.loggedin.Name != 'Anders'" value="Anders">
+                Anders
+              </option>
+              <option v-if="this.loggedin.Name != 'Philip'" value="Philip">
+                Philip
+              </option>
+              <option v-if="this.loggedin.Name != 'Khalid'" value="Khalid">
+                Khalid
+              </option>
             </select>
           </span>
           <span class="e">
@@ -147,6 +163,7 @@ export default {
     return {
       hej: "",
       show: true,
+      loggedin: "",
     };
   },
   created() {
@@ -157,24 +174,24 @@ export default {
         console.log(this.users);
         switch (this.$store.state.someValue) {
           case "MXkhalid":
-            this.loggedin = this.users[0];
+            this.loggedin = this.users[4];
             break;
           case "MXboss":
-            this.loggedin = this.users[1];
+            this.loggedin = this.users[0];
             break;
           case "MXkvist":
-            this.loggedin = this.users[2];
+            this.loggedin = this.users[1];
             break;
           case "MXanders":
-            this.loggedin = this.users[3];
+            this.loggedin = this.users[2];
             break;
           case "MXphilip":
-            this.loggedin = this.users[4];
+            this.loggedin = this.users[3];
             break;
           default:
             console.log("Inte inloggad");
         }
-        console.log(this.loggedin);
+        console.log(this.loggedin.id);
       });
   },
   methods: {
