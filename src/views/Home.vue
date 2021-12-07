@@ -3,28 +3,98 @@
     <Workernav />
     <div class="Grid">
       <div class="Card" v-for="projects in project" :key="projects.id">
-        <div>
+        <div class="tabletop">
           <span
             style="color: blue; float: left"
             v-bind:id="projects.id"
             class="edit"
             @click="Edit(projects.id), (T = !T)"
           >
-            edit
+            <img width="20px" src="@/assets/edit.png" alt="" />
           </span>
+          <span class="title">{{ projects.Title }}</span>
           <span
             v-bind:id="projects.id"
             @click="Remove(projects.id), (R = !R)"
             style="float: right; color: red"
-            >X</span
-          >
+            ><img width="15px" src="@/assets/kryss.png" alt=""
+          /></span>
         </div>
-        <p class="title">{{ projects.Title }}</p>
-        <p class="Author">{{ projects.Author }}</p>
-        <p class="Workers">{{ projects.Workers }}</p>
-        <p class="Date">{{ projects.Date }}</p>
-        <p class="Deadline">{{ projects.Deadline }}</p>
-        <p class="Completed">{{ projects.Completed }}</p>
+        <div class="inscription">
+          <div class="utförtS">
+            <span class="greendot"></span><span>Utfört</span>
+          </div>
+          <div class="deadlineS">
+            <span class="reddot"></span><span>Deadline</span>
+          </div>
+        </div>
+        <div class="radialprogress">
+          <radial-progress-bar
+            :diameter="150"
+            :completed-steps="projects.Precentage"
+            :total-steps="100"
+            :innerStrokeColor="'none'"
+            :startColor="'#6EF56D'"
+            :stopColor="'#2A9EBE'"
+            :strokeLinecap="'flat'"
+            :strokeWidth="14"
+          >
+            <radial-progress-bar
+              :diameter="130"
+              :completed-steps="array[projects.id - 1]"
+              :total-steps="100"
+              :innerStrokeColor="'none'"
+              :startColor="'#FF0606'"
+              :stopColor="'#700505'"
+              :strokeLinecap="'flat'"
+              :strokeWidth="14"
+            >
+              <div class="koko">
+                <span class="precst">{{ projects.Precentage }}%</span>
+                <span class="optim">{{ array[projects.id - 1] }}%</span>
+              </div>
+            </radial-progress-bar>
+          </radial-progress-bar>
+        </div>
+        <div class="desc">
+          <div class="inf">
+            <span class="fontgradient">Börjar:</span>
+            <span class="fontgradient">Deadline:</span>
+          </div>
+          <div class="val">
+            <span class="fontgradient">{{ projects.Date }}</span>
+            <span class="fontgradient">{{ projects.Deadline }}</span>
+          </div>
+        </div>
+        <div class="deltagareC">
+          <span class="fontgradient">Deltagare: </span>
+          <img
+            class="deltagare"
+            :src="require(`@/assets/${projects.Author}.jpg`)"
+            alt=""
+          />
+          <img
+            class="deltagare va"
+            v-if="projects.Workers !== 'Ensam'"
+            :src="require(`@/assets/${projects.Workers}.jpg`)"
+            alt=""
+          />
+        </div>
+        <div class="faktureratC">
+          <span class="fontgradient">Fakturerat: </span>
+          <img
+            v-if="projects.Completed === 'NEJ'"
+            width="15px"
+            :src="require(`@/assets/kryss.png`)"
+            alt=""
+          />
+          <img
+            v-if="projects.Completed === 'JA'"
+            width="15px"
+            :src="require(`@/assets/done.png`)"
+            alt=""
+          />
+        </div>
       </div>
       <transition name="slide-fade">
         <div id="Deleteform" v-if="!R">
@@ -36,7 +106,7 @@
             style="display: none"
           ></iframe>
           <form
-            action="http://localhost:3000/deleteproject"
+            action="http://192.168.1.140:3000/deleteproject"
             target="dummyframe"
             method="POST"
           >
@@ -69,7 +139,7 @@
               :value="this.$store.state.someValue"
               style="display: none"
             />
-            <button @click="R = !R">Nej</button>
+            <button type="button" @click="R = !R">Nej</button>
             <input type="submit" value="JA" @click="reloadPage" />
           </form>
         </div>
@@ -86,20 +156,18 @@
           <h2>Redigera projekt</h2>
           <form
             id="inputsStyle"
-            action="http://localhost:3000/editproject"
+            action="http://192.168.1.140:3000/editproject"
             method="POST"
             target="dummyframe"
           >
-            <span class="e">
-              <span>Projekt namn: </span
-              ><input
-                type="text"
-                name="title"
-                id="title"
-                :value="this.etitle"
-                required
-              />
-            </span>
+            <input type="hidden" name="title" id="title" :value="this.etitle" />
+            <input type="hidden" name="date" id="date" :value="this.edate" />
+            <input
+              type="hidden"
+              name="author"
+              id="author"
+              :value="this.eauthor"
+            />
             <span>
               <span>Deadline: </span
               ><input
@@ -109,6 +177,7 @@
                 id="deadline"
               />
             </span>
+
             <input
               type="text"
               name="id"
@@ -116,6 +185,15 @@
               :value="this.z"
               style="display: none"
             />
+            <span class="e">
+              <input
+                type="range"
+                name="precentage"
+                id="precentage"
+                v-model="precentage"
+              />
+              <span>{{ this.precentage }}</span>
+            </span>
             <span class="e">
               <span>Avklarat: </span>
               <span
@@ -136,35 +214,149 @@
   </div>
 </template>
 <style scoped>
+.tabletop {
+  padding: 10px;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 15px 15px 0px 0px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(90deg, #004e95 0%, #6994bd 100%);
+}
+.optim {
+  color: #b40303;
+  font-weight: bolder;
+}
+.inscription {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: -15px;
+  font-size: 10px;
+  text-align: left;
+  margin-left: 5px;
+  justify-content: flex-start;
+  padding-top: 5px;
+}
+.koko {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 6px;
+}
+.fontgradient {
+  background: -webkit-linear-gradient(#eee, rgb(126, 126, 126));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  font-size: 20px;
+  line-height: 16px;
+  padding-bottom: 5px;
+}
+.utförtS {
+  display: flex;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  color: #24ff00;
+  grid-gap: 5px;
+}
+.deadlineS {
+  display: flex;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  color: red;
+  grid-gap: 5px;
+}
+.reddot {
+  width: 10px;
+  height: 10px;
+  border-radius: 25px;
+  background-color: red;
+  border: solid 1px black;
+}
+.greendot {
+  width: 10px;
+  height: 10px;
+  border-radius: 25px;
+  background-color: #24ff00;
+  border: solid 1px black;
+}
+.precst {
+  font-size: 25px;
+  font-weight: bolder;
+  color: rgb(84, 235, 134);
+}
+.radialprogress {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.inspcript {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+}
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  color: rgb(212, 255, 251);
+}
+.desc {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 5px;
+}
+.inf {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+.val {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
 #Deleteform {
   position: absolute;
   z-index: 1;
   top: 25%;
   left: 40%;
   background: rgb(255, 255, 255);
-  width: 20vw;
+  width: 300px;
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.377);
   border-radius: 10px;
 }
 #Home {
-  width: 100vw;
-  height: 100vh;
+  margin: 0;
+  max-width: 100%;
+  width: 100%;
+
   overflow-y: scroll;
   overflow-x: hidden;
+  background: -webkit-linear-gradient(left, #25c481, #25b7c4);
+  background: linear-gradient(to right, #25c481, #25b7c4);
+  background: rgb(231, 231, 231);
 }
 .Grid {
   display: grid;
-  grid-template-columns: auto auto auto auto auto;
-  grid-template-rows: auto auto auto auto;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   width: 80vw;
   margin: 30px;
   grid-gap: 20px;
 }
+
 .Card {
-  background: rgb(224, 224, 252);
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0px 10px 10px 1px rgba(68, 68, 68, 0.37);
+  background: linear-gradient(
+    180deg,
+    #0d0d0e 0%,
+    rgb(40, 72, 87) 50%,
+    #000000 100%
+  );
+  border-radius: 15px;
+
+  width: 250px;
+  font-weight: bolder;
+  font-size: 18px;
+  line-height: 16px;
+  color: #b1abab;
 }
 .slide-fade-enter-active {
   transition: all 0.6s ease;
@@ -183,10 +375,46 @@
   top: 25%;
   left: 40%;
   background: rgb(255, 255, 255);
-  width: 20vw;
+  width: 300px;
   height: 50vh;
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.377);
   border-radius: 10px;
+}
+@media only screen and (max-width: 1000px) {
+  #Editform {
+    left: 20%;
+  }
+  #Deleteform {
+    left: 20%;
+  }
+}
+.deltagareC {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+}
+.deltagareC > span {
+  margin-right: 4px;
+}
+.deltagare {
+  width: 40px;
+  border-radius: 25px;
+  box-shadow: 0px 0px 5px 1px black;
+}
+.va {
+  margin-left: -10px;
+}
+.faktureratC {
+  padding: 15px;
+  margin-top: 8px;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 0px 0px 15px 15px;
+  background: linear-gradient(180deg, #0089d0 0%, #0089d0 100%);
+  filter: drop-shadow(0px -1px 5px rgba(0, 0, 0, 0.25));
 }
 #inputsStyle {
   display: flex;
@@ -222,30 +450,65 @@ input[type="date"] {
 }
 </style>
 <script>
+import $ from "jquery";
+import RadialProgressBar from "vue-radial-progress";
 import Postit from "../components/Postit.vue";
 import Workernav from "@/components/Workernav.vue";
 export default {
-  components: { Postit, Workernav },
+  components: { Postit, Workernav, RadialProgressBar },
   data() {
     return {
+      completedSteps: 0,
+      totalSteps: 10,
       T: true,
       R: true,
-      project: "",
       x: "",
-      i: 0,
       etitle: "",
       eauthor: "",
       edate: "",
       edeadline: "",
       eworkers: "",
       ecompleted: "",
+      eprecentage: 0,
+      precentage: 0,
+      projects: "",
+      project: "",
+      obj: {},
+      start: 0,
+      end: 0,
+      today: "",
+      array: [],
+      i: 0,
+      q: 0,
+      d: 0,
+      optimal: 0,
     };
   },
   created() {
-    fetch("http://localhost:3000/viewprojects")
+    fetch("http://192.168.1.140:3000/viewprojects")
       .then((response) => response.json())
       .then((result) => {
         this.project = result;
+        console.log(this.project);
+        for (this.i = 0; this.i < this.project.length; this.i++) {
+          this.start = new Date(this.project[this.i].Date);
+          this.end = new Date(this.project[this.i].Deadline);
+          this.today = new Date();
+          this.q = Math.abs(this.today - this.start);
+          this.d = Math.abs(this.end - this.start);
+          this.optimal = Math.round((this.q / this.d) * 100);
+          if (this.optimal > 100) {
+            this.optimal = 100;
+          }
+          this.array.push(this.optimal);
+        }
+      });
+
+    fetch("http://192.168.1.140:3000/getuseractiveonproject")
+      .then((response) => response.json())
+      .then((result) => {
+        this.project = result;
+        console.log(this.project);
       });
   },
   methods: {
@@ -253,11 +516,12 @@ export default {
       this.z = id;
       this.x = id - 1;
       console.log(this.x);
-
+      this.etitle = this.project[this.x].Title;
       this.edeadline = this.project[this.x].Deadline;
       this.ecompleted = this.project[this.x].Completed;
       this.eauthor = this.project[this.x].Author;
-      console.log(this.eauthor);
+      this.eprecentage = this.project[this.x].precentage;
+      this.edate = this.project[this.x].Date;
     },
     Remove(id) {
       this.z = id - 1;

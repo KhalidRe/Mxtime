@@ -42,8 +42,9 @@
 </template>
 <style scoped>
 .Users {
-  background: linear-gradient(180deg, #6b6b6b 0%, #3d3750 100%);
-  width: 100vw;
+  background: -webkit-linear-gradient(left, #25c481, #25b7c4);
+  background: linear-gradient(to right, #25c481, #25b7c4);
+  width: 100%;
   height: 100vh;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -53,9 +54,10 @@
 .s {
 }
 .Grid {
+  width: 90vw;
   margin-top: 50px;
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   grid-gap: 50px;
 }
 .img {
@@ -70,7 +72,7 @@
   height: 400px;
   background: linear-gradient(180deg, #5f94a5 0%, #000000 100%);
   box-shadow: 0px 5px 5px 1px rgba(0, 253, 42, 0.322);
-  border-radius: 20px;
+  border-radius: 40% 20px 20px 20px;
 }
 .name {
   margin-top: 5px;
@@ -143,7 +145,7 @@ export default {
     };
   },
   created() {
-    fetch("http://localhost:3000/getusers")
+    fetch("http://192.168.1.140:3000/getusers")
       .then((response) => response.json())
       .then((result) => {
         this.user = result;

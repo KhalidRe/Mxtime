@@ -19,14 +19,15 @@
 </template>
 <style scoped>
 #Workernav {
-  background: rgb(164, 243, 168);
+  width: 100%;
+  background: linear-gradient(90deg, #98f46c 0%, #65a4ee 100%);
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
   grid-gap: 10vh;
   height: 60px;
-  width: 93.9vw;
+
   box-shadow: 0px 0px 4px 1px rgb(145, 145, 145);
   font-size: 16px;
   font-weight: 900;
@@ -41,6 +42,21 @@
   align-items: center;
   grid-gap: 10px;
 }
+@media only screen and (max-width: 1000px) {
+  #Workernav {
+    background: linear-gradient(90deg, #98f46c 0%, #65a4ee 100%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    grid-gap: 0vh;
+    height: 60px;
+    width: normal;
+    box-shadow: 0px 0px 4px 1px rgb(145, 145, 145);
+    font-size: 16px;
+    font-weight: 900;
+  }
+}
 </style>
 <script>
 export default {
@@ -51,7 +67,7 @@ export default {
     };
   },
   created() {
-    fetch("http://localhost:3000/getusers")
+    fetch("http://192.168.1.140:3000/getusers")
       .then((response) => response.json())
       .then((result) => {
         this.users = result;

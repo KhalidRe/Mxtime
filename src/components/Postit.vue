@@ -9,10 +9,10 @@
     ></iframe>
     <transition name="slide-fade">
       <div id="Formen" v-if="!show">
-        <h1>Lägg till Projekt</h1>
+        <h1 style="margin: 0">Lägg till Projekt</h1>
         <form
           id="inputsStyle"
-          action="http://localhost:3000/createproject"
+          action="http://192.168.1.140:3000/createproject"
           method="POST"
           target="dummyframe"
         >
@@ -52,6 +52,7 @@
               <option v-if="this.loggedin.Name != 'Khalid'" value="Khalid">
                 Khalid
               </option>
+              <option value="Ensam">Ensam</option>
             </select>
           </span>
           <span class="e">
@@ -60,11 +61,22 @@
           </span>
           <span>
             <span>Deadline: </span
-            ><input type="date" name="deadline" id="deadline" />
+            ><input type="date" name="deadline" id="deadline" required />
+          </span>
+          <span class="e">
+            <span>%Avklarat: </span>
+            <input
+              type="range"
+              name="precentage"
+              id="precentage"
+              value="0"
+              v-model="precentage"
+            />
+            <span>{{ this.precentage }}</span>
           </span>
 
           <span class="e">
-            <span>Avklarat: </span>
+            <span>Fakturerat: </span>
             <span
               ><input type="radio" value="JA" name="completed" /><span>JA</span>
               |<input type="radio" checked value="NEJ" name="completed" />
@@ -82,6 +94,7 @@
 </template>
 <style scoped>
 #Addbtn {
+  overflow: hidden;
   position: fixed;
   font-size: 40px;
   font-weight: bolder;
@@ -119,18 +132,24 @@
   top: 25%;
   left: 40%;
   background: rgb(255, 255, 255);
-  width: 20vw;
-  height: 50vh;
+  width: 300px;
+  min-height: 50vh;
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.377);
   border-radius: 10px;
+}
+@media only screen and (max-width: 1000px) {
+  #Formen {
+    left: 20%;
+  }
 }
 #inputsStyle {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+
   align-items: center;
-  width: 100%;
-  height: 100%;
-  grid-gap: 4%;
+
+  grid-gap: 10px;
   text-align: center;
 }
 input[type="text"] {
@@ -164,10 +183,11 @@ export default {
       hej: "",
       show: true,
       loggedin: "",
+      precentage: 0,
     };
   },
   created() {
-    fetch("http://localhost:3000/getusers")
+    fetch("http://192.168.1.140:3000/getusers")
       .then((response) => response.json())
       .then((result) => {
         this.users = result;
