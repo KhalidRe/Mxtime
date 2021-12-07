@@ -9,15 +9,14 @@
     ></iframe>
     <div id="LoginForm">
       <h2>Logga in</h2>
-      <form action="http://localhost:3000/authenticate" method="POST">
+      <form action="http://192.168.1.140:3000/authenticate" method="POST">
         <div>
           <input
             type="text"
             id="Username"
             name="Username"
-            value="hej"
-            placeholder="Username"
             v-model="someValue"
+            value=""
           />
         </div>
         <br />
@@ -42,14 +41,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
+  background: -webkit-linear-gradient(left, #25c481, #25b7c4);
+  background: linear-gradient(to right, #25c481, #25b7c4);
 }
 #LoginForm {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 30vw;
+  width: 300px;
   height: 30vh;
   border-radius: 25px;
   box-shadow: 0px 0px 5px 5px rgb(128, 128, 128);

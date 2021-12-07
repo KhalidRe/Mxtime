@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <div>
-      <Navbar v-if="!isLogin" />
-    </div>
+    <Navbar v-if="!isLogin" />
 
     <router-view />
   </div>
@@ -18,6 +16,17 @@ export default {
     Navbar,
     Workernav,
   },
+  data() {
+    return {
+      show: false,
+      fromChild: false,
+    };
+  },
+  methods: {
+    onClickChild(value) {
+      console.log(value);
+    },
+  },
   computed: {
     isLogin() {
       return this.$route.name === "Login";
@@ -29,6 +38,8 @@ export default {
 <style>
 body {
   background: rgb(245, 245, 245);
+
+  margin: 0;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -37,7 +48,9 @@ body {
   text-align: center;
   color: #2c3e50;
   display: flex;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
+  margin: 0px;
 }
 
 #nav {
