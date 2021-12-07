@@ -174,19 +174,19 @@ export default {
         console.log(this.users);
         switch (this.$store.state.someValue) {
           case "MXkhalid":
-            this.loggedin = this.users[4];
-            break;
-          case "MXboss":
             this.loggedin = this.users[0];
             break;
-          case "MXkvist":
+          case "MXboss":
             this.loggedin = this.users[1];
             break;
-          case "MXanders":
+          case "MXkvist":
             this.loggedin = this.users[2];
             break;
-          case "MXphilip":
+          case "MXanders":
             this.loggedin = this.users[3];
+            break;
+          case "MXphilip":
+            this.loggedin = this.users[4];
             break;
           default:
             console.log("Inte inloggad");
