@@ -17,18 +17,18 @@ export default {
   },
   extends: Line,
   created() {
-    fetch("http://192.168.1.140:3000/viewprojects")
+    fetch("/viewprojects")
       .then((response) => response.json())
       .then((result) => {
         this.project = result;
         for (this.i = 0; this.i <= result.length; this.i++) {}
       });
-    fetch("http://192.168.1.140:3000/getusers")
+    fetch("/getusers")
       .then((response) => response.json())
       .then((result) => {
         this.user = result;
       });
-    fetch("http://192.168.1.140:3000/chartdata")
+    fetch("/chartdata")
       .then((response) => response.json())
       .then((result) => {
         this.chartdata = result;

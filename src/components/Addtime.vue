@@ -43,11 +43,7 @@
           id="dummyframe"
           style="display: none"
         ></iframe>
-        <form
-          action="http://192.168.1.140:3000/deletetime"
-          target="dummyframe"
-          method="POST"
-        >
+        <form action="/deletetime" target="dummyframe" method="POST">
           <p>Är du säker att du vill radera denna tid?</p>
           <input
             type="text"
@@ -228,7 +224,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("http://192.168.1.140:3000/mytime", requestOptions)
+    fetch("/mytime", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.time = result;

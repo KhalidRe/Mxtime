@@ -105,11 +105,7 @@
             id="dummyframe"
             style="display: none"
           ></iframe>
-          <form
-            action="http://192.168.1.140:3000/deleteproject"
-            target="dummyframe"
-            method="POST"
-          >
+          <form action="/deleteproject" target="dummyframe" method="POST">
             <p>Är du säker att du vill radera detta project?</p>
             <input
               type="text"
@@ -156,7 +152,7 @@
           <h2>Redigera projekt</h2>
           <form
             id="inputsStyle"
-            action="http://192.168.1.140:3000/editproject"
+            action="/editproject"
             method="POST"
             target="dummyframe"
           >
@@ -486,7 +482,7 @@ export default {
     };
   },
   created() {
-    fetch("http://192.168.1.140:3000/viewprojects")
+    fetch("/viewprojects")
       .then((response) => response.json())
       .then((result) => {
         this.project = result;
@@ -506,7 +502,7 @@ export default {
         console.log(this.array);
       });
 
-    fetch("http://192.168.1.140:3000/getuseractiveonproject")
+    fetch("/getuseractiveonproject")
       .then((response) => response.json())
       .then((result) => {
         this.project = result;
