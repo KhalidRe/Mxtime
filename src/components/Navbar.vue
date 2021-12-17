@@ -60,6 +60,7 @@ export default {
   border-radius: 0% 25px 25px 0px;
   background: #6aec87;
 }
+
 #father {
   display: flex;
   height: 100vh;
@@ -75,7 +76,7 @@ export default {
   width: 100px;
 }
 .links {
-  width: 4vw;
+  width: 50px;
   padding: 10px;
   padding-top: 15px;
   padding-bottom: 15px;
@@ -83,7 +84,6 @@ export default {
   border: solid 1px rgb(109, 235, 161);
   border-radius: 5px;
   transition: 1s;
-  width: 3vw;
 }
 .links:active {
   transition: 1s;

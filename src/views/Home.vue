@@ -333,7 +333,6 @@
   overflow-x: hidden;
   background: -webkit-linear-gradient(left, #25c481, #25b7c4);
   background: linear-gradient(to right, #25c481, #25b7c4);
-  background: rgb(231, 231, 231);
 }
 .Grid {
   display: grid;
@@ -346,9 +345,11 @@
 .Card {
   background: linear-gradient(
     180deg,
-    #0d0d0e 0%,
-    rgb(40, 72, 87) 50%,
-    #000000 100%
+    #0d0d0e 30%,
+    rgb(59, 92, 107) 50%,
+    rgb(89, 107, 116) 57%,
+    rgb(59, 92, 107) 65%,
+    #000000 90%
   );
   border-radius: 15px;
 
@@ -413,7 +414,7 @@
   align-items: center;
 
   border-radius: 0px 0px 15px 15px;
-  background: linear-gradient(180deg, #0089d0 0%, #0089d0 100%);
+  background: linear-gradient(180deg, #0089d0 0%, #024d72 100%);
   filter: drop-shadow(0px -1px 5px rgba(0, 0, 0, 0.25));
 }
 #inputsStyle {
@@ -502,6 +503,7 @@ export default {
           }
           this.array.push(this.optimal);
         }
+        console.log(this.array);
       });
 
     fetch("http://192.168.1.140:3000/getuseractiveonproject")

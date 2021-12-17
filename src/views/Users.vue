@@ -1,5 +1,8 @@
 <template>
   <div class="Users">
+    <Usermetrics />
+    <Addtime />
+    <h1>Hela laget Föffan</h1>
     <div class="Grid">
       <div class="s" v-for="users in user" :key="users.id">
         <div name="id" id="id" class="card" :value="users.id">
@@ -41,6 +44,9 @@
   </div>
 </template>
 <style scoped>
+#Your {
+  width: 100%;
+}
 .Users {
   background: -webkit-linear-gradient(left, #25c481, #25b7c4);
   background: linear-gradient(to right, #25c481, #25b7c4);
@@ -49,16 +55,18 @@
   overflow-y: scroll;
   overflow-x: hidden;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 .s {
 }
 .Grid {
-  width: 90vw;
+  width: 80vw;
   margin-top: 50px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   grid-gap: 50px;
+  padding-bottom: 50px;
 }
 .img {
   width: 100px;
@@ -138,10 +146,18 @@
 }
 </style>
 <script>
+import Usermetrics from "../components/Usermetrics.vue";
+import Addtime from "../components/Addtime.vue";
 export default {
+  components: {
+    Addtime,
+    Usermetrics,
+  },
   data() {
     return {
       user: "",
+      projects: "",
+      logged: this.$store.state.someValue,
     };
   },
   created() {
@@ -150,6 +166,22 @@ export default {
       .then((result) => {
         this.user = result;
         console.log(this.user);
+      });
+    const requestOptions = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+
+      body: JSON.stringify({ user: this.logged }),
+    };
+    fetch("http://192.168.1.140:3000/myprojects", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        this.myprojects = result;
+        console.log(this.myprojects);
       });
   },
 };
