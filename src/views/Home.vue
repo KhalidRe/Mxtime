@@ -31,28 +31,63 @@
         <div class="radialprogress">
           <radial-progress-bar
             :diameter="150"
-            :completed-steps="projects.Precentage"
+            :completed-steps="100"
             :total-steps="100"
             :innerStrokeColor="'none'"
-            :startColor="'#6EF56D'"
-            :stopColor="'#2A9EBE'"
+            :startColor="'#D4F7FFB0'"
+            :stopColor="'#D4F7FFB0'"
             :strokeLinecap="'flat'"
-            :strokeWidth="14"
+            :strokeWidth="18"
           >
             <radial-progress-bar
-              :diameter="130"
-              :completed-steps="array[projects.id - 1]"
-              :total-steps="100"
+              class="progresscont"
+              :diameter="147"
+              :total-steps="0"
+              :completed-steps="100"
               :innerStrokeColor="'none'"
-              :startColor="'#FF0606'"
-              :stopColor="'#700505'"
+              :startColor="'#D4F7FF'"
+              :stopColor="'#D4F7FF'"
               :strokeLinecap="'flat'"
-              :strokeWidth="14"
+              :strokeWidth="18"
             >
-              <div class="koko">
-                <span class="precst">{{ projects.Precentage }}%</span>
-                <span class="optim">{{ array[projects.id - 1] }}%</span>
-              </div>
+              <radial-progress-bar
+                :diameter="150"
+                :completed-steps="projects.Precentage"
+                :total-steps="100"
+                :innerStrokeColor="'none'"
+                :startColor="'#6EF56D'"
+                :stopColor="'#2A9EBE'"
+                :strokeLinecap="'flat'"
+                :strokeWidth="18"
+              >
+                <radial-progress-bar
+                  :diameter="139"
+                  :completed-steps="array[projects.id - 1]"
+                  :total-steps="100"
+                  :innerStrokeColor="'none'"
+                  :startColor="'#FF0606'"
+                  :stopColor="'#700505'"
+                  :strokeLinecap="'flat'"
+                  :strokeWidth="9"
+                >
+                  <radial-progress-bar
+                    class="deadlinecont"
+                    :diameter="129"
+                    :total-steps="100"
+                    :completed-steps="0"
+                    :innerStrokeColor="'none'"
+                    :startColor="'none'"
+                    :stopColor="''"
+                    :strokeLinecap="'flat'"
+                    :strokeWidth="9"
+                  >
+                    <div class="koko">
+                      <span class="precst">{{ projects.Precentage }}%</span>
+                      <span class="optim">{{ array[projects.id - 1] }}%</span>
+                    </div>
+                  </radial-progress-bar>
+                </radial-progress-bar>
+              </radial-progress-bar>
             </radial-progress-bar>
           </radial-progress-bar>
         </div>
@@ -81,19 +116,14 @@
           />
         </div>
         <div class="faktureratC">
-          <span class="fontgradient">Fakturerat: </span>
-          <img
-            v-if="projects.Completed === 'NEJ'"
-            width="15px"
-            :src="require(`@/assets/kryss.png`)"
-            alt=""
-          />
-          <img
-            v-if="projects.Completed === 'JA'"
-            width="15px"
-            :src="require(`@/assets/done.png`)"
-            alt=""
-          />
+          <div
+            title="Du måste först nå 100% avklarat"
+            class="notnow"
+            v-if="projects.Precentage < 100"
+          >
+            Complete
+          </div>
+          <div class="now" v-if="projects.Precentage > 99">Complete</div>
         </div>
       </div>
       <transition name="slide-fade">
@@ -214,6 +244,106 @@
   </div>
 </template>
 <style scoped>
+.now {
+  background: linear-gradient(#8bf39c 0%, #49ca38 100%);
+  border: solid rgb(30, 212, 182) 1px;
+  box-shadow: inset 0px 0px 5px 1px black;
+  padding: 7px;
+  border-radius: 20px;
+  color: rgb(46, 48, 53);
+  padding-left: 10px;
+  padding-right: 10px;
+  transition: 1s;
+  animation: glow 10s infinite;
+}
+.now:after {
+  content: "";
+  top: 20%;
+
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  z-index: 1;
+  animation: slide 1s infinite 3s;
+  border-radius: 25px;
+
+  /*
+  CSS Gradient - complete browser support from http://www.colorzilla.com/gradient-editor/
+  */
+  background: -moz-linear-gradient(
+    left,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(128, 186, 232, 0) 99%,
+    rgba(125, 185, 232, 0) 100%
+  ); /* FF3.6+ */
+  background: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    color-stop(0%, rgba(255, 255, 255, 0)),
+    color-stop(50%, rgba(255, 255, 255, 0.8)),
+    color-stop(99%, rgba(128, 186, 232, 0)),
+    color-stop(100%, rgba(125, 185, 232, 0))
+  ); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(
+    left,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(128, 186, 232, 0) 99%,
+    rgba(125, 185, 232, 0) 100%
+  ); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(
+    left,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(128, 186, 232, 0) 99%,
+    rgba(125, 185, 232, 0) 100%
+  ); /* Opera 11.10+ */
+  background: -ms-linear-gradient(
+    left,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(128, 186, 232, 0) 99%,
+    rgba(125, 185, 232, 0) 100%
+  ); /* IE10+ */
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(128, 186, 232, 0) 99%,
+    rgba(125, 185, 232, 0) 100%
+  ); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#007db9e8',GradientType=1 ); /* IE6-9 */
+}
+
+@keyframes slide {
+  0% {
+    opacity: 0;
+    transform: translateX(-300%);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-67%);
+    opacity: 0;
+  }
+}
+.notnow {
+  background-color: #5e685c;
+  padding: 7px;
+  border-radius: 20px;
+  color: rgb(135, 140, 151);
+}
+.progresscont {
+  box-shadow: inset 0px 0px 5px 1px rgb(119, 229, 248);
+  border-radius: 100%;
+}
+.deadlinecont {
+  box-shadow: inset 0px 0px 5px 1px black;
+  border-radius: 100%;
+}
 .tabletop {
   padding: 10px;
   align-items: center;
@@ -300,7 +430,6 @@
 .desc {
   display: flex;
   justify-content: space-between;
-
   padding: 5px;
 }
 .inf {
@@ -333,7 +462,6 @@
   overflow-x: hidden;
   background: -webkit-linear-gradient(left, #25c481, #25b7c4);
   background: linear-gradient(to right, #25c481, #25b7c4);
-  background: rgb(231, 231, 231);
 }
 .Grid {
   display: grid;
@@ -346,9 +474,11 @@
 .Card {
   background: linear-gradient(
     180deg,
-    #0d0d0e 0%,
-    rgb(40, 72, 87) 50%,
-    #000000 100%
+    #0d0d0e 30%,
+    rgb(59, 92, 107) 50%,
+    rgb(89, 107, 116) 57%,
+    rgb(59, 92, 107) 65%,
+    #000000 90%
   );
   border-radius: 15px;
 
@@ -407,13 +537,14 @@
 .faktureratC {
   padding: 15px;
   margin-top: 8px;
-  padding-bottom: 10px;
+  padding-bottom: 15px;
+  height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
 
   border-radius: 0px 0px 15px 15px;
-  background: linear-gradient(180deg, #0089d0 0%, #0089d0 100%);
+  background: linear-gradient(180deg, #0089d0 0%, #024d72 100%);
   filter: drop-shadow(0px -1px 5px rgba(0, 0, 0, 0.25));
 }
 #inputsStyle {
@@ -484,6 +615,7 @@ export default {
       optimal: 0,
     };
   },
+
   created() {
     fetch("http://192.168.1.65:3000/viewprojects")
       .then((response) => response.json())
@@ -503,13 +635,6 @@ export default {
           this.array.push(this.optimal);
         }
       });
-
-    fetch("http://192.168.1.65:3000/getuseractiveonproject")
-      .then((response) => response.json())
-      .then((result) => {
-        this.project = result;
-        console.log(this.project);
-      });
   },
   methods: {
     Edit(id) {
@@ -528,7 +653,6 @@ export default {
       this.x = id;
       this.rauthor = this.project[this.z].Author;
       this.rworker = this.project[this.z].Workers;
-      console.log(this.rworker);
     },
     reloadPage() {
       window.location.reload();

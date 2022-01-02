@@ -184,34 +184,24 @@ export default {
       show: true,
       loggedin: "",
       precentage: 0,
+      logged: this.$store.state.someValue,
     };
   },
   created() {
-    fetch("http://192.168.1.65:3000/getusers")
+    const requestOptions = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+
+      body: JSON.stringify({ user: this.logged }),
+    };
+    fetch("http://192.168.1.140:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        this.users = result;
-        console.log(this.users);
-        switch (this.$store.state.someValue) {
-          case "MXkhalid":
-            this.loggedin = this.users[0];
-            break;
-          case "MXboss":
-            this.loggedin = this.users[1];
-            break;
-          case "MXkvist":
-            this.loggedin = this.users[2];
-            break;
-          case "MXanders":
-            this.loggedin = this.users[3];
-            break;
-          case "MXphilip":
-            this.loggedin = this.users[4];
-            break;
-          default:
-            console.log("Inte inloggad");
-        }
-        console.log(this.loggedin.id);
+        this.loggedin = result[0];
       });
   },
   methods: {
