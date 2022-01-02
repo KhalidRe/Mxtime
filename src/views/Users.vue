@@ -161,7 +161,7 @@ export default {
     };
   },
   created() {
-    fetch("/getusers")
+    fetch("http://192.168.1.140:3000/getusers")
       .then((response) => response.json())
       .then((result) => {
         this.user = result;
@@ -177,7 +177,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("/myprojects", requestOptions)
+    fetch("http://192.168.1.140:3000/myprojects", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.myprojects = result;

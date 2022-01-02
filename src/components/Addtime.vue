@@ -26,7 +26,11 @@
               <td>{{ times.Hours }}</td>
               <td>{{ times.Minutes }}</td>
               <td>{{ times.Description }}</td>
-              <td v-bind:id="times.id" @click="Remove(times.id), (R = !R)">
+              <td
+                style="color: red"
+                v-bind:id="times.id"
+                @click="Remove(times.id), (R = !R)"
+              >
                 DELETE
               </td>
             </tr>
@@ -43,7 +47,11 @@
           id="dummyframe"
           style="display: none"
         ></iframe>
-        <form action="/deletetime" target="dummyframe" method="POST">
+        <form
+          action="http://192.168.1.140:3000/deletetime"
+          target="dummyframe"
+          method="POST"
+        >
           <p>Är du säker att du vill radera denna tid?</p>
           <input
             type="text"
@@ -224,7 +232,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("/mytime", requestOptions)
+    fetch("http://192.168.1.140:3000/mytime", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.time = result;

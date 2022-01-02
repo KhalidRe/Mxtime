@@ -38,7 +38,7 @@ app.use(function (req, res, next) {
 
 app.get("/createtableprojects", (req, res) => {
   let sql =
-    "CREATE TABLE time(id int AUTO_INCREMENT, Title VARCHAR(255), Name VARCHAR(255), Username VARCHAR(255), Description VARCHAR(255), Hours VARCHAR(255), Minutes VARCHAR(255), PRIMARY KEY(id))";
+    "CREATE TABLE fakturerat(id int AUTO_INCREMENT, Title VARCHAR(255), Author VARCHAR(255), Workers VARCHAR(255), Datum VARCHAR(255), Budget VARCHAR(255), Belopp VARCHAR(255), PRIMARY KEY(id))";
 
   db.query(sql, (err, result) => {
     if (err) throw err;
@@ -226,6 +226,38 @@ app.post("/editproject", (req, res) => {
   });
   res.send("Updated table");
 });
+app.post("/completeproject", function (req, res) {
+  var today = new Date();
+  var date =
+    today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+  let project = {
+    id: req.body.id,
+    title: req.body.title,
+    author: req.body.author,
+    datum: date,
+    workers: req.body.workers,
+    completed: req.body.completed,
+    budget: req.body.budget,
+    belopp: req.body.belopp,
+  };
+  let sql = `INSERT INTO fakturerat(Title,Author,Workers,Datum,Budget,Belopp) VALUES('${project.title}','${project.author}','${project.workers}','${project.datum}','${project.budget}','${project.belopp}')`;
+  let sqldelete = `DELETE from projects WHERE id = ${project.id}; SET @num := 0;UPDATE projects SET id = @num := (@num+1);ALTER TABLE projects AUTO_INCREMENT = 1`;
+  let sql2 = `UPDATE users SET Created = Created - 1, Active = Active -1, Completion = Completion + 1 WHERE Name = '${project.author}' `;
+  let sql3 = `UPDATE users SET Active = Active - 1, Completion = Completion + 1 WHERE Name = '${project.workers}'`;
+  let query1 = db.query(sql, project, (err, result) => {
+    if (err) throw err;
+  });
+  let query2 = db.query(sqldelete, project, (err, result) => {
+    if (err) throw err;
+  });
+  let query3 = db.query(sql2, project, (err, result) => {
+    if (err) throw err;
+  });
+  let query4 = db.query(sql3, project, (err, result) => {
+    if (err) throw err;
+  });
+  res.send("Projekt Arkiverad!");
+});
 app.post("/authenticate", function (req, res) {
   var Username = req.body.Username;
   var Password = req.body.Password;
@@ -237,7 +269,7 @@ app.post("/authenticate", function (req, res) {
         if (results[0].Username === Username) {
           req.session.loggedin = true;
           req.session.Username = Username;
-          res.redirect("/Home");
+          res.redirect("http://192.168.1.140:8080/#/Home");
         } else {
           res.send("Incorrect Username and/or Password!");
         }

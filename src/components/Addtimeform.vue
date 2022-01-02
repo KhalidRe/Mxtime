@@ -12,7 +12,7 @@
       <h1 style="margin: 0">Lägg till tid</h1>
       <form
         id="inputsStyle"
-        action="/addtime"
+        action="http://192.168.1.140:3000/addtime"
         method="POST"
         target="dummyframe"
       >
@@ -149,12 +149,12 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("/workernav", requestOptions)
+    fetch("http://192.168.1.140:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
       });
-    fetch("/viewprojects")
+    fetch("http://192.168.1.140:3000/viewprojects")
       .then((response) => response.json())
       .then((result) => {
         this.project = result;
