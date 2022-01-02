@@ -9,7 +9,7 @@
     ></iframe>
     <div id="LoginForm">
       <h2>Logga in</h2>
-      <form action="http://192.168.1.140:3000/authenticate" method="POST">
+      <form action="http://192.168.1.65:3000/authenticate" method="POST">
         <div>
           <input
             type="text"
@@ -22,10 +22,11 @@
         <br />
         <div style="margin-bottom: 10px">
           <input
-            type="text"
+            type="password"
             id="Password"
             name="Password"
             placeholder="Password"
+            autocomplete="false"
           />
         </div>
         <div>
@@ -57,6 +58,7 @@
 }
 </style>
 <script>
+import domain from "../domain";
 export default {
   data() {
     return {

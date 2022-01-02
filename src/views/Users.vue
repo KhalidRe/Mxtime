@@ -145,7 +145,7 @@ export default {
     };
   },
   created() {
-    fetch("http://192.168.1.140:3000/getusers")
+    fetch("http://192.168.1.65:3000/getusers")
       .then((response) => response.json())
       .then((result) => {
         this.user = result;

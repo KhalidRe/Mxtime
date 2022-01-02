@@ -12,7 +12,7 @@
         <h1 style="margin: 0">Lägg till Projekt</h1>
         <form
           id="inputsStyle"
-          action="http://192.168.1.140:3000/createproject"
+          action="http://192.168.1.65:3000/createproject"
           method="POST"
           target="dummyframe"
         >
@@ -187,7 +187,7 @@ export default {
     };
   },
   created() {
-    fetch("http://192.168.1.140:3000/getusers")
+    fetch("http://192.168.1.65:3000/getusers")
       .then((response) => response.json())
       .then((result) => {
         this.users = result;

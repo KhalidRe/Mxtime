@@ -25,6 +25,10 @@ app.use(
 );
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json());
+
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
@@ -33,7 +37,9 @@ app.use(function(req, res, next) {
 });
 
 app.get("/createtableprojects", (req, res) => {
-    let sql = "ALTER TABLE chart ADD Projectid int";
+    let sql =
+        "CREATE TABLE fakturerat(id int AUTO_INCREMENT, Title VARCHAR(255), Author VARCHAR(255), Workers VARCHAR(255), Datum VARCHAR(255), Budget VARCHAR(255), Belopp VARCHAR(255), PRIMARY KEY(id))";
+
     db.query(sql, (err, result) => {
         if (err) throw err;
 
@@ -65,11 +71,44 @@ app.get("/viewprojects", (req, res) => {
         res.json(result);
     });
 });
+app.post("/myprojects", (req, res) => {
+    let maker = {
+        user: req.body.user,
+    };
+
+    let sql = `SELECT * FROM projects WHERE Author = (SELECT Name FROM users WHERE Username = '${maker.user}') `;
+    let query = db.query(sql, (err, result) => {
+        if (err) throw err;
+        res.json(result);
+    });
+});
 app.get("/getusers", (req, res) => {
     let sql = "SELECT * FROM users";
     let query = db.query(sql, (err, result) => {
         if (err) throw err;
 
+        res.json(result);
+    });
+});
+app.post("/workernav", (req, res) => {
+    let maker = {
+        user: req.body.user,
+    };
+    let sql = `SELECT * FROM users  WHERE Username = '${maker.user}'`;
+    let query = db.query(sql, (err, result) => {
+        if (err) throw err;
+
+        res.json(result);
+    });
+});
+app.post("/mytime", (req, res) => {
+    let maker = {
+        user: req.body.user,
+    };
+    let sql = `SELECT * FROM time  WHERE Username = '${maker.user}'`;
+    let query = db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(result);
         res.json(result);
     });
 });
@@ -79,6 +118,22 @@ app.get("/chartdata", (req, res) => {
     let query = db.query(sql, (err, result) => {
         if (err) throw err;
 
+        res.json(result);
+    });
+});
+app.post("/addtime", (req, res) => {
+    let tid = {
+        title: req.body.title,
+        name: req.body.name,
+        username: req.body.username,
+        description: req.body.description,
+        hours: req.body.hours,
+        minutes: req.body.minutes,
+    };
+    let sql = `INSERT INTO time SET ?; `;
+    let query = db.query(sql, tid, (err, result) => {
+        if (err) throw err;
+        console.log(result);
         res.json(result);
     });
 });
@@ -138,6 +193,17 @@ app.post("/deleteproject", (req, res) => {
     });
     res.send("Project Deleted");
 });
+app.post("/deletetime", (req, res) => {
+    let project = {
+        id: req.body.id,
+    };
+
+    let sql = `DELETE from time WHERE id = ${project.id}; SET @num := 0;UPDATE time SET id = @num := (@num+1);ALTER TABLE time AUTO_INCREMENT = 1`;
+    let query = db.query(sql, project, (err, result) => {
+        if (err) throw err;
+    });
+    res.send("Project Deleted");
+});
 
 app.post("/editproject", (req, res) => {
     let project = {
@@ -160,6 +226,38 @@ app.post("/editproject", (req, res) => {
     });
     res.send("Updated table");
 });
+app.post("/completeproject", function(req, res) {
+    var today = new Date();
+    var date =
+        today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
+    let project = {
+        id: req.body.id,
+        title: req.body.title,
+        author: req.body.author,
+        datum: date,
+        workers: req.body.workers,
+        completed: req.body.completed,
+        budget: req.body.budget,
+        belopp: req.body.belopp,
+    };
+    let sql = `INSERT INTO fakturerat(Title,Author,Workers,Datum,Budget,Belopp) VALUES('${project.title}','${project.author}','${project.workers}','${project.datum}','${project.budget}','${project.belopp}')`;
+    let sqldelete = `DELETE from projects WHERE id = ${project.id}; SET @num := 0;UPDATE projects SET id = @num := (@num+1);ALTER TABLE projects AUTO_INCREMENT = 1`;
+    let sql2 = `UPDATE users SET Created = Created - 1, Active = Active -1, Completion = Completion + 1 WHERE Name = '${project.author}' `;
+    let sql3 = `UPDATE users SET Active = Active - 1, Completion = Completion + 1 WHERE Name = '${project.workers}'`;
+    let query1 = db.query(sql, project, (err, result) => {
+        if (err) throw err;
+    });
+    let query2 = db.query(sqldelete, project, (err, result) => {
+        if (err) throw err;
+    });
+    let query3 = db.query(sql2, project, (err, result) => {
+        if (err) throw err;
+    });
+    let query4 = db.query(sql3, project, (err, result) => {
+        if (err) throw err;
+    });
+    res.send("Projekt Arkiverad!");
+});
 app.post("/authenticate", function(req, res) {
     var Username = req.body.Username;
     var Password = req.body.Password;
@@ -167,16 +265,19 @@ app.post("/authenticate", function(req, res) {
         db.query(
             `SELECT * FROM users WHERE Username = ? AND Password = ?`, [Username, Password],
             function(error, results, fields) {
-                if (results.length > 0) {
+                if (results[0].Username === Username) {
                     req.session.loggedin = true;
                     req.session.Username = Username;
-                    res.redirect("http://192.168.1.140:8080/#/Home");
+                    res.redirect("http://192.168.1.65:8080/#/Home");
                 } else {
                     res.send("Incorrect Username and/or Password!");
                 }
                 res.end();
             }
         );
+    } else {
+        res.send("Please enter Username and Password!");
+        res.end();
     }
 });
 
