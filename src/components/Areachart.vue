@@ -32,7 +32,6 @@ export default {
       .then((response) => response.json())
       .then((result) => {
         this.chartdata = result;
-        console.log(this.chartdata);
       });
   },
 

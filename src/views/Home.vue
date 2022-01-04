@@ -116,14 +116,20 @@
           />
         </div>
         <div class="faktureratC">
-          <div
+          <button
             title="Du måste först nå 100% avklarat"
             class="notnow"
             v-if="projects.Precentage < 100"
           >
             Complete
-          </div>
-          <div class="now" v-if="projects.Precentage > 99">Complete</div>
+          </button>
+          <button
+            class="now"
+            v-if="projects.Precentage > 99"
+            @click="Edit(projects.id), (arkiveraoverlay = !arkiveraoverlay)"
+          >
+            Complete
+          </button>
         </div>
       </div>
       <transition name="slide-fade">
@@ -141,33 +147,24 @@
             method="POST"
           >
             <p>Är du säker att du vill radera detta project?</p>
+            <input type="hidden" name="id" id="id" :value="this.x" />
             <input
-              type="text"
-              name="id"
-              id="id"
-              :value="this.x"
-              style="display: none"
-            />
-            <input
-              type="text"
+              type="hidden"
               name="author"
               id="author"
               :value="this.rauthor"
-              style="display: none"
             />
             <input
-              type="text"
+              type="hidden"
               name="workers"
               id="workers"
               :value="this.rworker"
-              style="display: none"
             />
             <input
-              type="text"
+              type="hidden"
               name="username"
               id="username"
               :value="this.$store.state.someValue"
-              style="display: none"
             />
             <button type="button" @click="R = !R">Nej</button>
             <input type="submit" value="JA" @click="reloadPage" />
@@ -208,13 +205,7 @@
               />
             </span>
 
-            <input
-              type="text"
-              name="id"
-              id="id"
-              :value="this.z"
-              style="display: none"
-            />
+            <input type="hidden" name="id" id="id" :value="this.z" />
             <span class="e">
               <input
                 type="range"
@@ -224,18 +215,71 @@
               />
               <span>{{ this.precentage }}</span>
             </span>
-            <span class="e">
-              <span>Avklarat: </span>
-              <span
-                ><input type="radio" value="JA" name="completed" /><span
-                  >JA</span
-                >
-                |<input type="radio" checked value="NEJ" name="completed" />
-                NEJ</span
-              >
-            </span>
 
             <input type="submit" @click="reloadPage" />
+          </form>
+        </div>
+      </transition>
+      <transition name="slide-fade">
+        <div id="ArkivForm" v-if="arkiveraoverlay">
+          <iframe
+            width="1px"
+            height="1px"
+            name="dummyframe"
+            id="dummyframe"
+            style="display: none"
+          ></iframe>
+          <form
+            method="POST"
+            action="http://192.168.1.65:3000/completeproject"
+            target="dummyframe"
+          >
+            <h1>{{ this.etitle }}</h1>
+            <input type="hidden" name="id" id="id" :value="this.z" />
+            <input type="hidden" name="title" id="title" :value="this.etitle" />
+            <input
+              type="hidden"
+              name="author"
+              id="author"
+              :value="this.eauthor"
+            />
+            <input
+              type="hidden"
+              name="workers"
+              id="workers"
+              :value="this.eworker"
+            />
+            <div>
+              <span>Budget</span>
+              <input type="number" id="budget" name="budget" />
+            </div>
+            <div>
+              <span>Belopp</span>
+              <input type="Number" id="belopp" name="belopp" />
+            </div>
+            <div>
+              <p>Fakturerat</p>
+              <div>
+                <input
+                  type="radio"
+                  name="completed"
+                  id="completed"
+                  value="Nej"
+                  checked
+                />
+                <label for="completed">Nej</label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  name="completed"
+                  id="completed"
+                  value="Ja"
+                />
+                <label for="completed">Ja</label>
+              </div>
+            </div>
+            <input type="Submit" value="Arkivera" @click="reloadPage" />
           </form>
         </div>
       </transition>
@@ -255,16 +299,19 @@
   padding-right: 10px;
   transition: 1s;
   animation: glow 10s infinite;
+  font-weight: bold;
+
+  font-size: 20px;
 }
 .now:after {
   content: "";
   top: 20%;
 
-  width: 30px;
+  width: 35px;
   height: 30px;
   position: absolute;
   z-index: 1;
-  animation: slide 1s infinite 3s;
+  animation: slide 1s infinite;
   border-radius: 25px;
 
   /*
@@ -335,6 +382,7 @@
   padding: 7px;
   border-radius: 20px;
   color: rgb(135, 140, 151);
+  border: none;
 }
 .progresscont {
   box-shadow: inset 0px 0px 5px 1px rgb(119, 229, 248);
@@ -442,7 +490,16 @@
   flex-direction: column;
   text-align: right;
 }
-
+#ArkivForm {
+  position: absolute;
+  z-index: 1;
+  top: 25%;
+  left: 40%;
+  background: rgb(255, 255, 255);
+  width: 300px;
+  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.377);
+  border-radius: 10px;
+}
 #Deleteform {
   position: absolute;
   z-index: 1;
@@ -457,7 +514,6 @@
   margin: 0;
   max-width: 100%;
   width: 100%;
-
   overflow-y: scroll;
   overflow-x: hidden;
   background: -webkit-linear-gradient(left, #25c481, #25b7c4);
@@ -470,7 +526,6 @@
   margin: 30px;
   grid-gap: 20px;
 }
-
 .Card {
   background: linear-gradient(
     180deg,
@@ -511,6 +566,9 @@
   border-radius: 10px;
 }
 @media only screen and (max-width: 1000px) {
+  #ArkivForm {
+    left: 20%;
+  }
   #Editform {
     left: 20%;
   }
@@ -579,6 +637,15 @@ input[type="date"] {
 .e {
   width: 100%;
 }
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
 </style>
 <script>
 import $ from "jquery";
@@ -589,6 +656,7 @@ export default {
   components: { Postit, Workernav, RadialProgressBar },
   data() {
     return {
+      arkiveraoverlay: false,
       completedSteps: 0,
       totalSteps: 10,
       T: true,
@@ -647,6 +715,7 @@ export default {
       this.eauthor = this.project[this.x].Author;
       this.eprecentage = this.project[this.x].precentage;
       this.edate = this.project[this.x].Date;
+      this.eworker = this.project[this.x].Workers;
     },
     Remove(id) {
       this.z = id - 1;

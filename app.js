@@ -247,16 +247,25 @@ app.post("/completeproject", function(req, res) {
     let query1 = db.query(sql, project, (err, result) => {
         if (err) throw err;
     });
-    let query2 = db.query(sqldelete, project, (err, result) => {
+    let query4 = db.query(sql3, project, (err, result) => {
         if (err) throw err;
     });
     let query3 = db.query(sql2, project, (err, result) => {
         if (err) throw err;
     });
-    let query4 = db.query(sql3, project, (err, result) => {
+    let query2 = db.query(sqldelete, project, (err, result) => {
         if (err) throw err;
     });
+
     res.send("Projekt Arkiverad!");
+});
+app.get("/getarkiv", (req, res) => {
+    let sql = "SELECT * FROM fakturerat";
+    let query = db.query(sql, (err, result) => {
+        if (err) throw err;
+
+        res.json(result);
+    });
 });
 app.post("/authenticate", function(req, res) {
     var Username = req.body.Username;

@@ -35,7 +35,6 @@ export default {
           names.push(user[i].Name);
         }
 
-        console.log(pointer);
         // Create new arrays to store the data
 
         this.gradient = this.$refs.canvas
@@ -53,7 +52,6 @@ export default {
           // Then push our data to the new arrays
           labelsArray.push(names[i]);
           ratioArray.push(pointer[i]);
-          console.log(ratioArray);
         }
 
         this.renderChart(

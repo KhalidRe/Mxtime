@@ -5,7 +5,7 @@
       <table cellpadding="0" cellspacing="0" border="0">
         <thead>
           <tr class="trhead">
-            <th>ProjeKt</th>
+            <th>Projekt</th>
             <th>Deadline</th>
             <th>Färdigt</th>
             <th>Deltagare</th>
@@ -266,8 +266,7 @@ export default {
           if (this.optimal > 100) {
             this.optimal = 100;
           }
-          console.log(this.q, "THIS.Q");
-          console.log(this.d, "This.D");
+
           this.array.push(this.optimal);
         }
       });

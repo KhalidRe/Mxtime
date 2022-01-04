@@ -4,22 +4,38 @@
 
     <div id="aktivP">
       <h1 style="color: white">Aktiva i project</h1>
-      <Barchart />
+      <Barchart class="barchart" />
     </div>
   </div>
 </template>
 <style scoped>
-#aktivP {
-  background: linear-gradient(#878f8965, #00000054);
+::-webkit-scrollbar {
+  width: 6px;
 }
-.Charts {
-  width: 100%;
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
 
+.Charts {
+  height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
 
   background: -webkit-linear-gradient(left, #25c481, #25b7c4);
   background: linear-gradient(to right, #25c481, #25b7c4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#aktivP {
+  height: 100%;
+  background: linear-gradient(#878f8965, #00000054);
+}
+.barchart {
+  height: 80%;
 }
 </style>
 <script>

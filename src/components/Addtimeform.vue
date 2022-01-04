@@ -158,7 +158,6 @@ export default {
       .then((response) => response.json())
       .then((result) => {
         this.project = result;
-        console.log(this.project);
       });
   },
   methods: {

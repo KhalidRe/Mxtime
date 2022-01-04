@@ -75,15 +75,6 @@
             <span>{{ this.precentage }}</span>
           </span>
 
-          <span class="e">
-            <span>Fakturerat: </span>
-            <span
-              ><input type="radio" value="JA" name="completed" /><span>JA</span>
-              |<input type="radio" checked value="NEJ" name="completed" />
-              NEJ</span
-            >
-          </span>
-
           <input type="submit" @click="reloadPage" />
         </form>
       </div>
@@ -198,7 +189,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("http://192.168.1.140:3000/workernav", requestOptions)
+    fetch("http://192.168.1.65:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
