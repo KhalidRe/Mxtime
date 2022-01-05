@@ -94,7 +94,7 @@ export default {
     };
   },
   created() {
-    fetch("http://192.168.1.65:3000/getarkiv")
+    fetch("http://192.168.1.138:3000/getarkiv")
       .then((response) => response.json())
       .then((result) => {
         this.arkiv = result;

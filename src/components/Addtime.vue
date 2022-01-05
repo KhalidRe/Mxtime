@@ -48,7 +48,7 @@
           style="display: none"
         ></iframe>
         <form
-          action="http://192.168.1.65:3000/deletetime"
+          action="http://192.168.1.138:3000/deletetime"
           target="dummyframe"
           method="POST"
         >
@@ -231,7 +231,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("http://192.168.1.65:3000/mytime", requestOptions)
+    fetch("http://192.168.1.138:3000/mytime", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.time = result;

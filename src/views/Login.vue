@@ -9,7 +9,7 @@
     ></iframe>
     <div id="LoginForm">
       <h2>Logga in</h2>
-      <form action="http://192.168.1.65:3000/authenticate" method="POST">
+      <form action="http://192.168.1.138:3000/authenticate" method="POST">
         <div>
           <input
             type="text"

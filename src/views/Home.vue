@@ -142,7 +142,7 @@
             style="display: none"
           ></iframe>
           <form
-            action="http://192.168.1.65:3000/deleteproject"
+            action="http://192.168.1.138:3000/deleteproject"
             target="dummyframe"
             method="POST"
           >
@@ -183,7 +183,7 @@
           <h2>Redigera projekt</h2>
           <form
             id="inputsStyle"
-            action="http://192.168.1.65:3000/editproject"
+            action="http://192.168.1.138:3000/editproject"
             method="POST"
             target="dummyframe"
           >
@@ -231,7 +231,7 @@
           ></iframe>
           <form
             method="POST"
-            action="http://192.168.1.65:3000/completeproject"
+            action="http://192.168.1.138:3000/completeproject"
             target="dummyframe"
           >
             <h1>{{ this.etitle }}</h1>
@@ -684,7 +684,7 @@ export default {
   },
 
   created() {
-    fetch("http://192.168.1.65:3000/viewprojects")
+    fetch("http://192.168.1.138:3000/viewprojects")
       .then((response) => response.json())
       .then((result) => {
         this.project = result;

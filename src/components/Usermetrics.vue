@@ -251,7 +251,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("http://192.168.1.65:3000/myprojects", requestOptions)
+    fetch("http://192.168.1.138:3000/myprojects", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.project = result;
@@ -270,12 +270,12 @@ export default {
           this.array.push(this.optimal);
         }
       });
-    fetch("http://192.168.1.65:3000/getusers")
+    fetch("http://192.168.1.138:3000/getusers")
       .then((response) => response.json())
       .then((result) => {
         this.user = result;
       });
-    fetch("http://192.168.1.65:3000/chartdata")
+    fetch("http://192.168.1.138:3000/chartdata")
       .then((response) => response.json())
       .then((result) => {
         this.chartdata = result;

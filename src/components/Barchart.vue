@@ -12,7 +12,7 @@ export default {
     };
   },
   created() {
-    fetch("http://192.168.1.65:3000/getusers")
+    fetch("http://192.168.1.138:3000/getusers")
       .then((response) => response.json())
       .then((result) => {
         this.user = result;
@@ -26,7 +26,7 @@ export default {
   mounted() {
     let names = [];
     let pointer = [];
-    fetch("http://192.168.1.65:3000/getusers")
+    fetch("http://192.168.1.138:3000/getusers")
       .then((response) => response.json())
       .then((result) => {
         let user = result;

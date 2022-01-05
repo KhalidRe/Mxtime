@@ -12,7 +12,7 @@
         <h1 style="margin: 0">Lägg till Projekt</h1>
         <form
           id="inputsStyle"
-          action="http://192.168.1.65:3000/createproject"
+          action="http://192.168.1.138:3000/createproject"
           method="POST"
           target="dummyframe"
         >
@@ -189,7 +189,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("http://192.168.1.65:3000/workernav", requestOptions)
+    fetch("http://192.168.1.138:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
