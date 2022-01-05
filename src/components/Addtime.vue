@@ -102,7 +102,7 @@
   line-height: 50px;
 }
 #Addtime {
-  width: 95vw;
+  width: 100%;
 }
 
 h1 {
@@ -157,7 +157,6 @@ body {
   font-family: "Roboto", sans-serif;
 }
 section {
-  margin: 50px;
 }
 
 /* follow me template */

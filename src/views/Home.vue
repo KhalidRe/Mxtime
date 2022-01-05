@@ -516,8 +516,7 @@
   width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  background: -webkit-linear-gradient(left, #25c481, #25b7c4);
-  background: linear-gradient(to right, #25c481, #25b7c4);
+  background: -webkit-linear-gradient(120deg, #497771, #80f2ff);
 }
 .Grid {
   display: grid;

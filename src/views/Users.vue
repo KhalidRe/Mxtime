@@ -2,7 +2,7 @@
   <div class="Users transform">
     <Usermetrics />
     <Addtime />
-    <h1>Hela laget Föffan</h1>
+    <h1>Marinex</h1>
     <div class="Grid">
       <div class="s" v-for="users in user" :key="users.id">
         <div name="id" id="id" class="card" :value="users.id">
@@ -42,7 +42,7 @@
         <audio src="@/assets/pep.mp3" autoplay></audio>
         <div class="metrics">
           <div class="close" @click="showprofile = !showprofile">
-            <img width="50px" src="@/assets/closebtn.png" alt="" />
+            <img width="40vw" src="@/assets/closebtn.png" alt="" />
           </div>
           <div class="infocapsule">
             <div class="gotit">
@@ -53,7 +53,6 @@
               />
               <h1>{{ this.ename }}</h1>
             </div>
-            <div class="chart"><Linechart :to-chart="filteredArray" /></div>
             <div class="stats">
               <div class="fe">
                 <div class="n">
@@ -76,7 +75,9 @@
                 <div class="d">Success</div>
               </div>
             </div>
-            <div class="hot"></div>
+            <div class="chart">
+              <Linechart id="chart" :to-chart="filteredArray" />
+            </div>
           </div>
         </div>
       </div>
@@ -125,25 +126,33 @@
   justify-content: center;
   grid-gap: 10px;
 }
+#chart {
+  width: 100%;
+}
 .chart {
-  width: 40vw;
-  background-color: #113a3d44;
-  height: 40vh;
+  width: 100%;
+  background-color: #000000cc;
+
   float: right;
+  color: white;
 }
 .gotit {
-  float: left;
-  margin-left: 10%;
 }
 .infocapsule {
-  margin-top: 5%;
-  width: 100vw;
+  width: 100%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 .close {
   float: right;
   padding: 20px;
 }
-
+#line-chart {
+  width: 100vw;
+}
 .metrics {
   width: 100%;
   height: 100%;
@@ -152,7 +161,7 @@
 video {
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   object-fit: cover;
   z-index: 0;
   left: 0;
@@ -199,8 +208,7 @@ video {
   width: 100%;
 }
 .Users {
-  background: -webkit-linear-gradient(left, #25c481, #25b7c4);
-  background: linear-gradient(to right, #25c481, #25b7c4);
+  background: -webkit-linear-gradient(120deg, #497771, #80f2ff);
   width: 100%;
   height: 100vh;
   overflow-y: scroll;

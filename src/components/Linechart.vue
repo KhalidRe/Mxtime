@@ -31,9 +31,9 @@ export default {
       .createLinearGradient(0, 0, 0, 450);
     this.gradient2 = this.$refs.canvas
       .getContext("2d")
-      .createLinearGradient(0, 0, 0, 450);
+      .createLinearGradient(0, 0, 0, 0);
     this.gradient.addColorStop(0, "#1D80AB");
-    this.gradient.addColorStop(1, "#8E00D0");
+    this.gradient.addColorStop(1, "#31FFF3");
 
     var ratioArray = [];
     var labelsArray = [];
@@ -50,8 +50,11 @@ export default {
         datasets: [
           {
             label: "Avklarade projekt",
+
             backgroundColor: this.gradient,
+            borderColor: "white",
             data: pointer,
+            color: "red",
           },
         ],
       },

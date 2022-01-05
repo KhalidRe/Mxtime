@@ -53,15 +53,14 @@
   align-items: center;
   width: 100%;
   height: 100vh;
-  background: -webkit-linear-gradient(left, #25c481, #25b7c4);
-  background: linear-gradient(to right, #25c481, #25b7c4);
+  background: -webkit-linear-gradient(120deg, #497771, #80f2ff);
 }
 #LoginForm {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 300px;
-  height: 30vh;
+
   border-radius: 25px;
   box-shadow: 0px 0px 5px 5px rgb(128, 128, 128);
 }

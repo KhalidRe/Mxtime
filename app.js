@@ -83,7 +83,8 @@ app.post("/myprojects", (req, res) => {
     });
 });
 app.get("/getusers", (req, res) => {
-    let sql = "SELECT * FROM users";
+    let sql =
+        "SELECT id,Username,Name,Active,Created,Completion,Profile,Status FROM users";
     let query = db.query(sql, (err, result) => {
         if (err) throw err;
 
@@ -94,7 +95,7 @@ app.post("/workernav", (req, res) => {
     let maker = {
         user: req.body.user,
     };
-    let sql = `SELECT * FROM users  WHERE Username = '${maker.user}'`;
+    let sql = `SELECT id,Username,Name,Active,Created,Completion,Profile,Status FROM users  WHERE Username = '${maker.user}'`;
     let query = db.query(sql, (err, result) => {
         if (err) throw err;
 

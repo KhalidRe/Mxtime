@@ -66,7 +66,7 @@ export default {
   height: 100vh;
 }
 #Navbar {
-  background: linear-gradient(180deg, #a4f3a8 0%, rgb(108, 216, 175) 100%);
+  background: -webkit-linear-gradient(120deg, #4484b8, #47b4b4);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -81,7 +81,7 @@ export default {
   padding-top: 15px;
   padding-bottom: 15px;
   box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.603);
-  border: solid 1px rgb(109, 235, 161);
+  border: solid 1px rgb(15, 61, 34);
   border-radius: 5px;
   transition: 1s;
 }

@@ -20,7 +20,7 @@
 <style scoped>
 #Workernav {
   width: 100%;
-  background: linear-gradient(90deg, #98f46c 0%, #65a4ee 100%);
+  background: -webkit-linear-gradient(120deg, #4484b8, #47b4b4);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -44,7 +44,6 @@
 }
 @media only screen and (max-width: 1000px) {
   #Workernav {
-    background: linear-gradient(90deg, #98f46c 0%, #65a4ee 100%);
     display: flex;
     flex-direction: row;
     align-items: center;
