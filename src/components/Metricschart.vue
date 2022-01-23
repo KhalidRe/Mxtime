@@ -228,7 +228,7 @@ export default {
   },
 
   created() {
-    fetch("http://192.168.1.138:3000/viewprojects")
+    fetch("https://mxserver-simdf.ondigitalocean.app/viewprojects")
       .then((response) => response.json())
       .then((result) => {
         this.project = result;
@@ -247,15 +247,10 @@ export default {
           this.array.push(this.optimal);
         }
       });
-    fetch("http://192.168.1.138:3000/getusers")
+    fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
       .then((response) => response.json())
       .then((result) => {
         this.user = result;
-      });
-    fetch("http://192.168.1.138:3000/chartdata")
-      .then((response) => response.json())
-      .then((result) => {
-        this.chartdata = result;
       });
   },
 };

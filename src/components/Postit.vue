@@ -12,13 +12,19 @@
         <h1 style="margin: 0">Lägg till Projekt</h1>
         <form
           id="inputsStyle"
-          action="http://192.168.1.138:3000/createproject"
+          action="https://mxserver-simdf.ondigitalocean.app/createproject"
           method="POST"
           target="dummyframe"
         >
           <span class="e">
             <span>Projekt namn: </span
-            ><input type="text" name="title" id="title" required />
+            ><input
+              type="text"
+              name="title"
+              id="title"
+              mode="no-cors"
+              required
+            />
           </span>
           <span class="e">
             <input
@@ -75,7 +81,7 @@
             <span>{{ this.precentage }}</span>
           </span>
 
-          <input type="submit" @click="reloadPage" />
+          <input type="submit" @click="reloadPage()" />
         </form>
       </div>
     </transition>
@@ -181,7 +187,7 @@ export default {
   created() {
     const requestOptions = {
       method: "POST",
-      mode: "cors",
+
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -189,7 +195,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("http://192.168.1.138:3000/workernav", requestOptions)
+    fetch("https://mxserver-simdf.ondigitalocean.app/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];

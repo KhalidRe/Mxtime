@@ -12,7 +12,7 @@
       <h1 style="margin: 0">Lägg till tid</h1>
       <form
         id="inputsStyle"
-        action="http://192.168.1.138:3000/addtime"
+        action="https://mxserver-simdf.ondigitalocean.app/addtime"
         method="POST"
         target="dummyframe"
       >
@@ -70,7 +70,7 @@
           <input type="text" name="description" id="description" value=".." />
         </span>
 
-        <input type="submit" @click="reloadPage" />
+        <input type="submit" @click="reloadPage()" />
       </form>
     </div>
   </div>
@@ -143,18 +143,19 @@ export default {
       method: "POST",
       mode: "cors",
       headers: {
-        "Content-Type": "application/json",
         Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
-
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("http://192.168.1.138:3000/workernav", requestOptions)
+
+    fetch("https://mxserver-simdf.ondigitalocean.app/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
       });
-    fetch("http://192.168.1.138:3000/viewprojects")
+    fetch("https://mxserver-simdf.ondigitalocean.app/viewprojects")
       .then((response) => response.json())
       .then((result) => {
         this.project = result;

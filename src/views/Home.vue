@@ -142,7 +142,7 @@
             style="display: none"
           ></iframe>
           <form
-            action="http://192.168.1.138:3000/deleteproject"
+            action="https://mxserver-simdf.ondigitalocean.app/deleteproject"
             target="dummyframe"
             method="POST"
           >
@@ -183,7 +183,7 @@
           <h2>Redigera projekt</h2>
           <form
             id="inputsStyle"
-            action="http://192.168.1.138:3000/editproject"
+            action="https://mxserver-simdf.ondigitalocean.app/editproject"
             method="POST"
             target="dummyframe"
           >
@@ -231,7 +231,7 @@
           ></iframe>
           <form
             method="POST"
-            action="http://192.168.1.138:3000/completeproject"
+            action="https://mxserver-simdf.ondigitalocean.app/completeproject"
             target="dummyframe"
           >
             <h1>{{ this.etitle }}</h1>
@@ -684,7 +684,19 @@ export default {
   },
 
   created() {
-    fetch("http://192.168.1.138:3000/viewprojects")
+    const requestOptionsget = {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
+    fetch(
+      "https://mxserver-simdf.ondigitalocean.app/viewprojects",
+      requestOptionsget
+    )
       .then((response) => response.json())
       .then((result) => {
         this.project = result;
@@ -701,6 +713,7 @@ export default {
           }
           this.array.push(this.optimal);
         }
+        console.log(this.project);
       });
   },
   methods: {

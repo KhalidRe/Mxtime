@@ -356,14 +356,13 @@ export default {
     };
   },
   created() {
-    fetch("http://192.168.1.138:3000/getusers")
+    fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
       .then((response) => response.json())
       .then((result) => {
         this.user = result;
       });
     const requestOptions = {
       method: "POST",
-      mode: "cors",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -371,12 +370,15 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("http://192.168.1.138:3000/myprojects", requestOptions)
+    fetch(
+      "https://mxserver-simdf.ondigitalocean.app/myprojects",
+      requestOptions
+    )
       .then((response) => response.json())
       .then((result) => {
         this.myprojects = result;
       });
-    fetch("http://192.168.1.138:3000/getarkiv")
+    fetch("https://mxserver-simdf.ondigitalocean.app/getarkiv")
       .then((response) => response.json())
       .then((result) => {
         this.arkivs = result;

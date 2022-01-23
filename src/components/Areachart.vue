@@ -17,18 +17,18 @@ export default {
   },
   extends: Line,
   created() {
-    fetch("http://192.168.1.138:3000/viewprojects")
+    fetch("https://mxserver-simdf.ondigitalocean.app/viewprojects")
       .then((response) => response.json())
       .then((result) => {
         this.project = result;
         for (this.i = 0; this.i <= result.length; this.i++) {}
       });
-    fetch("http://192.168.1.138:3000/getusers")
+    fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
       .then((response) => response.json())
       .then((result) => {
         this.user = result;
       });
-    fetch("http://192.168.1.138:3000/chartdata")
+    fetch("https://mxserver-simdf.ondigitalocean.app/chartdata")
       .then((response) => response.json())
       .then((result) => {
         this.chartdata = result;

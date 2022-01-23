@@ -48,7 +48,7 @@
           style="display: none"
         ></iframe>
         <form
-          action="http://192.168.1.138:3000/deletetime"
+          action="https://mxserver-simdf.ondigitalocean.app/deletetime"
           target="dummyframe"
           method="POST"
         >
@@ -225,13 +225,13 @@ export default {
       method: "POST",
       mode: "cors",
       headers: {
-        "Content-Type": "application/json",
         Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
-
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("http://192.168.1.138:3000/mytime", requestOptions)
+    fetch("https://mxserver-simdf.ondigitalocean.app/mytime", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.time = result;

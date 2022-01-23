@@ -94,7 +94,19 @@ export default {
     };
   },
   created() {
-    fetch("http://192.168.1.138:3000/getarkiv")
+    const requestOptionsget = {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    };
+    fetch(
+      "https://mxserver-simdf.ondigitalocean.app/getarkiv",
+      requestOptionsget
+    )
       .then((response) => response.json())
       .then((result) => {
         this.arkiv = result;

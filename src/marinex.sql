@@ -27,96 +27,13 @@ SET time_zone = "+00:00";
 -- Tabellstruktur `chart`
 --
 
-CREATE TABLE `chart` (
-  `id` int(11) NOT NULL,
-  `Title` varchar(255) DEFAULT NULL,
-  `Completion` varchar(255) DEFAULT NULL,
-  `Deadline` varchar(255) DEFAULT NULL,
-  `Author` varchar(255) DEFAULT NULL,
-  `Date` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 --
 -- Dumpning av Data i tabell `chart`
 --
 
-INSERT INTO `chart` (`id`, `Title`, `Completion`, `Deadline`, `Author`, `Date`) VALUES
-(5, 'JAE', '79', '2021-12-23', 'Khalid', '2021-12-31'),
-(6, 'JAE', '53', '2021-12-23', 'Khalid', '2021-12-31'),
-(7, 'JAE', '66', '2021-12-23', 'Khalid', '2021-12-31'),
-(8, 'JAE', '90', '2021-12-23', 'Khalid', '2021-12-31'),
-(9, 'JAE', '84', '2021-12-23', 'Khalid', '2021-12-31'),
-(10, 'JAE', '25', '2021-12-23', 'Khalid', '2021-12-31'),
-(11, 'JBK', '0', '2022-01-08', 'Khalid', '2022-01-02'),
-(12, 'JBK', '17', '2022-01-08', 'Khalid', '2022-01-02'),
-(13, 'JBK', '52', '2022-01-08', 'Khalid', '2022-01-02'),
-(14, 'JBK', '85', '2022-01-08', 'Khalid', '2022-01-02'),
-(15, 'JBK', '100', '2022-01-08', 'Khalid', '2022-01-02'),
-(16, 'OKE', '0', '2022-01-08', 'Khalid', '2022-01-08'),
-(17, 'OKE', '0', '2022-02-06', 'Khalid', '2022-01-08'),
-(18, 'JAE', '0', '2022-01-09', 'Khalid', '2021-12-31'),
-(19, 'JAE', '34', '2022-01-09', 'Khalid', '2021-12-31'),
-(20, 'OKE', '63', '2022-02-06', 'Khalid', '2022-01-08'),
-(21, 'JBK', '27', '2021-12-06', 'Khalid', '2021-12-05'),
-(22, 'Geee', '47', '2021-12-12', 'Khalid', '2021-12-05'),
-(23, 'Okeee', '39', '2021-12-07', 'Khalid', '2021-12-04'),
-(24, 'Okeee', '0', '2021-12-06', 'Khalid', '2021-12-04'),
-(25, 'Okeee', '0', '2021-12-05', 'Khalid', '2021-12-04'),
-(26, 'CSS', '20', '2022-01-02', 'Khalid', '2021-12-12'),
-(27, 'Okeee', '78', '2021-12-05', 'Khalid', '2021-12-04'),
-(28, 'okok', '73', '2022-01-07', 'Khalid', '2021-12-25'),
-(29, 'okok', '0', '2021-12-31', 'Khalid', '2021-12-25'),
-(30, 'okok', '0', '2022-01-09', 'Khalid', '2021-12-25'),
-(31, 'HTML', '37', '2022-01-01', 'Khalid', '2021-12-05'),
-(32, 'Skjutsa mama', '100', '2021-12-06', 'Khalid', '2021-12-05'),
-(33, 'JBK', '58', '2021-12-06', 'Khalid', '2021-12-05'),
-(34, 'CSS', '52', '2022-01-02', 'Khalid', '2021-12-12'),
-(35, 'Okeee', '0', '2021-12-05', 'Khalid', '2021-12-04'),
-(36, 'Okeee', '67', '2021-12-05', 'Khalid', '2021-12-04'),
-(37, 'Okeee', '0', '2021-12-05', 'Khalid', '2021-12-04'),
-(38, 'Okeee', '47', '2021-12-05', 'Khalid', '2021-12-04'),
-(39, 'JBK', '100', '2021-12-06', 'Khalid', '2021-12-05'),
-(40, 'JBK', '100', '2021-12-06', 'Khalid', '2021-12-05'),
-(41, 'Meme', '43', '2021-12-11', 'Khalid', '2021-12-05'),
-(42, 'JBK', '70', '2021-12-23', 'Khalid', '2021-12-31'),
-(43, 'Morad', '34', '2021-12-31', 'Khalid', '2021-12-05'),
-(44, 'JBK', '48', '2021-12-30', 'Khalid', '2021-12-05'),
-(45, 'Morad', '0', '2021-12-31', 'Khalid', '2021-12-05'),
-(46, 'ME', '41', '2021-12-31', 'Khalid', '2021-12-05'),
-(47, 'efaf', '50', '2022-01-09', 'Khalid', '2021-12-05'),
-(48, 'Morad', '60', '2022-01-09', 'Khalid', '2022-01-08'),
-(49, 'okok', '0', '2022-12-06', 'Khalid', '2022-01-05'),
-(50, 'aoemtåaoem', '49', '2022-12-06', 'Khalid', '2022-12-05'),
-(51, 'JBK', '100', '2021-12-27', 'Khalid', '2021-12-06'),
-(52, 'Medlife', '26', '2021-12-13', 'Khalid', '2021-12-06'),
-(53, 'OK', '40', '2021-12-13', 'Khalid', '2021-12-06'),
-(54, 'YO!', '55', '2021-12-09', 'Philip', '2021-12-06'),
-(55, 'Test', '0', '2021-12-20', 'Anders', '2021-12-06'),
-(56, 'Skolarbete Religion', '35', '2021-12-11', 'Khalid', '2021-12-08'),
-(57, 'ff', '37', '2021-12-30', 'Khalid', '2021-12-14'),
-(58, 'egea', '84', '2021-12-30', 'Khalid', '2021-12-17'),
-(59, 'Mansaf', '31', '2021-12-16', 'Khalid', '2021-12-15'),
-(60, 'Medlife', '100', '2021-12-13', 'Khalid', '2021-12-06'),
-(61, 'Mansaf', '77', '2021-12-16', 'Khalid', '2021-12-15'),
-(62, 'Mansaf', '81', '2021-12-16', 'Khalid', '2021-12-15'),
-(63, 'ok', '55', '2021-12-30', 'Khalid', '2021-12-15'),
-(64, 'JBK', 'undefined', 'undefined', 'undefined', 'undefined'),
-(65, 'Medlife', '0', '2021-12-13', 'Khalid', '2021-12-06'),
-(66, 'Medlife', '100', '2021-12-13', 'Khalid', '2021-12-06'),
-(67, 'JBK', '0', '2021-12-27', 'Khalid', '2021-12-06'),
-(68, 'JBK', '100', '2021-12-27', 'Khalid', '2021-12-06'),
-(69, 'ookok', '21', '2021-12-18', 'Khalid', '2021-12-17'),
-(70, 'aa', '37', '2021-12-19', 'Khalid', '2021-12-17'),
-(71, 'sgsg', '0', '2022-01-08', 'Khalid', '2021-12-23'),
-(72, 'sfs', '0', '2021-12-24', 'Khalid', '2021-12-18'),
-(73, 'jgfj', '0', '2021-12-18', 'Khalid', '2021-12-17'),
-(74, 'rur', '36', '2021-12-17', 'Khalid', '2021-12-18'),
-(75, 'u6u', '44', '2021-12-18', 'Khalid', '2021-12-17'),
-(76, 'ri6r', '58', '2021-12-18', 'Khalid', '2021-12-17'),
-(77, 'i6r', '0', '2021-12-18', 'Khalid', '2021-12-17'),
-(78, 'i6rr', '0', '2021-12-18', 'Khalid', '2021-12-17'),
-(79, 'ru6ru', '0', '2021-12-25', 'Khalid', '2021-12-18'),
-(80, 'r6ur', '45', '2021-12-18', 'Khalid', '2021-12-17');
+
 
 -- --------------------------------------------------------
 
@@ -125,7 +42,7 @@ INSERT INTO `chart` (`id`, `Title`, `Completion`, `Deadline`, `Author`, `Date`) 
 --
 
 CREATE TABLE `contacts` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL PRIMARY KEY,
   `f_name` varchar(100) NOT NULL,
   `l_name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
@@ -159,7 +76,7 @@ INSERT INTO `posts` (`id`, `title`, `body`) VALUES
 --
 
 CREATE TABLE `projects` (
-  `id` int(1) NOT NULL,
+  `id` int(1) NOT NULL PRIMARY KEY,
   `Title` varchar(255) DEFAULT NULL,
   `Author` varchar(255) DEFAULT NULL,
   `Date` varchar(255) DEFAULT NULL,
@@ -176,7 +93,7 @@ CREATE TABLE `projects` (
 --
 
 CREATE TABLE `time` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL PRIMARY KEY,
   `Title` varchar(255) DEFAULT NULL,
   `Name` varchar(255) DEFAULT NULL,
   `Username` varchar(255) DEFAULT NULL,
@@ -192,7 +109,7 @@ CREATE TABLE `time` (
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL PRIMARY KEY,
   `Username` varchar(255) DEFAULT NULL,
   `Password` varchar(255) DEFAULT NULL,
   `Name` varchar(255) DEFAULT NULL,
