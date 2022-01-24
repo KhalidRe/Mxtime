@@ -670,6 +670,7 @@ export default {
       eprecentage: 0,
       precentage: 0,
       projects: "",
+      logged: this.$store.state.someValue,
       project: "",
       obj: {},
       start: 0,
@@ -684,36 +685,63 @@ export default {
   },
 
   created() {
-    const requestOptionsget = {
-      method: "GET",
+    const auth = {
+      method: "POST",
       mode: "cors",
       headers: {
-        Accept: "application/json",
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
+        Accept: "application/json",
       },
+
+      body: JSON.stringify({ user: this.logged }),
     };
-    fetch(
-      "https://mxserver-simdf.ondigitalocean.app/viewprojects",
-      requestOptionsget
-    )
+    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        this.project = result;
-        console.log(this.project);
-        for (this.i = 0; this.i < this.project.length; this.i++) {
-          this.start = new Date(this.project[this.i].Date);
-          this.end = new Date(this.project[this.i].Deadline);
-          this.today = new Date();
-          this.q = Math.abs(this.today - this.start);
-          this.d = Math.abs(this.end - this.start);
-          this.optimal = Math.round((this.q / this.d) * 100);
-          if (this.optimal > 100) {
-            this.optimal = 100;
-          }
-          this.array.push(this.optimal);
+        console.log(result);
+        if (result.length === 0) {
+          location.replace("https://flexnet.se/#/");
         }
-        console.log(this.project);
+        if (result.length > 0) {
+          fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
+            .then((response) => response.json())
+            .then((result) => {
+              this.user = result;
+              console.log(user);
+            });
+
+          const requestOptionsget = {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          };
+          fetch(
+            "https://mxserver-simdf.ondigitalocean.app/viewprojects",
+            requestOptionsget
+          )
+            .then((response) => response.json())
+            .then((result) => {
+              this.project = result;
+              console.log(this.project);
+              for (this.i = 0; this.i < this.project.length; this.i++) {
+                this.start = new Date(this.project[this.i].Date);
+                this.end = new Date(this.project[this.i].Deadline);
+                this.today = new Date();
+                this.q = Math.abs(this.today - this.start);
+                this.d = Math.abs(this.end - this.start);
+                this.optimal = Math.round((this.q / this.d) * 100);
+                if (this.optimal > 100) {
+                  this.optimal = 100;
+                }
+                this.array.push(this.optimal);
+              }
+              console.log(this.project);
+            });
+        }
       });
   },
   methods: {
@@ -736,7 +764,14 @@ export default {
       this.rworker = this.project[this.z].Workers;
     },
     reloadPage() {
-      window.location.reload();
+      setTimeout(window.location.reload(), 2000);
+    },
+  },
+  computed: {
+    someValue: {
+      get() {
+        return this.$store.state.someValue;
+      },
     },
   },
 };

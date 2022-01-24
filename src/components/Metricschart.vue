@@ -224,33 +224,54 @@ export default {
       q: 0,
       d: 0,
       optimal: 0,
+      logged: this.$store.state.someValue,
     };
   },
 
   created() {
-    fetch("https://mxserver-simdf.ondigitalocean.app/viewprojects")
+    const auth = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+
+      body: JSON.stringify({ user: this.logged }),
+    };
+    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        this.project = result;
-
-        for (this.i = 0; this.i < this.project.length; this.i++) {
-          this.start = new Date(this.project[this.i].Date);
-          this.end = new Date(this.project[this.i].Deadline);
-          this.today = new Date();
-          this.q = Math.abs(this.today - this.start);
-          this.d = Math.abs(this.end - this.start);
-          this.optimal = Math.round((this.q / this.d) * 100);
-          if (this.optimal > 100) {
-            this.optimal = 100;
-          }
-
-          this.array.push(this.optimal);
+        console.log(result);
+        if (result.length == 0) {
+          location.replace("https://flexnet.se/#/");
         }
-      });
-    fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
-      .then((response) => response.json())
-      .then((result) => {
-        this.user = result;
+        if (result.length > 0) {
+          fetch("https://mxserver-simdf.ondigitalocean.app/viewprojects")
+            .then((response) => response.json())
+            .then((result) => {
+              this.project = result;
+
+              for (this.i = 0; this.i < this.project.length; this.i++) {
+                this.start = new Date(this.project[this.i].Date);
+                this.end = new Date(this.project[this.i].Deadline);
+                this.today = new Date();
+                this.q = Math.abs(this.today - this.start);
+                this.d = Math.abs(this.end - this.start);
+                this.optimal = Math.round((this.q / this.d) * 100);
+                if (this.optimal > 100) {
+                  this.optimal = 100;
+                }
+
+                this.array.push(this.optimal);
+              }
+            });
+          fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
+            .then((response) => response.json())
+            .then((result) => {
+              this.user = result;
+            });
+        }
       });
   },
 };

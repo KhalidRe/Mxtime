@@ -182,6 +182,7 @@ export default {
       loggedin: "",
       precentage: 0,
       logged: this.$store.state.someValue,
+      delay: 1000,
     };
   },
   created() {
@@ -203,7 +204,7 @@ export default {
   },
   methods: {
     reloadPage() {
-      window.location.reload();
+      setTimeout(window.location.reload(), 2000);
     },
   },
 };

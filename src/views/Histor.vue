@@ -91,26 +91,47 @@ export default {
   data() {
     return {
       arkiv: "",
+      logged: this.$store.state.someValue,
     };
   },
   created() {
-    const requestOptionsget = {
-      method: "GET",
+    const auth = {
+      method: "POST",
       mode: "cors",
       headers: {
-        Accept: "application/json",
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
+        Accept: "application/json",
       },
+
+      body: JSON.stringify({ user: this.logged }),
     };
-    fetch(
-      "https://mxserver-simdf.ondigitalocean.app/getarkiv",
-      requestOptionsget
-    )
+    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        this.arkiv = result;
-        console.log(this.arkiv);
+        console.log(result);
+        if (result.length == 0) {
+          location.replace("https://flexnet.se/#/");
+        }
+        if (result.length > 0) {
+          const requestOptionsget = {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          };
+          fetch(
+            "https://mxserver-simdf.ondigitalocean.app/getarkiv",
+            requestOptionsget
+          )
+            .then((response) => response.json())
+            .then((result) => {
+              this.arkiv = result;
+              console.log(this.arkiv);
+            });
+        }
       });
   },
 };

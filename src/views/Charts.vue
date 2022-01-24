@@ -49,7 +49,29 @@ export default {
     Metricschart,
   },
   data() {
-    return {};
+    return {
+      logged: this.$store.state.someValue,
+    };
+  },
+  created() {
+    const auth = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+
+      body: JSON.stringify({ user: this.logged }),
+    };
+    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.length == 0) {
+          location.replace("https://flexnet.se/#/");
+        }
+      });
   },
 };
 </script>

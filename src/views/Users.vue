@@ -344,7 +344,7 @@ export default {
       projects: "",
       logged: this.$store.state.someValue,
       arkivs: "",
-
+      success: true,
       arr2: "",
       index: "",
       value2: "",
@@ -356,13 +356,9 @@ export default {
     };
   },
   created() {
-    fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
-      .then((response) => response.json())
-      .then((result) => {
-        this.user = result;
-      });
     const requestOptions = {
       method: "POST",
+
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -370,19 +366,46 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch(
-      "https://mxserver-simdf.ondigitalocean.app/myprojects",
-      requestOptions
-    )
+    const auth = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+
+      body: JSON.stringify({ user: this.logged }),
+    };
+    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        this.myprojects = result;
-      });
-    fetch("https://mxserver-simdf.ondigitalocean.app/getarkiv")
-      .then((response) => response.json())
-      .then((result) => {
-        this.arkivs = result;
-        console.log(this.arkivs);
+        console.log(result);
+        if (result.length == 0) {
+          location.replace("https://flexnet.se/#/");
+        }
+        if (result.length > 0) {
+          fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
+            .then((response) => response.json())
+            .then((result) => {
+              this.user = result;
+            });
+
+          fetch(
+            "https://mxserver-simdf.ondigitalocean.app/myprojects",
+            requestOptions
+          )
+            .then((response) => response.json())
+            .then((result) => {
+              this.myprojects = result;
+            });
+
+          fetch("https://mxserver-simdf.ondigitalocean.app/getarkiv")
+            .then((response) => response.json())
+            .then((result) => {
+              this.arkivs = result;
+              console.log(this.arkivs);
+            });
+        }
       });
   },
   methods: {

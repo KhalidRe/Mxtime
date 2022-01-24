@@ -18,7 +18,7 @@
             type="text"
             id="Username"
             name="Username"
-            v-model="someValue"
+            ref="Username"
             value=""
           />
         </div>
@@ -33,7 +33,7 @@
           />
         </div>
         <div>
-          <input style="margin: 5px" type="submit" />
+          <input style="margin: 5px" type="submit" @click="setvalue()" />
         </div>
       </form>
       <button style="margin: 5px">Forgot password</button>
@@ -78,6 +78,7 @@ export default {
     };
   },
   created() {},
+
   computed: {
     someValue: {
       get() {
@@ -88,6 +89,10 @@ export default {
       },
     },
   },
-  methods: {},
+  methods: {
+    setvalue() {
+      this.someValue = this.$refs.Username.value;
+    },
+  },
 };
 </script>

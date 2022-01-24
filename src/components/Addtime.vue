@@ -217,7 +217,7 @@ export default {
       this.x = id;
     },
     reloadPage() {
-      window.location.reload();
+      setTimeout(window.location.reload(), 2000);
     },
   },
   created() {
