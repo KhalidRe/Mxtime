@@ -14,6 +14,9 @@
         <router-link class="links" to="/Histor"
           ><img width="50vw" src="@/assets/historyicon.png" alt=""
         /></router-link>
+        <router-link class="links" to="/Chat"
+          ><img width="50vw" src="@/assets/smokeeffect.gif" alt=""
+        /></router-link>
       </div>
     </transition>
     <div id="openclose">

@@ -5,38 +5,43 @@ import Histor from "../views/Histor.vue";
 import Charts from "../views/Charts.vue";
 import Users from "../views/Users.vue";
 import Login from "../views/Login.vue";
+import Chat from "../views/Chat.vue";
 Vue.use(VueRouter);
 
-const routes = [
-  {
-    path: "/",
-    name: "Login",
-    component: Login,
-  },
-  {
-    path: "/Home",
-    name: "Home",
-    component: Home,
-  },
-  {
-    path: "/Charts",
-    name: "Charts",
-    component: Charts,
-  },
-  {
-    path: "/Users",
-    name: "Users",
-    component: Users,
-  },
-  {
-    path: "/Histor",
-    name: "Histor",
-    component: Histor,
-  },
+const routes = [{
+        path: "/",
+        name: "Login",
+        component: Login,
+    },
+    {
+        path: "/Chat",
+        name: "Chat",
+        component: Chat,
+    },
+    {
+        path: "/Home",
+        name: "Home",
+        component: Home,
+    },
+    {
+        path: "/Charts",
+        name: "Charts",
+        component: Charts,
+    },
+    {
+        path: "/Users",
+        name: "Users",
+        component: Users,
+    },
+    {
+        path: "/Histor",
+        name: "Histor",
+        component: Histor,
+    },
 ];
 
 const router = new VueRouter({
-  routes,
+    routes,
 });
 
 export default router;

@@ -9,8 +9,6 @@ Vue.config.productionTip = false;
 new Vue({
     router,
     store,
-    beforeCreate() {
-        this.$store.commit("increment");
-    },
+
     render: (h) => h(App),
 }).$mount("#app");

@@ -69,7 +69,7 @@ export default {
       .then((result) => {
         console.log(result);
         if (result.length == 0) {
-          location.replace("https://flexnet.se/#/");
+          location.replace("http://192.168.1.65:8080/#/");
         }
       });
   },
