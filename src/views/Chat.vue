@@ -132,6 +132,11 @@ export default {
     };
   },
   created() {
+    this.socketInstance = io("https://mxserver-simdf.ondigitalocean.app");
+    this.socketInstance.on("message:received", (data) => {
+      this.messages = this.messages.concat(data);
+    });
+
     const auth = {
       method: "POST",
       mode: "cors",
@@ -173,13 +178,6 @@ export default {
       });
   },
   methods: {
-    join() {
-      this.joined = true;
-      this.socketInstance = io("https://mxserver-simdf.ondigitalocean.app");
-      this.socketInstance.on("message:recived", (data) => {
-        this.messages = this.messages.concat(data);
-      });
-    },
     sendMessage() {
       if (this.text.length > 0) {
         this.addMessage();

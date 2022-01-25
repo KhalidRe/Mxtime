@@ -81,7 +81,7 @@
             <span>{{ this.precentage }}</span>
           </span>
 
-          <input type="submit" @click="reloadPage()" />
+          <input type="submit" />
         </form>
       </div>
     </transition>

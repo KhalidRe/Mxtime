@@ -167,7 +167,7 @@
               :value="this.$store.state.someValue"
             />
             <button type="button" @click="R = !R">Nej</button>
-            <input type="submit" value="JA" @click="reloadPage" />
+            <input type="submit" value="JA" />
           </form>
         </div>
       </transition>
@@ -216,7 +216,7 @@
               <span>{{ this.precentage }}</span>
             </span>
 
-            <input type="submit" @click="reloadPage" />
+            <input type="submit" />
           </form>
         </div>
       </transition>
@@ -279,7 +279,7 @@
                 <label for="completed">Ja</label>
               </div>
             </div>
-            <input type="Submit" value="Arkivera" @click="reloadPage" />
+            <input type="Submit" value="Arkivera" />
           </form>
         </div>
       </transition>
