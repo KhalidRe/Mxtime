@@ -78,6 +78,15 @@ export default {
   overflow-x: hidden;
   width: 100px;
 }
+#Navbar::-webkit-scrollbar {
+  width: 6px;
+}
+#Navbar::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+#Navbar::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
 .links {
   width: 50px;
   padding: 10px;

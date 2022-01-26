@@ -2,16 +2,29 @@
   <div id="Chat">
     <div class="chatcont">
       <div class="messagewindow">
-        <span class="bouble" v-for="message in messages" :key="message.id">
-          <b class="usernamechat"> {{ message.user }}:</b>
-          <b class="messagelength">
-            {{ message.text }}
-          </b>
-          <div>
-            <b class="timestamp">{{ message.id }}</b>
-          </div>
-          <img class="profile" :src="message.icon" alt="" />
+        <span v-for="message in messages" :key="message.id">
+          <span
+            v-bind:class="[
+              message.user === currentUser ? boubleactive : '',
+              boubleothers,
+            ]"
+          >
+            <div id="ugotit">
+              <img class="profile" :src="message.icon" alt="" />
+
+              <b class="usernamechat" ref="usermsg"> {{ message.user }}</b
+              >:
+            </div>
+
+            <b class="messagelength">
+              {{ message.text }}
+            </b>
+            <div>
+              <b class="timestamp">{{ message.time }}</b>
+            </div>
+          </span>
         </span>
+        <span ref="scrollhere"></span>
       </div>
       <div class="inputsborder">
         <div class="inputs">
@@ -28,40 +41,76 @@
   </div>
 </template>
 <style scoped>
+#ugotit {
+  display: flex;
+  flex-direction: row;
+  justify-content: baseline;
+  align-items: center;
+}
 .messagelength {
   max-width: 400px;
   display: block; /* or inline-block */
   text-overflow: ellipsis;
   word-wrap: break-word;
   overflow: hidden;
+  text-align: left;
 }
 .profile {
   width: 50px;
   height: 50px;
   border-radius: 20px;
-  position: absolute;
+
   margin-left: -60px;
 }
 .timestamp {
   font-size: 14px;
   color: rgb(105, 105, 105);
 }
-.bouble {
-  display: flex;
-
-  background-color: white;
-  min-width: 200px;
+.boubleothers {
+  display: grid;
+  grid-template-columns: 15% auto 10%;
+  color: black;
+  background-color: #98d3dd;
+  min-width: 20vw;
+  max-width: 30vw;
   max-width: 450px;
   padding: 20px;
   border-radius: 25px 25px 25px 1px;
   margin: 5px;
   margin-left: 50px;
-  justify-content: space-between;
 }
+.boubleactive {
+  display: grid;
+  grid-template-columns: 15% auto 10%;
+
+  background-color: #063f80;
+  color: white;
+  min-width: 20vw;
+  max-width: 30vw;
+  max-width: 450px;
+  padding: 20px;
+  border-radius: 25px 25px 25px 1px;
+  margin: 5px;
+  margin-left: 50px;
+}
+
 .messagewindow {
+  margin: 0;
+  max-width: 100%;
   width: 100%;
-  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
+.messagewindow::-webkit-scrollbar {
+  width: 6px;
+}
+.messagewindow::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+.messagewindow::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
 .sendmessage {
   width: 5%;
   height: 45px;
@@ -114,6 +163,9 @@
   background-size: 100%;
   background: url("~@/assets/chatback.png");
 }
+#Chat::-webkit-scrollbar {
+  display: none;
+}
 </style>
 <script>
 import moment from "moment";
@@ -129,14 +181,15 @@ export default {
       currentUser: "",
       Profile: "",
       icon: "",
+      i: 0,
+      holder: [],
+      areulogged: false,
+      boubleactive: "boubleactive",
+      boubleothers: "boubleothers",
     };
   },
   created() {
-    this.socketInstance = io("https://mxserver-simdf.ondigitalocean.app");
-    this.socketInstance.on("message:received", (data) => {
-      this.messages = this.messages.concat(data);
-    });
-
+    console.log();
     const auth = {
       method: "POST",
       mode: "cors",
@@ -147,7 +200,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
+    fetch("http://192.168.1.191:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
@@ -163,39 +216,54 @@ export default {
             },
             body: JSON.stringify({ user: this.logged }),
           };
-          fetch(
-            "https://mxserver-simdf.ondigitalocean.app/workernav",
-            requestOptions
-          )
+          fetch("http://192.168.1.191:3000/workernav", requestOptions)
             .then((response) => response.json())
             .then((result) => {
               this.loggedin = result;
               this.currentUser = this.loggedin[0].Name;
               this.profile = this.loggedin[0].Profile;
-              console.log(this.currentUser);
+              this.scrollToElement();
             });
         }
       });
+    this.socketInstance = io("http://192.168.1.191:3000");
+
+    this.socketInstance.on("message:received", (result) => {
+      this.messages = result;
+      this.scrollToElement();
+    });
   },
   methods: {
     sendMessage() {
       if (this.text.length > 0) {
+        this.scrollToElement();
         this.addMessage();
         this.text = "";
       }
     },
     addMessage() {
       const message = {
-        id: moment().format("LT"),
-        text: this.text,
+        time: moment().format("LT"),
         user: this.currentUser,
+        text: this.text,
         icon:
           this.loggedin[0].Profile &&
           require(`../assets/${this.loggedin[0].Profile}`),
       };
-      this.messages = this.messages.concat(message);
+
       this.socketInstance.emit("message", message);
     },
+    scrollToElement() {
+      const el = this.$refs.scrollhere;
+
+      if (el) {
+        // Use el.scrollIntoView() to instantly scroll to the element
+        el.scrollIntoView();
+      }
+    },
+  },
+  mounted() {
+    this.scrollToElement();
   },
 };
 </script>
