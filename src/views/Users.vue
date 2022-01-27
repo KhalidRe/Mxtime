@@ -381,7 +381,7 @@ export default {
       .then((result) => {
         console.log(result);
         if (result.length == 0) {
-          location.replace("http://192.168.1.65:8080/#/");
+          location.replace("https://flexnet.se/#/");
         }
         if (result.length > 0) {
           fetch("https://mxserver-simdf.ondigitalocean.app/getusers")

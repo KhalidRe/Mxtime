@@ -9,22 +9,21 @@
               boubleothers,
             ]"
           >
-            <div id="ugotit">
-              <img class="profile" :src="message.icon" alt="" />
+            <img class="profile" :src="message.icon" alt="" />
 
-              <b class="usernamechat" ref="usermsg"> {{ message.user }}</b
-              >:
+            <div id="ugotit">
+              <b class="usernamechat"> {{ message.user }}</b>
+              <b class="messagelength">
+                {{ message.text }}
+              </b>
             </div>
 
-            <b class="messagelength">
-              {{ message.text }}
-            </b>
             <div>
               <b class="timestamp">{{ message.time }}</b>
             </div>
           </span>
         </span>
-        <span ref="scrollhere"></span>
+        <span ref="scrollhere">ok</span>
       </div>
       <div class="inputsborder">
         <div class="inputs">
@@ -41,26 +40,33 @@
   </div>
 </template>
 <style scoped>
+.usernamechat {
+  text-align: left;
+  color: #5f5e88;
+}
+.othersnamechat {
+  text-align: left;
+  color: #263123;
+}
 #ugotit {
   display: flex;
-  flex-direction: row;
-  justify-content: baseline;
-  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 .messagelength {
   max-width: 400px;
-  display: block; /* or inline-block */
+  /* or inline-block */
   text-overflow: ellipsis;
   word-wrap: break-word;
   overflow: hidden;
   text-align: left;
 }
 .profile {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   border-radius: 20px;
 
-  margin-left: -60px;
+  margin-left: -32px;
 }
 .timestamp {
   font-size: 14px;
@@ -68,9 +74,9 @@
 }
 .boubleothers {
   display: grid;
-  grid-template-columns: 15% auto 10%;
+  grid-template-columns: 5% auto 10%;
   color: black;
-  background-color: #98d3dd;
+  background-color: #b9d6db;
   min-width: 20vw;
   max-width: 30vw;
   max-width: 450px;
@@ -81,23 +87,25 @@
 }
 .boubleactive {
   display: grid;
-  grid-template-columns: 15% auto 10%;
+  grid-template-columns: 0% auto 5%;
 
-  background-color: #063f80;
-  color: white;
+  background-color: #b4ffb8;
+  color: rgb(58, 51, 51);
   min-width: 20vw;
   max-width: 30vw;
   max-width: 450px;
   padding: 20px;
-  border-radius: 25px 25px 25px 1px;
+  border-radius: 25px 25px 25px 25px;
   margin: 5px;
   margin-left: 50px;
+  margin-bottom: 25px;
 }
 
 .messagewindow {
   margin: 0;
   max-width: 100%;
   width: 100%;
+  height: 95%;
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -150,7 +158,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: flex-end;
 }
 #Chat {
@@ -186,6 +194,8 @@ export default {
       areulogged: false,
       boubleactive: "boubleactive",
       boubleothers: "boubleothers",
+      usernamechat: "usernamechat",
+      othersnamechat: "othersnamechat",
     };
   },
   created() {
@@ -200,7 +210,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("http://192.168.1.191:3000/loggedin", auth)
+    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
@@ -216,7 +226,10 @@ export default {
             },
             body: JSON.stringify({ user: this.logged }),
           };
-          fetch("http://192.168.1.191:3000/workernav", requestOptions)
+          fetch(
+            "https://mxserver-simdf.ondigitalocean.app/workernav",
+            requestOptions
+          )
             .then((response) => response.json())
             .then((result) => {
               this.loggedin = result;
@@ -226,7 +239,7 @@ export default {
             });
         }
       });
-    this.socketInstance = io("http://192.168.1.191:3000");
+    this.socketInstance = io("https://mxserver-simdf.ondigitalocean.app");
 
     this.socketInstance.on("message:received", (result) => {
       this.messages = result;
