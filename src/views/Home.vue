@@ -141,11 +141,7 @@
             id="dummyframe"
             style="display: none"
           ></iframe>
-          <form
-            action="https://mxserver-simdf.ondigitalocean.app/deleteproject"
-            target="dummyframe"
-            method="POST"
-          >
+          <form action="" target="dummyframe" method="POST">
             <p>Är du säker att du vill radera detta project?</p>
             <input type="hidden" name="id" id="id" :value="this.x" />
             <input
@@ -165,9 +161,10 @@
               name="username"
               id="username"
               :value="this.$store.state.someValue"
+              ref="deletbyname"
             />
             <button type="button" @click="R = !R">Nej</button>
-            <input type="submit" value="JA" />
+            <input type="submit" value="JA" @click="sendDelete(), (R = !R)" />
           </form>
         </div>
       </transition>
@@ -181,12 +178,7 @@
             style="display: none"
           ></iframe>
           <h2>Redigera projekt</h2>
-          <form
-            id="inputsStyle"
-            action="https://mxserver-simdf.ondigitalocean.app/editproject"
-            method="POST"
-            target="dummyframe"
-          >
+          <form id="inputsStyle" action="" method="POST" target="dummyframe">
             <input type="hidden" name="title" id="title" :value="this.etitle" />
             <input type="hidden" name="date" id="date" :value="this.edate" />
             <input
@@ -200,7 +192,7 @@
               ><input
                 type="date"
                 name="deadline"
-                :value="this.edeadline"
+                v-model="deadline"
                 id="deadline"
               />
             </span>
@@ -216,7 +208,8 @@
               <span>{{ this.precentage }}</span>
             </span>
 
-            <input type="submit" />
+            <input type="submit" @click="sendEdit(), (T = !T)" />
+            <button type="button" @click="T = !T">Avbryt</button>
           </form>
         </div>
       </transition>
@@ -229,11 +222,7 @@
             id="dummyframe"
             style="display: none"
           ></iframe>
-          <form
-            method="POST"
-            action="https://mxserver-simdf.ondigitalocean.app/completeproject"
-            target="dummyframe"
-          >
+          <form method="POST" action="" target="dummyframe">
             <h1>{{ this.etitle }}</h1>
             <input type="hidden" name="id" id="id" :value="this.z" />
             <input type="hidden" name="title" id="title" :value="this.etitle" />
@@ -251,11 +240,23 @@
             />
             <div>
               <span>Budget</span>
-              <input type="number" id="budget" name="budget" />
+              <input
+                type="number"
+                id="budget"
+                value="0"
+                name="budget"
+                v-model="budget"
+              />
             </div>
             <div>
               <span>Belopp</span>
-              <input type="Number" id="belopp" name="belopp" />
+              <input
+                type="Number"
+                id="belopp"
+                value="0"
+                name="belopp"
+                v-model="belopp"
+              />
             </div>
             <div>
               <p>Fakturerat</p>
@@ -266,6 +267,7 @@
                   id="completed"
                   value="Nej"
                   checked
+                  v-model="fakturerat"
                 />
                 <label for="completed">Nej</label>
               </div>
@@ -275,11 +277,19 @@
                   name="completed"
                   id="completed"
                   value="Ja"
+                  v-model="fakturerat"
                 />
                 <label for="completed">Ja</label>
               </div>
             </div>
-            <input type="Submit" value="Arkivera" />
+            <input
+              type="Submit"
+              value="Arkivera"
+              @click="sendArkiv(), (arkiveraoverlay = !arkiveraoverlay)"
+            />
+            <button type="button" @click="arkiveraoverlay = !arkiveraoverlay">
+              Avbryt
+            </button>
           </form>
         </div>
       </transition>
@@ -651,6 +661,7 @@ import $ from "jquery";
 import RadialProgressBar from "vue-radial-progress";
 import Postit from "../components/Postit.vue";
 import Workernav from "@/components/Workernav.vue";
+import io from "socket.io-client";
 export default {
   components: { Postit, Workernav, RadialProgressBar },
   data() {
@@ -665,6 +676,7 @@ export default {
       eauthor: "",
       edate: "",
       edeadline: "",
+      deadline: "",
       eworkers: "",
       ecompleted: "",
       eprecentage: 0,
@@ -672,6 +684,7 @@ export default {
       projects: "",
       logged: this.$store.state.someValue,
       project: "",
+      project: [],
       obj: {},
       start: 0,
       end: 0,
@@ -681,6 +694,10 @@ export default {
       q: 0,
       d: 0,
       optimal: 0,
+      deletebyname: "",
+      budget: "",
+      belopp: "",
+      fakturerat: "",
     };
   },
 
@@ -695,7 +712,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
+    fetch("http://192.168.1.129:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
@@ -703,7 +720,7 @@ export default {
           location.replace("https://flexnet.se/#/");
         }
         if (result.length > 0) {
-          fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
+          fetch("http://192.168.1.129:3000/getusers")
             .then((response) => response.json())
             .then((result) => {
               this.user = result;
@@ -719,10 +736,7 @@ export default {
               "Access-Control-Allow-Origin": "*",
             },
           };
-          fetch(
-            "https://mxserver-simdf.ondigitalocean.app/viewprojects",
-            requestOptionsget
-          )
+          /* fetch("http://192.168.1.129:3000/viewprojects", requestOptionsget)
             .then((response) => response.json())
             .then((result) => {
               this.project = result;
@@ -740,11 +754,65 @@ export default {
                 this.array.push(this.optimal);
               }
               console.log(this.project);
-            });
+            }); */
+          this.socketInstance = io("http://192.168.1.129:3000");
+
+          this.socketInstance.on("data:received", (projectdata) => {
+            this.project = projectdata;
+            this.array = [];
+            for (this.i = 0; this.i < this.project.length; this.i++) {
+              this.start = new Date(this.project[this.i].Date);
+              this.end = new Date(this.project[this.i].Deadline);
+              this.today = new Date();
+              this.q = Math.abs(this.today - this.start);
+              this.d = Math.abs(this.end - this.start);
+              this.optimal = Math.round((this.q / this.d) * 100);
+              if (this.optimal > 100) {
+                this.optimal = 100;
+              }
+
+              this.array.push(this.optimal);
+              console.log(this.array);
+            }
+          });
         }
       });
   },
   methods: {
+    sendArkiv() {
+      const arkivdata = {
+        id: this.z,
+        title: this.etitle,
+        author: this.eauthor,
+        workers: this.eworker,
+        budget: this.budget,
+        belopp: this.belopp,
+        fakturerat: this.fakturerat,
+      };
+      this.socketInstance.emit("arkiv", arkivdata);
+    },
+
+    sendEdit() {
+      const editdata = {
+        id: this.z,
+        title: this.etitle,
+        deadline: this.deadline,
+        completed: this.ecompleted,
+        precentage: this.precentage,
+      };
+
+      this.socketInstance.emit("edit", editdata);
+    },
+    sendDelete() {
+      const deletedata = {
+        id: this.x,
+
+        author: this.rauthor,
+        workers: this.rworker,
+      };
+
+      this.socketInstance.emit("delete", deletedata);
+    },
     Edit(id) {
       this.z = id;
       this.x = id - 1;

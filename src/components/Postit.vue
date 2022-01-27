@@ -10,12 +10,7 @@
     <transition name="slide-fade">
       <div id="Formen" v-if="!show">
         <h1 style="margin: 0">Lägg till Projekt</h1>
-        <form
-          id="inputsStyle"
-          action="https://mxserver-simdf.ondigitalocean.app/createproject"
-          method="POST"
-          target="dummyframe"
-        >
+        <form id="inputsStyle" action="" method="POST" target="dummyframe">
           <span class="e">
             <span>Projekt namn: </span
             ><input
@@ -24,6 +19,7 @@
               id="title"
               mode="no-cors"
               required
+              v-model="title"
             />
           </span>
           <span class="e">
@@ -32,17 +28,20 @@
               :value="this.loggedin.Name"
               name="author"
               id="author"
+              ref="author"
             />
             <input
               type="hidden"
               id="userid"
               name="userid"
               :value="this.loggedin.id"
+              ref="userid"
             />
           </span>
           <span class="e">
             <span>Arbetare: </span
-            ><select name="workers" id="workers">
+            ><select name="workers" id="workers" v-model="workers">
+              <option value="Ensam">Ensam</option>
               <option v-if="this.loggedin.Name != 'Ljung'" value="Ljung">
                 Ljung
               </option>
@@ -58,16 +57,21 @@
               <option v-if="this.loggedin.Name != 'Khalid'" value="Khalid">
                 Khalid
               </option>
-              <option value="Ensam">Ensam</option>
             </select>
           </span>
           <span class="e">
             <span>Datum: </span>
-            <input type="date" name="date" id="date" required />
+            <input type="date" name="date" id="date" v-model="date" required />
           </span>
           <span>
             <span>Deadline: </span
-            ><input type="date" name="deadline" id="deadline" required />
+            ><input
+              type="date"
+              name="deadline"
+              id="deadline"
+              v-model="deadline"
+              required
+            />
           </span>
           <span class="e">
             <span>%Avklarat: </span>
@@ -81,7 +85,18 @@
             <span>{{ this.precentage }}</span>
           </span>
 
-          <input type="submit" />
+          <input
+            type="submit"
+            v-if="
+              this.title.replace(/\s/g, '').length > 0 &&
+              this.workers.length > 0 &&
+              this.date.length > 0 &&
+              this.deadline.length > 0
+            "
+            @click="createProject(), (show = !show)"
+          />
+          <input v-else type="submit" title="Fyll i alla fält" disabled />
+          <button type="button" @click="show = !show">Avbryt</button>
         </form>
       </div>
     </transition>
@@ -174,6 +189,7 @@ input[type="date"] {
 }
 </style>
 <script>
+import io from "socket.io-client";
 export default {
   data() {
     return {
@@ -183,6 +199,10 @@ export default {
       precentage: 0,
       logged: this.$store.state.someValue,
       delay: 1000,
+      title: "",
+      workers: "",
+      date: "",
+      deadline: "",
     };
   },
   created() {
@@ -201,8 +221,22 @@ export default {
       .then((result) => {
         this.loggedin = result[0];
       });
+    this.socketInstance = io("http://192.168.1.129:3000");
   },
   methods: {
+    createProject() {
+      const postdata = {
+        title: this.title,
+        author: this.$refs.author.value,
+        workers: this.workers,
+        date: this.date,
+        deadline: this.deadline,
+        precentage: this.precentage,
+        userid: this.$refs.userid.value,
+      };
+
+      this.socketInstance.emit("post", postdata);
+    },
     reloadPage() {
       setTimeout(window.location.reload(), 2000);
     },

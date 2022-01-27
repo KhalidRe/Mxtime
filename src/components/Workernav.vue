@@ -58,6 +58,7 @@
 }
 </style>
 <script>
+import io from "socket.io-client";
 export default {
   data() {
     return {
@@ -67,21 +68,16 @@ export default {
     };
   },
   created() {
-    const requestOptions = {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({ user: this.logged }),
+    const user = {
+      username: this.logged,
     };
-    fetch("https://mxserver-simdf.ondigitalocean.app/workernav", requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        this.loggedin = result[0];
-      });
+
+    this.socketInstance = io("http://192.168.1.129:3000");
+    this.socketInstance.emit("info", user);
+    this.socketInstance.on("info:received", (userinfo) => {
+      this.loggedin = userinfo[0];
+      console.log(userinfo);
+    });
   },
 };
 </script>
