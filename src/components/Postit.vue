@@ -41,7 +41,7 @@
           <span class="e">
             <span>Arbetare: </span
             ><select name="workers" id="workers" v-model="workers">
-              <option value="Ensam">Ensam</option>
+              <option value="Ensam">Eget</option>
               <option v-if="this.loggedin.Name != 'Ljung'" value="Ljung">
                 Ljung
               </option>
