@@ -72,7 +72,7 @@ export default {
       username: this.logged,
     };
 
-    this.socketInstance = io("http://192.168.1.129:3000");
+    this.socketInstance = io("http://192.168.1.65:3000");
     this.socketInstance.emit("info", user);
     this.socketInstance.on("info:received", (userinfo) => {
       this.loggedin = userinfo[0];

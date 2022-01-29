@@ -712,7 +712,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("http://192.168.1.129:3000/loggedin", auth)
+    fetch("http://192.168.1.65:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
@@ -720,7 +720,7 @@ export default {
           location.replace("https://flexnet.se/#/");
         }
         if (result.length > 0) {
-          fetch("http://192.168.1.129:3000/getusers")
+          fetch("http://192.168.1.65:3000/getusers")
             .then((response) => response.json())
             .then((result) => {
               this.user = result;
@@ -736,7 +736,7 @@ export default {
               "Access-Control-Allow-Origin": "*",
             },
           };
-          /* fetch("http://192.168.1.129:3000/viewprojects", requestOptionsget)
+          /* fetch("http://192.168.1.65:3000/viewprojects", requestOptionsget)
             .then((response) => response.json())
             .then((result) => {
               this.project = result;
@@ -755,7 +755,7 @@ export default {
               }
               console.log(this.project);
             }); */
-          this.socketInstance = io("http://192.168.1.129:3000");
+          this.socketInstance = io("http://192.168.1.65:3000");
 
           this.socketInstance.on("data:received", (projectdata) => {
             this.project = projectdata;

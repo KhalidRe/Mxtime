@@ -210,7 +210,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("http://192.168.1.129:3000/loggedin", auth)
+    fetch("http://192.168.1.65:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
@@ -226,7 +226,7 @@ export default {
             },
             body: JSON.stringify({ user: this.logged }),
           };
-          fetch("http://192.168.1.129:3000/workernav", requestOptions)
+          fetch("http://192.168.1.65:3000/workernav", requestOptions)
             .then((response) => response.json())
             .then((result) => {
               this.loggedin = result;
@@ -236,7 +236,7 @@ export default {
             });
         }
       });
-    this.socketInstance = io("http://192.168.1.129:3000");
+    this.socketInstance = io("http://192.168.1.65:3000");
 
     this.socketInstance.on("message:received", (result) => {
       this.messages = result;

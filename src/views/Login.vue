@@ -9,15 +9,9 @@
     ></iframe>
     <div id="LoginForm">
       <h2>Logga in</h2>
-      <form action="http://192.168.1.129:3000/authenticate" method="POST">
+      <form action="" method="POST">
         <div>
-          <input
-            type="text"
-            id="Username"
-            name="Username"
-            ref="Username"
-            value=""
-          />
+          <input type="text" id="Username" name="Username" ref="Username" />
         </div>
         <br />
         <div style="margin-bottom: 10px">
@@ -27,10 +21,15 @@
             name="Password"
             placeholder="Password"
             autocomplete="false"
+            ref="Password"
           />
         </div>
         <div>
-          <input style="margin: 5px" type="submit" @click="setvalue()" />
+          <input
+            style="margin: 5px"
+            type="submit"
+            @click="setvalue(), login()"
+          />
         </div>
       </form>
       <button style="margin: 5px">Forgot password</button>
@@ -87,6 +86,26 @@ export default {
     },
   },
   methods: {
+    login() {
+      const auth = {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+
+        body: JSON.stringify({
+          Username: this.$refs.Username.value,
+          Password: this.$refs.Password.value,
+        }),
+      };
+      fetch("https://192.168.1.65:3000/test", auth)
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+        });
+    },
     setvalue() {
       this.someValue = this.$refs.Username.value;
     },

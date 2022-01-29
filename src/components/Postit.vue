@@ -221,7 +221,7 @@ export default {
       .then((result) => {
         this.loggedin = result[0];
       });
-    this.socketInstance = io("http://192.168.1.129:3000");
+    this.socketInstance = io("http://192.168.1.65:3000");
   },
   methods: {
     createProject() {
