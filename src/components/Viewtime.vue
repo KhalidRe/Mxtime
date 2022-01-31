@@ -1,16 +1,16 @@
 <template>
-  <div id="Addtime">
+  <div id="Viewtime" v-if="userstatus === 'Admin'">
     <section>
-      <h1>Lägg in tid</h1>
+      <h1>Admin view</h1>
       <div class="tbl-header">
         <table cellpadding="0" cellspacing="0" border="0">
           <thead>
             <tr>
               <th>Projekt</th>
+              <th>Skapare</th>
               <th>Timmar</th>
               <th>Minuter</th>
               <th>Beskrivning</th>
-              <Addtimeform class="o" />
             </tr>
           </thead>
         </table>
@@ -20,6 +20,7 @@
           <tbody>
             <tr class="row" v-for="times in time" :key="times.id">
               <td>{{ times.Title }}</td>
+              <td>{{ times.Name }}</td>
               <td>{{ times.Hours }}</td>
               <td>{{ times.Minutes }}</td>
               <td>{{ times.Description }}</td>
@@ -190,7 +191,7 @@
   text-align: center;
   line-height: 50px;
 }
-#Addtime {
+#Viewtime {
   width: 100%;
 }
 
@@ -320,10 +321,20 @@ export default {
       },
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://mxserver-simdf.ondigitalocean.app/mytime", requestOptions)
+    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        this.time = result;
+        this.userstatus = result[0].Status;
+        if (this.userstatus === "Admin") {
+          fetch(
+            "https://mxserver-simdf.ondigitalocean.app/alltime",
+            requestOptions
+          )
+            .then((response) => response.json())
+            .then((result) => {
+              this.time = result;
+            });
+        }
       });
   },
 };

@@ -82,6 +82,7 @@
         </div>
       </div>
     </transition>
+    <Viewtime />
   </div>
 </template>
 <style scoped>
@@ -331,11 +332,13 @@ import Linechart from "../components/Linechart.vue";
 import $ from "jquery";
 import Usermetrics from "../components/Usermetrics.vue";
 import Addtime from "../components/Addtime.vue";
+import Viewtime from "../components/Viewtime.vue";
 export default {
   components: {
     Addtime,
     Usermetrics,
     Linechart,
+    Viewtime,
   },
   data() {
     return {

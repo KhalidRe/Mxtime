@@ -1091,7 +1091,7 @@ export default {
     fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
+        console.log(result, "HEJEHEJEJHEJEHH");
         if (result.length === 0) {
           location.replace("https://flexnet.se/#/");
         }
