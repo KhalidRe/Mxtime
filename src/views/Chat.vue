@@ -32,6 +32,7 @@
             ref="textmessage"
             v-model="text"
             v-on:keyup.enter="sendMessage"
+            maxlength="150"
           ></textarea>
           <button class="sendmessage" @click="sendMessage()">Send</button>
         </div>
@@ -210,7 +211,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("http://192.168.1.129:3000/loggedin", auth)
+    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);
@@ -226,7 +227,10 @@ export default {
             },
             body: JSON.stringify({ user: this.logged }),
           };
-          fetch("http://192.168.1.129:3000/workernav", requestOptions)
+          fetch(
+            "https://mxserver-simdf.ondigitalocean.app/workernav",
+            requestOptions
+          )
             .then((response) => response.json())
             .then((result) => {
               this.loggedin = result;
@@ -236,7 +240,7 @@ export default {
             });
         }
       });
-    this.socketInstance = io("http://192.168.1.129:3000");
+    this.socketInstance = io("https://mxserver-simdf.ondigitalocean.app");
 
     this.socketInstance.on("message:received", (result) => {
       this.messages = result;
