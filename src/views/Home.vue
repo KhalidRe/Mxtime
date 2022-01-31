@@ -1,5 +1,6 @@
 <template>
   <div id="Home">
+    <Victory />
     <Workernav />
     <div class="Grid">
       <div class="Card" v-for="projects in project" :key="projects.id">
@@ -662,8 +663,10 @@ import RadialProgressBar from "vue-radial-progress";
 import Postit from "../components/Postit.vue";
 import Workernav from "@/components/Workernav.vue";
 import io from "socket.io-client";
+import Victory from "../components/Victory.vue";
+
 export default {
-  components: { Postit, Workernav, RadialProgressBar },
+  components: { Victory, Postit, Workernav, RadialProgressBar },
   data() {
     return {
       arkiveraoverlay: false,
@@ -736,6 +739,7 @@ export default {
               "Access-Control-Allow-Origin": "*",
             },
           };
+
           /* fetch("http://192.168.1.65:3000/viewprojects", requestOptionsget)
             .then((response) => response.json())
             .then((result) => {
@@ -779,6 +783,9 @@ export default {
       });
   },
   methods: {
+    toVictory() {
+      sendArkiv();
+    },
     sendArkiv() {
       const arkivdata = {
         id: this.z,

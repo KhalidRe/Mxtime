@@ -8,13 +8,11 @@
 
 <script>
 import Navbar from "@/components/Navbar.vue";
-import Workernav from "@/components/Workernav.vue";
-import SocketioService from "./services/socketio.service.js";
+
 export default {
   name: "Home",
   components: {
     Navbar,
-    Workernav,
   },
   data() {
     return {
