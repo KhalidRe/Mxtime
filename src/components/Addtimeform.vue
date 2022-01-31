@@ -11,29 +11,26 @@
       <div v-if="!show" class="noclick">
         <div id="Formen">
           <h1 class="title" style="margin: 0">Lägg till tid</h1>
-          <form
-            id="inputsStyle"
-            action="https://mxserver-simdf.ondigitalocean.app/addtime"
-            method="POST"
-            target="dummyframe"
-          >
+          <form id="inputsStyle" action="" method="POST" target="dummyframe">
             <span class="e">
               <input
                 type="hidden"
                 :value="this.loggedin.Name"
                 name="name"
                 id="name"
+                ref="name"
               />
               <input
                 type="hidden"
                 id="username"
                 name="username"
                 :value="this.loggedin.Username"
+                ref="username"
               />
             </span>
             <span class="e">
               <span>Projekt: </span
-              ><select name="title" id="title">
+              ><select name="title" id="title" ref="title">
                 <option value="Egen tid">Egen tid</option>
                 <option
                   v-for="projects in project"
@@ -53,6 +50,7 @@
                 value="0"
                 name="hours"
                 id="hours"
+                ref="timmar"
               />
             </span>
             <span class="e">
@@ -64,6 +62,7 @@
                 value="0"
                 name="minutes"
                 id="minutes"
+                ref="minuter"
               />
             </span>
             <span class="e">
@@ -74,9 +73,14 @@
                 id="description"
                 value=".."
                 maxlength="60"
+                ref="description"
               />
             </span>
-            <input type="submit" class="skapaknapp" @click="reloadPage()" />
+            <input
+              type="submit"
+              class="skapaknapp"
+              @click="createTime(), reloadPage()"
+            />
             <button @click="show = !show" class="avbryt">Avbryt</button>
           </form>
         </div>
@@ -332,6 +336,7 @@ input[type="range"] {
 }
 </style>
 <script>
+import io from "socket.io-client";
 export default {
   data() {
     return {
@@ -365,10 +370,23 @@ export default {
       .then((result) => {
         this.project = result;
       });
+    this.socketInstance = io("https://mxserver-simdf.ondigitalocean.app");
   },
   methods: {
     reloadPage() {
       setTimeout(window.location.reload(), 2000);
+    },
+    createTime() {
+      const timedata = {
+        title: this.$refs.title.value,
+        name: this.$refs.name.value,
+        user: this.$refs.username.value,
+        description: this.$refs.description.value,
+        timmar: this.$refs.timmar.value,
+        minuter: this.$refs.minuter.value,
+      };
+
+      this.socketInstance.emit("time", timedata);
     },
   },
 };

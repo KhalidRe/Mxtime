@@ -85,7 +85,7 @@
                 />
               </span>
             </div>
-            <span class="e">
+            <span class="e avk">
               <span>Avklarat</span>
               <input
                 type="range"
@@ -96,7 +96,10 @@
               />
               <span>{{ this.precentage }}</span>
             </span>
-
+            <span class="e">
+              <span>Tidsbudget</span>
+              <input type="number" value="0" v-model="timebudget" />
+            </span>
             <input
               type="submit"
               class="skapaknapp"
@@ -260,6 +263,15 @@ input[type="text"] {
   box-shadow: inset 0px 0px 1px 1px rgb(15, 130, 196);
   background: linear-gradient(180deg, #129426 0%, #40cf57 46.88%, #129628 100%);
 }
+input[type="number"] {
+  background-color: rgb(238, 238, 238);
+  border: none;
+  border-radius: 5px;
+  width: 50%;
+  height: 25px;
+  box-shadow: inset 0px 0px 1px 1px rgb(15, 130, 196);
+  background: linear-gradient(180deg, #129426 0%, #40cf57 46.88%, #129628 100%);
+}
 select {
   border: none;
   background: linear-gradient(180deg, #6df983 0%, #40cf57 46.88%, #82ed93 100%);
@@ -297,6 +309,10 @@ input[type="range"] {
 
   color: #d5d5d5;
 }
+.avk {
+  background: rgba(0, 0, 0, 0.336);
+  width: 100%;
+}
 </style>
 <script>
 import io from "socket.io-client";
@@ -313,6 +329,7 @@ export default {
       workers: "",
       date: "",
       deadline: "",
+      timebudget: 0,
     };
   },
   created() {
@@ -343,6 +360,8 @@ export default {
         deadline: this.deadline,
         precentage: this.precentage,
         userid: this.$refs.userid.value,
+        timebudget: this.timebudget,
+        timeused: 0,
       };
 
       this.socketInstance.emit("post", postdata);

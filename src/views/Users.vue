@@ -209,7 +209,7 @@ video {
   width: 100%;
 }
 .Users {
-  background: -webkit-linear-gradient(120deg, #497771, #80f2ff);
+  background: -webkit-linear-gradient(120deg, #053250, #000000);
   width: 100%;
   height: 100vh;
   overflow-y: scroll;

@@ -54,12 +54,34 @@
             <h2 class="dangertext">Raderade Tider försvinner permanent!</h2>
             <h1 class="dsure">Säker att du vill radera detta projekt?</h1>
             <input
-              type="text"
+              type="hidden"
               name="id"
               id="id"
               :value="this.x"
               style="display: none"
             />
+            <input
+              type="hidden"
+              name="hours"
+              id="hours"
+              :value="parseInt(this.dhours)"
+              style="display: none"
+            />
+            <input
+              type="hidden"
+              name="minutes"
+              id="minutes"
+              :value="parseInt(this.dminutes)"
+              style="display: none"
+            />
+            <input
+              type="hidden"
+              name="title"
+              id="title"
+              :value="this.dtitle"
+              style="display: none"
+            />
+
             <button class="dAvbryt" type="button" @click="R = !R">Nej</button>
             <input
               class="deletebtn"
@@ -287,6 +309,7 @@ section {
 </style>
 <script>
 import Addtimeform from "@/components/Addtimeform.vue";
+import io from "socket.io-client";
 export default {
   components: {
     Addtimeform,
@@ -298,12 +321,21 @@ export default {
       time: "",
       logged: this.$store.state.someValue,
       x: 0,
+      dhours: 0,
+      dminutes: 0,
+      dtitle: "",
     };
   },
   methods: {
     Remove(id) {
       this.z = id - 1;
       this.x = id;
+      this.dhours = parseInt(this.time[this.z].Hours);
+      this.dminutes = parseInt(this.time[this.z].Minutes);
+      this.dtitle = this.time[this.z].Title;
+      console.log(this.dtitle);
+      console.log(this.dminutes);
+      console.log(this.dhours);
     },
     reloadPage() {
       setTimeout(window.location.reload(), 2000);
@@ -325,6 +357,10 @@ export default {
       .then((result) => {
         this.time = result;
       });
+    this.socketInstance = io("https://mxserver-simdf.ondigitalocean.app");
+    this.socketInstance.on("time:received", (timedata) => {
+      this.time = timedata;
+    });
   },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div id="Histor">
-    <h1>Arkiv</h1>
+    <h1 style="color: white">Arkiv</h1>
     <div>
       <table cellpadding="0" cellspacing="0" border="0">
         <thead>
@@ -71,7 +71,7 @@ td {
 #Histor {
   width: 100%;
   height: 100vh;
-  background: -webkit-linear-gradient(120deg, #497771, #80f2ff);
+  background: -webkit-linear-gradient(120deg, #053250, #000000);
   display: flex;
   align-items: center;
   flex-direction: column;

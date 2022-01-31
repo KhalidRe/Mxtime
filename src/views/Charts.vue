@@ -24,7 +24,7 @@
   overflow-y: scroll;
   overflow-x: hidden;
 
-  background: -webkit-linear-gradient(120deg, #497771, #80f2ff);
+  background: -webkit-linear-gradient(120deg, #053250, #000000);
 
   display: flex;
   flex-direction: column;

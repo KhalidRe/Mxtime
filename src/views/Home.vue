@@ -348,12 +348,7 @@
                   type="Submit"
                   value="Arkivera"
                   class="completebtn"
-                  @mousedown="start()"
-                  @mouseleave="stop()"
-                  @mouseup="stop()"
-                  @touchstart="start()"
-                  @touchend="stop()"
-                  @touchcancel="stop()"
+                  @click="sendArkiv(), (arkiveraoverlay = !arkiveraoverlay)"
                 >
                   complete
                   <span></span>
@@ -369,7 +364,6 @@
                 >
                   Avbryt
                 </button>
-                <button v-longclick="() => changeValue(1)">+</button>
               </div>
             </form>
           </div>
@@ -698,7 +692,7 @@
   width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  background: -webkit-linear-gradient(120deg, #497771, #80f2ff);
+  background: -webkit-linear-gradient(120deg, #053250, #000000);
 }
 .Grid {
   display: grid;
@@ -1034,7 +1028,6 @@ import Postit from "../components/Postit.vue";
 import Workernav from "@/components/Workernav.vue";
 import io from "socket.io-client";
 import { invalid } from "moment";
-import { longClickDirective } from "vue-long-click";
 export default {
   components: { Postit, Workernav, RadialProgressBar },
   data() {
@@ -1064,8 +1057,6 @@ export default {
       today: "",
       sure: "",
       array: [],
-      interval: false,
-      count: 0,
       i: 0,
       q: 0,
       d: 0,
@@ -1091,7 +1082,7 @@ export default {
     fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result, "HEJEHEJEJHEJEHH");
+        console.log(result);
         if (result.length === 0) {
           location.replace("https://flexnet.se/#/");
         }
@@ -1143,7 +1134,7 @@ export default {
               this.q = Math.abs(this.today - this.start);
               this.d = Math.abs(this.end - this.start);
               this.optimal = Math.round((this.q / this.d) * 100);
-
+              console.log(this.project);
               if (this.project[this.i].Deadline.length < 1) {
                 this.optimal = 0;
               }
@@ -1157,20 +1148,8 @@ export default {
           });
         }
       });
-    const longClickInstance = longClickDirective({ delay: 400, interval: 50 });
-    Vue.directive("longclick", longClickInstance);
   },
   methods: {
-    start() {
-      if (!this.interval) {
-        this.interval = setInterval(() => this.count++, 30);
-        console.log(this.count);
-      }
-    },
-    stop() {
-      clearInterval(this.interval);
-      this.interval = false;
-    },
     sendArkiv() {
       const arkivdata = {
         id: this.z,

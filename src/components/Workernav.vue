@@ -20,7 +20,7 @@
 <style scoped>
 #Workernav {
   width: 100%;
-  background: -webkit-linear-gradient(120deg, #4484b8, #47b4b4);
+  background: -webkit-linear-gradient(120deg, #839dad, #4e7388);
   display: flex;
   flex-direction: row;
   align-items: center;
