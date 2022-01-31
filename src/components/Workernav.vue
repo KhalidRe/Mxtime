@@ -20,7 +20,7 @@
 <style scoped>
 #Workernav {
   width: 100%;
-  background: -webkit-linear-gradient(120deg, #4484b8, #47b4b4);
+  background: -webkit-linear-gradient(120deg, #839dad, #4e7388);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -68,16 +68,22 @@ export default {
     };
   },
   created() {
-    const user = {
-      username: this.logged,
+    const requestOptions = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ user: this.logged }),
     };
 
-    this.socketInstance = io("http://192.168.1.65:3000");
-    this.socketInstance.emit("info", user);
-    this.socketInstance.on("info:received", (userinfo) => {
-      this.loggedin = userinfo[0];
-      console.log(userinfo);
-    });
+    fetch("https://mxserver-simdf.ondigitalocean.app/workernav", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        this.loggedin = result[0];
+      });
   },
 };
 </script>

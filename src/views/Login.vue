@@ -9,7 +9,10 @@
     ></iframe>
     <div id="LoginForm">
       <h2>Logga in</h2>
-      <form action="" method="POST">
+      <form
+        action="https://mxserver-simdf.ondigitalocean.app/authenticate"
+        method="POST"
+      >
         <div>
           <input type="text" id="Username" name="Username" ref="Username" />
         </div>
@@ -52,7 +55,7 @@
   align-items: center;
   width: 100%;
   height: 100vh;
-  background: -webkit-linear-gradient(120deg, #497771, #80f2ff);
+  background: -webkit-linear-gradient(120deg, #053250, #000000);
 }
 #LoginForm {
   display: flex;

@@ -82,6 +82,7 @@
         </div>
       </div>
     </transition>
+    <Viewtime />
   </div>
 </template>
 <style scoped>
@@ -208,7 +209,7 @@ video {
   width: 100%;
 }
 .Users {
-  background: -webkit-linear-gradient(120deg, #497771, #80f2ff);
+  background: -webkit-linear-gradient(120deg, #053250, #000000);
   width: 100%;
   height: 100vh;
   overflow-y: scroll;
@@ -331,11 +332,13 @@ import Linechart from "../components/Linechart.vue";
 import $ from "jquery";
 import Usermetrics from "../components/Usermetrics.vue";
 import Addtime from "../components/Addtime.vue";
+import Viewtime from "../components/Viewtime.vue";
 export default {
   components: {
     Addtime,
     Usermetrics,
     Linechart,
+    Viewtime,
   },
   data() {
     return {

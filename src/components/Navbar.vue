@@ -3,19 +3,19 @@
     <transition name="normal">
       <div v-if="show" id="Navbar">
         <router-link class="links" to="/Home"
-          ><img width="50vw" src="@/assets/projecticon.png" alt=""
+          ><img width="25vw" src="@/assets/projecticon.png" alt=""
         /></router-link>
         <router-link class="links" to="/Charts"
-          ><img width="50vw" src="@/assets/charticon.png" alt=""
+          ><img width="25vw" src="@/assets/charticon.png" alt=""
         /></router-link>
         <router-link class="links" to="/Users"
-          ><img width="50vw" src="@/assets/usericon.png" alt=""
+          ><img width="25vw" src="@/assets/usericon.png" alt=""
         /></router-link>
         <router-link class="links" to="/Histor"
-          ><img width="50vw" src="@/assets/historyicon.png" alt=""
+          ><img width="25vw" src="@/assets/historyicon.png" alt=""
         /></router-link>
         <router-link class="links" to="/Chat"
-          ><img width="50vw" src="@/assets/smokeeffect.gif" alt=""
+          ><img width="25vw" src="@/assets/Chat.png" alt=""
         /></router-link>
       </div>
     </transition>
@@ -69,14 +69,14 @@ export default {
   height: 100vh;
 }
 #Navbar {
-  background: -webkit-linear-gradient(120deg, #4484b8, #47b4b4);
+  background: -webkit-linear-gradient(120deg, #839dad, #4e7388);
   display: flex;
   flex-direction: column;
   align-items: center;
-  grid-gap: 10vh;
+  grid-gap: 5vh;
   padding-top: 10px;
   overflow-x: hidden;
-  width: 100px;
+  width: 70px;
 }
 #Navbar::-webkit-scrollbar {
   width: 6px;
@@ -88,7 +88,7 @@ export default {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 .links {
-  width: 50px;
+  width: 30px;
   padding: 10px;
   padding-top: 15px;
   padding-bottom: 15px;
@@ -115,15 +115,18 @@ export default {
     width: 0vw;
   }
 
+  50% {
+    width: 90px;
+  }
   100% {
-    width: 100px;
+    width: 70px;
   }
 }
 @media only screen and (max-width: 1000px) {
   #Navbar {
   }
   .links {
-    width: 13vw;
+    width: 50%;
   }
 }
 </style>

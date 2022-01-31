@@ -1,16 +1,38 @@
 <template>
-  <div id="Addtime">
+  <div id="Viewtime" v-if="userstatus === 'Admin'">
     <section>
-      <h1>Lägg in tid</h1>
+      <h1>Admin view</h1>
+      <select
+        name="arbetare"
+        id="arbetare"
+        ref="arbetare"
+        v-model="selectedfilter"
+      >
+        <option value="alla" selected>Alla</option>
+        <option
+          v-for="usersindex in users"
+          :key="usersindex.id"
+          :value="usersindex.Name"
+          @
+        >
+          {{ usersindex.Name }}
+        </option>
+      </select>
+      <span
+        ><input type="date" name="Start" id="Start" v-model="start" ref="start"
+      /></span>
+      <span><input type="date" name="End" id="End" v-model="end" /></span>
+
+      <input type="submit" value="Filtrera" @click="filterthatshit()" />
       <div class="tbl-header">
         <table cellpadding="0" cellspacing="0" border="0">
           <thead>
             <tr>
               <th>Projekt</th>
+              <th>Skapare</th>
               <th>Timmar</th>
               <th>Minuter</th>
               <th>Beskrivning</th>
-              <Addtimeform class="o" />
             </tr>
           </thead>
         </table>
@@ -20,16 +42,10 @@
           <tbody>
             <tr class="row" v-for="times in time" :key="times.id">
               <td>{{ times.Title }}</td>
+              <td>{{ times.Name }}</td>
               <td>{{ times.Hours }}</td>
               <td>{{ times.Minutes }}</td>
               <td>{{ times.Description }}</td>
-              <td
-                style="color: red"
-                v-bind:id="times.id"
-                @click="Remove(times.id), (R = !R)"
-              >
-                DELETE
-              </td>
             </tr>
           </tbody>
         </table>
@@ -54,34 +70,12 @@
             <h2 class="dangertext">Raderade Tider försvinner permanent!</h2>
             <h1 class="dsure">Säker att du vill radera detta projekt?</h1>
             <input
-              type="hidden"
+              type="text"
               name="id"
               id="id"
               :value="this.x"
               style="display: none"
             />
-            <input
-              type="hidden"
-              name="hours"
-              id="hours"
-              :value="parseInt(this.dhours)"
-              style="display: none"
-            />
-            <input
-              type="hidden"
-              name="minutes"
-              id="minutes"
-              :value="parseInt(this.dminutes)"
-              style="display: none"
-            />
-            <input
-              type="hidden"
-              name="title"
-              id="title"
-              :value="this.dtitle"
-              style="display: none"
-            />
-
             <button class="dAvbryt" type="button" @click="R = !R">Nej</button>
             <input
               class="deletebtn"
@@ -212,8 +206,9 @@
   text-align: center;
   line-height: 50px;
 }
-#Addtime {
+#Viewtime {
   width: 100%;
+  margin-bottom: 50px;
 }
 
 h1 {
@@ -249,6 +244,15 @@ th {
   color: #fff;
   text-transform: uppercase;
 }
+input[type="date"] {
+  padding: 5px;
+  border-radius: 5px 5px 0px 0px;
+  border: none;
+
+  width: 100px;
+  height: 27px;
+  background: linear-gradient(180deg, #6df983 0%, #40cf57 46.88%, #82ed93 100%);
+}
 td {
   padding: 15px;
   text-align: left;
@@ -258,7 +262,21 @@ td {
   color: #fff;
   border-bottom: solid 1px rgba(255, 255, 255, 0.1);
 }
-
+select {
+  border: none;
+  background: linear-gradient(180deg, #6df983 0%, #40cf57 46.88%, #82ed93 100%);
+  padding: 10px;
+  border-radius: 10px 10px 0px 0px;
+  font-weight: bolder;
+}
+input[type="submit"] {
+  background: linear-gradient(180deg, #a0bff8 0%, #6d688a 46.88%, #28274b 100%);
+  border-radius: 5px 5px 0px 0px;
+  border: none;
+  width: 70px;
+  height: 37px;
+  font-weight: 700;
+}
 /* demo styles */
 
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
@@ -309,7 +327,6 @@ section {
 </style>
 <script>
 import Addtimeform from "@/components/Addtimeform.vue";
-import io from "socket.io-client";
 export default {
   components: {
     Addtimeform,
@@ -321,26 +338,16 @@ export default {
       time: "",
       logged: this.$store.state.someValue,
       x: 0,
-      dhours: 0,
-      dminutes: 0,
-      dtitle: "",
+      userstatus: "",
+      users: "",
+      selectedfilter: "alla",
+      start: "",
+      end: "",
+      startholder: "",
+      endholder: "getTime(this.end),",
     };
   },
-  methods: {
-    Remove(id) {
-      this.z = id - 1;
-      this.x = id;
-      this.dhours = parseInt(this.time[this.z].Hours);
-      this.dminutes = parseInt(this.time[this.z].Minutes);
-      this.dtitle = this.time[this.z].Title;
-      console.log(this.dtitle);
-      console.log(this.dminutes);
-      console.log(this.dhours);
-    },
-    reloadPage() {
-      setTimeout(window.location.reload(), 2000);
-    },
-  },
+
   created() {
     const requestOptions = {
       method: "POST",
@@ -352,15 +359,73 @@ export default {
       },
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://mxserver-simdf.ondigitalocean.app/mytime", requestOptions)
+    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        this.time = result;
+        this.userstatus = result[0].Status;
+        console.log(this.userstatus);
+        if (this.userstatus === "Admin") {
+          fetch(
+            "https://mxserver-simdf.ondigitalocean.app/alltime",
+            requestOptions
+          )
+            .then((response) => response.json())
+            .then((result) => {
+              this.time = result;
+            });
+          fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
+            .then((response) => response.json())
+            .then((result) => {
+              this.users = result;
+              console.log(this.users);
+            });
+        }
       });
-    this.socketInstance = io("https://mxserver-simdf.ondigitalocean.app");
-    this.socketInstance.on("time:received", (timedata) => {
-      this.time = timedata;
-    });
+  },
+  methods: {
+    Remove(id) {
+      this.z = id - 1;
+      this.x = id;
+    },
+    reloadPage() {
+      setTimeout(window.location.reload(), 2000);
+    },
+    filterthatshit() {
+      this.startholder = new Date(this.start).getTime();
+      this.endholder = new Date(this.end).getTime();
+      const requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({ user: this.logged }),
+      };
+      fetch("https://mxserver-simdf.ondigitalocean.app/alltime", requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          this.time = result;
+          this.time = this.time.filter((results) => {
+            return (
+              parseInt(results.Datum) >= this.startholder &&
+              parseInt(results.Datum) <= this.endholder
+            );
+          });
+          console.log(this.startholder, "START");
+
+          console.log(this.time, "hej");
+
+          console.log(this.endholder, "END");
+          if (this.selectedfilter !== "alla") {
+            this.time = this.time.filter((results) => {
+              return results.Name.includes(this.selectedfilter);
+            });
+          }
+        });
+      console.log(this.selectedfilter);
+    },
   },
 };
 </script>
