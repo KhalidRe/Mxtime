@@ -324,6 +324,7 @@ export default {
       dhours: 0,
       dminutes: 0,
       dtitle: "",
+      dtimeused: "",
     };
   },
   methods: {
@@ -333,6 +334,8 @@ export default {
       this.dhours = parseInt(this.time[this.z].Hours);
       this.dminutes = parseInt(this.time[this.z].Minutes);
       this.dtitle = this.time[this.z].Title;
+      this.dtimeused = this.dhours + this.dminutes;
+      console.log(this.dtimeused);
       console.log(this.dtitle);
       console.log(this.dminutes);
       console.log(this.dhours);
