@@ -45,11 +45,7 @@
             id="dummyframe"
             style="display: none"
           ></iframe>
-          <form
-            action="https://mxserver-simdf.ondigitalocean.app/deletetime"
-            target="dummyframe"
-            method="POST"
-          >
+          <form action="" target="dummyframe" method="POST">
             <img class="danger" src="@/assets/Danger.png" alt="" />
             <h2 class="dangertext">Raderade Tider försvinner permanent!</h2>
             <h1 class="dsure">Säker att du vill radera detta projekt?</h1>
@@ -87,7 +83,7 @@
               class="deletebtn"
               type="submit"
               value="JA"
-              @click="reloadPage"
+              @click="sendDelete(), reloadPage()"
             />
           </form>
         </div>
@@ -325,9 +321,19 @@ export default {
       dminutes: 0,
       dtitle: "",
       dtimeused: "",
+      z: 0,
     };
   },
   methods: {
+    sendDelete() {
+      let dtimedata = {
+        id: this.x,
+        title: this.dtitle,
+        timmar: this.dhours,
+        minuter: this.dminutes,
+      };
+      this.socketInstance.emit("delet:time", dtimedata);
+    },
     Remove(id) {
       this.z = id - 1;
       this.x = id;

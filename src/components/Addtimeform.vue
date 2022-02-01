@@ -99,7 +99,7 @@
   left: 40%;
   background: rgb(255, 255, 255);
   width: 300px;
-  min-height: 50vh;
+
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.377);
   border-radius: 10px;
 }

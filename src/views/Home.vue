@@ -20,76 +20,101 @@
             ><img width="15px" src="@/assets/kryss.png" alt=""
           /></span>
         </div>
-        <div class="inscription">
-          <div class="utförtS">
-            <span class="greendot"></span><span>Utfört</span>
+        <div class="canit">
+          <div class="inscription">
+            <div class="utförtS">
+              <span class="greendot"></span><span>Utfört</span>
+            </div>
+            <div class="deadlineS">
+              <span class="reddot"></span><span>Deadline</span>
+            </div>
           </div>
-          <div class="deadlineS">
-            <span class="reddot"></span><span>Deadline</span>
-          </div>
-        </div>
-        <div class="radialprogress">
-          <radial-progress-bar
-            :diameter="150"
-            :completed-steps="100"
-            :total-steps="100"
-            :innerStrokeColor="'none'"
-            :startColor="'#D4F7FFB0'"
-            :stopColor="'#D4F7FFB0'"
-            :strokeLinecap="'flat'"
-            :strokeWidth="18"
-          >
+
+          <div class="radialprogress">
             <radial-progress-bar
-              class="progresscont"
-              :diameter="147"
-              :total-steps="0"
+              :diameter="150"
               :completed-steps="100"
+              :total-steps="100"
               :innerStrokeColor="'none'"
-              :startColor="'#D4F7FF'"
-              :stopColor="'#D4F7FF'"
+              :startColor="'#D4F7FFB0'"
+              :stopColor="'#D4F7FFB0'"
               :strokeLinecap="'flat'"
               :strokeWidth="18"
             >
               <radial-progress-bar
-                :diameter="150"
-                :completed-steps="projects.Precentage"
-                :total-steps="100"
+                class="progresscont"
+                :diameter="147"
+                :total-steps="0"
+                :completed-steps="100"
                 :innerStrokeColor="'none'"
-                :startColor="'#6EF56D'"
-                :stopColor="'#2A9EBE'"
+                :startColor="'#D4F7FF'"
+                :stopColor="'#D4F7FF'"
                 :strokeLinecap="'flat'"
                 :strokeWidth="18"
               >
                 <radial-progress-bar
-                  :diameter="139"
-                  :completed-steps="array[projects.id - 1]"
+                  :diameter="150"
+                  :completed-steps="timearray[projects.id - 1]"
                   :total-steps="100"
                   :innerStrokeColor="'none'"
-                  :startColor="'#FF0606'"
-                  :stopColor="'#700505'"
+                  :startColor="'#6EF56D'"
+                  :stopColor="'#2A9EBE'"
                   :strokeLinecap="'flat'"
-                  :strokeWidth="9"
+                  :strokeWidth="18"
                 >
                   <radial-progress-bar
-                    class="deadlinecont"
-                    :diameter="129"
+                    :diameter="139"
+                    :completed-steps="array[projects.id - 1]"
                     :total-steps="100"
-                    :completed-steps="0"
                     :innerStrokeColor="'none'"
-                    :startColor="'none'"
-                    :stopColor="''"
+                    :startColor="'#FF0606'"
+                    :stopColor="'#700505'"
                     :strokeLinecap="'flat'"
                     :strokeWidth="9"
                   >
-                    <div class="koko">
-                      <span class="precst">{{ projects.Precentage }}%</span>
-                      <span class="optim">{{ array[projects.id - 1] }}%</span>
-                    </div>
+                    <radial-progress-bar
+                      class="deadlinecont"
+                      :diameter="129"
+                      :total-steps="100"
+                      :completed-steps="0"
+                      :innerStrokeColor="'none'"
+                      :startColor="'none'"
+                      :stopColor="''"
+                      :strokeLinecap="'flat'"
+                      :strokeWidth="9"
+                    >
+                      <div class="koko">
+                        <span class="precst"
+                          >{{ timearray[projects.id - 1] }}%</span
+                        >
+                        <span class="optim">{{ array[projects.id - 1] }}%</span>
+                      </div>
+                    </radial-progress-bar>
                   </radial-progress-bar>
                 </radial-progress-bar>
               </radial-progress-bar>
             </radial-progress-bar>
-          </radial-progress-bar>
+            <div class="satuscont">
+              <input
+                type="radio"
+                v-if="projects.Statu === 'A'"
+                checked
+                class="A shown"
+              />
+              <input
+                type="radio"
+                v-if="projects.Statu === 'B'"
+                checked
+                class="B shown"
+              />
+              <input
+                type="radio"
+                v-if="projects.Statu === 'C'"
+                checked
+                class="C shown"
+              />
+            </div>
+          </div>
         </div>
         <div class="desc">
           <div class="inf">
@@ -117,15 +142,7 @@
         </div>
         <div class="faktureratC">
           <button
-            title="Du måste först nå 100% avklarat"
-            class="notnow"
-            v-if="projects.Precentage < 100"
-          >
-            Complete
-          </button>
-          <button
             class="now"
-            v-if="projects.Precentage > 99"
             @click="Edit(projects.id), (arkiveraoverlay = !arkiveraoverlay)"
           >
             Complete
@@ -223,6 +240,7 @@
                 id="title"
                 :value="this.etitle"
               />
+
               <input type="hidden" name="date" id="date" :value="this.edate" />
               <input
                 type="hidden"
@@ -231,7 +249,40 @@
                 :value="this.eauthor"
               />
               <span class="e">
-                <span>Deadline: </span
+                <span>Status</span>
+                <span>
+                  <input
+                    type="radio"
+                    name="status"
+                    value="A"
+                    checked
+                    id="status"
+                    class="A"
+                    v-model="estatus"
+                    ref="status"
+                  />
+                  <input
+                    type="radio"
+                    name="status"
+                    value="B"
+                    id="status"
+                    class="B"
+                    ref="status"
+                    v-model="estatus"
+                  />
+                  <input
+                    type="radio"
+                    name="status"
+                    value="C"
+                    id="status"
+                    class="C"
+                    ref="status"
+                    v-model="estatus"
+                  />
+                </span>
+              </span>
+              <span class="e">
+                <span>Deadline </span
                 ><input
                   type="date"
                   name="deadline"
@@ -244,12 +295,12 @@
               <input type="hidden" name="id" id="id" :value="this.z" />
               <span class="e">
                 <input
-                  type="range"
+                  type="hidden"
                   name="precentage"
                   id="precentage"
+                  value="0"
                   v-model="precentage"
                 />
-                <span>{{ this.precentage }}</span>
               </span>
 
               <input
@@ -316,33 +367,7 @@
                   v-model="belopp"
                 />
               </div>
-              <div>
-                <p class="e">Fakturerat</p>
-                <div class="esd">
-                  <div class="es">
-                    <input
-                      type="radio"
-                      name="completed"
-                      id="completed"
-                      value="Nej"
-                      checked
-                      v-model="fakturerat"
-                    />
-                    <label for="completed">Nej</label>
-                  </div>
 
-                  <div class="es">
-                    <input
-                      type="radio"
-                      name="completed"
-                      id="completed"
-                      value="Ja"
-                      v-model="fakturerat"
-                    />
-                    <label for="completed">Ja</label>
-                  </div>
-                </div>
-              </div>
               <div class="e">
                 <button
                   type="Submit"
@@ -374,6 +399,108 @@
   </div>
 </template>
 <style scoped>
+.canit {
+  display: grid;
+  grid-template-columns: 75px 150px;
+}
+.satuscont {
+  margin-top: -150px;
+  margin-left: -13px;
+}
+.shown {
+  cursor: default;
+}
+.A {
+  background-color: rgb(3, 194, 35);
+  width: 50px;
+  height: 50px;
+  background-image: -webkit-linear-gradient(
+      0deg,
+      transparent 20%,
+      hsla(128, 92%, 50%, 0.7),
+      transparent 80%
+    ),
+    -webkit-linear-gradient(90deg, transparent 20%, hsla(138, 100%, 55%, 0.7), transparent
+          80%);
+  border-radius: 50px;
+  box-shadow: inset 0 1px 1px hsla(123, 84%, 49%, 0.8),
+    0 0 0 1px hsla(0, 0%, 0%, 0.6), 0 2px 3px hsla(0, 0%, 0%, 0.6),
+    0 4px 3px hsla(0, 0%, 0%, 0.4), 0 6px 6px hsla(0, 0%, 0%, 0.2),
+    0 10px 6px hsla(0, 0%, 0%, 0.2);
+  cursor: pointer;
+  display: inline-block;
+
+  position: relative;
+
+  -webkit-appearance: none;
+}
+.B {
+  background-color: rgb(217, 235, 60);
+  background-image: -webkit-linear-gradient(
+      0deg,
+      transparent 20%,
+      hsla(78, 82%, 62%, 0.7),
+      transparent 80%
+    ),
+    -webkit-linear-gradient(90deg, transparent 20%, hsla(71, 70%, 65%, 0.7), transparent
+          80%);
+  border-radius: 50px;
+  box-shadow: inset 0 1px 1px hsla(0, 0%, 100%, 0.8),
+    0 0 0 1px hsla(0, 0%, 0%, 0.6), 0 2px 3px hsla(0, 0%, 0%, 0.6),
+    0 4px 3px hsla(0, 0%, 0%, 0.4), 0 6px 6px hsla(0, 0%, 0%, 0.2),
+    0 10px 6px hsla(0, 0%, 0%, 0.2);
+  cursor: pointer;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+
+  position: relative;
+
+  -webkit-appearance: none;
+}
+.C {
+  background-color: rgb(255, 10, 10);
+  background-image: -webkit-linear-gradient(
+      0deg,
+      transparent 20%,
+      hsla(0, 100%, 73%, 0.7),
+      transparent 80%
+    ),
+    -webkit-linear-gradient(90deg, transparent 20%, hsla(0, 94%, 68%, 0.7), transparent
+          80%);
+  border-radius: 50px;
+  box-shadow: inset 0 1px 1px hsla(0, 0%, 100%, 0.8),
+    0 0 0 1px hsla(0, 0%, 0%, 0.6), 0 2px 3px hsla(0, 0%, 0%, 0.6),
+    0 4px 3px hsla(0, 0%, 0%, 0.4), 0 6px 6px hsla(0, 0%, 0%, 0.2),
+    0 10px 6px hsla(0, 0%, 0%, 0.2);
+  cursor: pointer;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+
+  position: relative;
+
+  -webkit-appearance: none;
+}
+input[type="radio"]:after {
+  background-color: #444;
+  border-radius: 25px;
+  box-shadow: inset 0 0 0 1px hsla(0, 0%, 0%, 0.4),
+    0 1px 1px hsla(0, 0%, 100%, 0.8);
+  content: "";
+  display: block;
+  height: 20px;
+  left: 15px;
+  position: relative;
+  top: 15px;
+  width: 20px;
+}
+input[type="radio"]:checked:after {
+  background-color: rgb(148, 255, 175);
+  box-shadow: inset 0 0 0 1px hsla(0, 0%, 0%, 0.4),
+    inset 0 2px 2px hsla(0, 0%, 100%, 0.4), 0 1px 1px hsla(0, 0%, 100%, 0.8),
+    0 0 2px 2px hsla(128, 100%, 51%, 0.4);
+}
 .dflex {
   display: flex;
   flex-direction: row;
@@ -449,7 +576,7 @@
   margin-top: 0px;
 }
 .now {
-  background: linear-gradient(#8bf39c 0%, #49ca38 100%);
+  background: linear-gradient(#8bf39c 0%, #4cc93c 100%);
   border: solid rgb(30, 212, 182) 1px;
   box-shadow: inset 0px 0px 5px 1px black;
   padding: 7px;
@@ -463,87 +590,7 @@
 
   font-size: 20px;
 }
-.now:after {
-  content: "";
-  top: 20%;
 
-  width: 35px;
-  height: 30px;
-  position: absolute;
-  z-index: 1;
-  animation: slide 1s infinite;
-  border-radius: 25px;
-
-  /*
-  CSS Gradient - complete browser support from http://www.colorzilla.com/gradient-editor/
-  */
-  background: -moz-linear-gradient(
-    left,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.8) 50%,
-    rgba(128, 186, 232, 0) 99%,
-    rgba(125, 185, 232, 0) 100%
-  ); /* FF3.6+ */
-  background: -webkit-gradient(
-    linear,
-    left top,
-    right top,
-    color-stop(0%, rgba(255, 255, 255, 0)),
-    color-stop(50%, rgba(255, 255, 255, 0.8)),
-    color-stop(99%, rgba(128, 186, 232, 0)),
-    color-stop(100%, rgba(125, 185, 232, 0))
-  ); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(
-    left,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.8) 50%,
-    rgba(128, 186, 232, 0) 99%,
-    rgba(125, 185, 232, 0) 100%
-  ); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(
-    left,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.8) 50%,
-    rgba(128, 186, 232, 0) 99%,
-    rgba(125, 185, 232, 0) 100%
-  ); /* Opera 11.10+ */
-  background: -ms-linear-gradient(
-    left,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.8) 50%,
-    rgba(128, 186, 232, 0) 99%,
-    rgba(125, 185, 232, 0) 100%
-  ); /* IE10+ */
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.8) 50%,
-    rgba(128, 186, 232, 0) 99%,
-    rgba(125, 185, 232, 0) 100%
-  ); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#007db9e8',GradientType=1 ); /* IE6-9 */
-}
-
-@keyframes slide {
-  0% {
-    opacity: 0;
-    transform: translateX(-300%);
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(-67%);
-    opacity: 0;
-  }
-}
-.notnow {
-  background-color: #5e685c;
-  padding: 7px;
-  border-radius: 20px;
-  color: rgb(135, 140, 151);
-  border: none;
-}
 .progresscont {
   box-shadow: inset 0px 0px 5px 1px rgb(119, 229, 248);
   border-radius: 100%;
@@ -624,6 +671,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 30px;
 }
 .inspcript {
   display: flex;
@@ -949,7 +997,7 @@ input[type="date"] {
   overflow: hidden;
 
   box-shadow: 0 0 10px rgb(0, 0, 0, 1);
-  font-family: verdana;
+
   font-size: 28px;
   font-weight: bolder;
   text-decoration: none;
@@ -1028,6 +1076,7 @@ import Postit from "../components/Postit.vue";
 import Workernav from "@/components/Workernav.vue";
 import io from "socket.io-client";
 import { invalid } from "moment";
+import swal from "sweetalert";
 export default {
   components: { Postit, Workernav, RadialProgressBar },
   data() {
@@ -1042,13 +1091,14 @@ export default {
       eauthor: "",
       edate: "",
       edeadline: "",
-      deadline: "",
+      deadline: this.edeadline,
       eworkers: "",
       ecompleted: "",
       eprecentage: 0,
       precentage: 0,
       projects: "",
       logged: this.$store.state.someValue,
+      estatus: "",
       project: "",
       project: [],
       obj: {},
@@ -1057,6 +1107,7 @@ export default {
       today: "",
       sure: "",
       array: [],
+      timearray: [],
       i: 0,
       q: 0,
       d: 0,
@@ -1065,6 +1116,7 @@ export default {
       budget: "",
       belopp: "",
       fakturerat: "",
+      eproject: [],
     };
   },
 
@@ -1126,8 +1178,13 @@ export default {
 
           this.socketInstance.on("data:received", (projectdata) => {
             this.project = projectdata;
+            this.timearray = [];
             this.array = [];
             for (this.i = 0; this.i < this.project.length; this.i++) {
+              this.tu = this.project[this.i].Timeused;
+              this.tb = this.project[this.i].Timebudget;
+              this.timep = Math.round((this.tu / this.tb) * 100);
+              console.log(this.timep, "hej");
               this.start = new Date(this.project[this.i].Date);
               this.end = new Date(this.project[this.i].Deadline);
               this.today = new Date();
@@ -1141,7 +1198,7 @@ export default {
               if (this.optimal > 100 || this.end < this.today) {
                 this.optimal = 100;
               }
-
+              this.timearray.push(this.timep);
               this.array.push(this.optimal);
               console.log(this.array);
             }
@@ -1161,6 +1218,11 @@ export default {
         fakturerat: this.fakturerat,
       };
       this.socketInstance.emit("arkiv", arkivdata);
+      swal({
+        title: "Grattis!",
+        text: "Du har Arkiverat projektet!",
+        icon: "success",
+      });
     },
 
     sendEdit() {
@@ -1169,11 +1231,18 @@ export default {
         title: this.etitle,
         deadline: this.deadline,
         completed: this.ecompleted,
-        precentage: this.precentage,
+        precentage: 0,
+        status: this.estatus,
       };
 
       this.socketInstance.emit("edit", editdata);
+      swal({
+        title: "Projekt Redigerad!",
+        text: "Du har redigerat projektet!",
+        icon: "success",
+      });
     },
+
     sendDelete() {
       const deletedata = {
         id: this.x,
@@ -1183,25 +1252,35 @@ export default {
       };
 
       this.socketInstance.emit("delete", deletedata);
+      swal({
+        title: "Projekt Raderat!",
+        text: "Du har raderat projektet!",
+        icon: "success",
+      });
     },
     Edit(id) {
       this.z = id;
       this.x = id - 1;
-      console.log(this.x);
-      this.etitle = this.project[this.x].Title;
-      this.edeadline = this.project[this.x].Deadline;
-      this.ecompleted = this.project[this.x].Completed;
-      this.eauthor = this.project[this.x].Author;
-      this.eprecentage = this.project[this.x].precentage;
-      this.edate = this.project[this.x].Date;
-      this.eworker = this.project[this.x].Workers;
+      this.eproject = this.project.find((result) => result.id == this.z);
+
+      console.log(this.eproject, "hello");
+
+      this.estatus = this.eproject.Statu;
+      this.etitle = this.eproject.Title;
+      this.edeadline = this.eproject.Deadline;
+      this.ecompleted = this.eproject.Completed;
+      this.eauthor = this.eproject.Author;
+      this.eprecentage = this.eproject.precentage;
+      this.edate = this.eproject.Date;
+      this.eworker = this.eproject.Workers;
     },
     Remove(id) {
       this.z = id - 1;
       this.x = id;
-      this.rtitle = this.project[this.z].Title;
-      this.rauthor = this.project[this.z].Author;
-      this.rworker = this.project[this.z].Workers;
+      this.rproject = this.project.find((result) => result.id == this.x);
+      this.rtitle = this.rproject.Title;
+      this.rauthor = this.rproject.Author;
+      this.rworker = this.rproject.Workers;
     },
     reloadPage() {
       setTimeout(window.location.reload(), 2000);

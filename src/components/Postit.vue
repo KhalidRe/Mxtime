@@ -86,15 +86,13 @@
               </span>
             </div>
             <span class="e avk">
-              <span>Avklarat</span>
               <input
-                type="range"
+                type="hidden"
                 name="precentage"
                 id="precentage"
                 value="0"
                 v-model="precentage"
               />
-              <span>{{ this.precentage }}</span>
             </span>
             <span class="e">
               <span>Tidsbudget</span>
@@ -235,7 +233,7 @@
     #000000 100%
   );
   width: 300px;
-  min-height: 50vh;
+
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.377);
   border-radius: 10px;
   padding-bottom: 10px;
@@ -358,13 +356,19 @@ export default {
         workers: this.workers,
         date: this.date,
         deadline: this.deadline,
-        precentage: this.precentage,
+        precentage: 0,
         userid: this.$refs.userid.value,
         timebudget: this.timebudget,
         timeused: 0,
+        status: "A",
       };
 
       this.socketInstance.emit("post", postdata);
+      swal({
+        title: "Projekt Skapat!",
+        text: "Du har skapat ett projekt!",
+        icon: "success",
+      });
     },
     reloadPage() {
       setTimeout(window.location.reload(), 2000);

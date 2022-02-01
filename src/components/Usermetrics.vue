@@ -8,7 +8,7 @@
             <th>Projekt</th>
             <th>Deadline</th>
             <th>Färdigt</th>
-            <th>Deltagare</th>
+            <th>Tid / Använt</th>
           </tr>
         </thead>
       </table>
@@ -33,12 +33,16 @@
             <td class="progress currentC">
               <progress
                 class="current"
-                :value="projects.Precentage"
+                :value="timearray[projects.id - 1]"
                 min="0"
                 max="100"
               ></progress>
             </td>
-            <td>{{ projects.Author }},{{ projects.Workers }}</td>
+            <td>
+              <span class="timebudget">{{ projects.Timebudget }}</span>
+              <span class="slash"> / </span>
+              <span class="timeused">{{ projects.Timeused }}</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -46,6 +50,19 @@
   </div>
 </template>
 <style scoped>
+.slash {
+  font-size: 20px;
+}
+.timebudget {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+}
+.timeused {
+  color: #33ff00;
+  font-size: 15px;
+  font-weight: 700;
+}
 .Metricschart {
   overflow-y: scroll;
   max-height: 20px;
@@ -237,6 +254,7 @@ export default {
       q: 0,
       d: 0,
       optimal: 0,
+      timearray: [],
     };
   },
 
@@ -276,19 +294,29 @@ export default {
             .then((response) => response.json())
             .then((result) => {
               this.project = result;
-
+              this.timearray = [];
+              this.array = [];
               for (this.i = 0; this.i < this.project.length; this.i++) {
+                this.tu = this.project[this.i].Timeused;
+                this.tb = this.project[this.i].Timebudget;
+                this.timep = Math.round((this.tu / this.tb) * 100);
+                console.log(this.timep, "hej");
                 this.start = new Date(this.project[this.i].Date);
                 this.end = new Date(this.project[this.i].Deadline);
                 this.today = new Date();
                 this.q = Math.abs(this.today - this.start);
                 this.d = Math.abs(this.end - this.start);
                 this.optimal = Math.round((this.q / this.d) * 100);
-                if (this.optimal > 100) {
+                console.log(this.project);
+                if (this.project[this.i].Deadline.length < 1) {
+                  this.optimal = 0;
+                }
+                if (this.optimal > 100 || this.end < this.today) {
                   this.optimal = 100;
                 }
-
+                this.timearray.push(this.timep);
                 this.array.push(this.optimal);
+                console.log(this.array);
               }
               console.log(this.project);
             });
