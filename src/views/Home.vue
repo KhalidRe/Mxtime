@@ -32,6 +32,15 @@
 
           <div class="radialprogress">
             <radial-progress-bar
+              v-if="
+                Math.round(
+                  (Math.abs(new Date() - new Date(projects.Date)) /
+                    Math.abs(
+                      new Date(projects.Deadline) - new Date(projects.Date)
+                    )) *
+                    100
+                ) < 100
+              "
               :diameter="150"
               :completed-steps="100"
               :total-steps="100"
@@ -54,7 +63,9 @@
               >
                 <radial-progress-bar
                   :diameter="150"
-                  :completed-steps="timearray[projects.id - 1]"
+                  :completed-steps="
+                    Math.round((projects.Timeused / projects.Timebudget) * 100)
+                  "
                   :total-steps="100"
                   :innerStrokeColor="'none'"
                   :startColor="'#6EF56D'"
@@ -64,7 +75,16 @@
                 >
                   <radial-progress-bar
                     :diameter="139"
-                    :completed-steps="array[projects.id - 1]"
+                    :completed-steps="
+                      Math.round(
+                        (Math.abs(new Date() - new Date(projects.Date)) /
+                          Math.abs(
+                            new Date(projects.Deadline) -
+                              new Date(projects.Date)
+                          )) *
+                          100
+                      )
+                    "
                     :total-steps="100"
                     :innerStrokeColor="'none'"
                     :startColor="'#FF0606'"
@@ -85,9 +105,102 @@
                     >
                       <div class="koko">
                         <span class="precst"
-                          >{{ timearray[projects.id - 1] }}%</span
+                          >{{
+                            Math.round(
+                              (projects.Timeused / projects.Timebudget) * 100
+                            )
+                          }}%</span
                         >
-                        <span class="optim">{{ array[projects.id - 1] }}%</span>
+                        <span class="optim"
+                          >{{
+                            Math.round(
+                              (Math.abs(new Date() - new Date(projects.Date)) /
+                                Math.abs(
+                                  new Date(projects.Deadline) -
+                                    new Date(projects.Date)
+                                )) *
+                                100
+                            )
+                          }}%</span
+                        >
+                      </div>
+                    </radial-progress-bar>
+                  </radial-progress-bar>
+                </radial-progress-bar>
+              </radial-progress-bar>
+            </radial-progress-bar>
+            <radial-progress-bar
+              v-if="
+                Math.round(
+                  (Math.abs(new Date() - new Date(projects.Date)) /
+                    Math.abs(
+                      new Date(projects.Deadline) - new Date(projects.Date)
+                    )) *
+                    100
+                ) > 99
+              "
+              :diameter="150"
+              :completed-steps="100"
+              :total-steps="100"
+              :innerStrokeColor="'none'"
+              :startColor="'#D4F7FFB0'"
+              :stopColor="'#D4F7FFB0'"
+              :strokeLinecap="'flat'"
+              :strokeWidth="18"
+            >
+              <radial-progress-bar
+                class="progresscont"
+                :diameter="147"
+                :total-steps="0"
+                :completed-steps="100"
+                :innerStrokeColor="'none'"
+                :startColor="'#D4F7FF'"
+                :stopColor="'#D4F7FF'"
+                :strokeLinecap="'flat'"
+                :strokeWidth="18"
+              >
+                <radial-progress-bar
+                  :diameter="150"
+                  :completed-steps="
+                    Math.round((projects.Timeused / projects.Timebudget) * 100)
+                  "
+                  :total-steps="100"
+                  :innerStrokeColor="'none'"
+                  :startColor="'#6EF56D'"
+                  :stopColor="'#2A9EBE'"
+                  :strokeLinecap="'flat'"
+                  :strokeWidth="18"
+                >
+                  <radial-progress-bar
+                    :diameter="139"
+                    :completed-steps="100"
+                    :total-steps="100"
+                    :innerStrokeColor="'none'"
+                    :startColor="'#FF0606'"
+                    :stopColor="'#700505'"
+                    :strokeLinecap="'flat'"
+                    :strokeWidth="9"
+                  >
+                    <radial-progress-bar
+                      class="deadlinecont"
+                      :diameter="129"
+                      :total-steps="100"
+                      :completed-steps="0"
+                      :innerStrokeColor="'none'"
+                      :startColor="'none'"
+                      :stopColor="''"
+                      :strokeLinecap="'flat'"
+                      :strokeWidth="9"
+                    >
+                      <div class="koko">
+                        <span class="precst"
+                          >{{
+                            Math.round(
+                              (projects.Timeused / projects.Timebudget) * 100
+                            )
+                          }}%</span
+                        >
+                        <span class="optim">100 %</span>
                       </div>
                     </radial-progress-bar>
                   </radial-progress-bar>
@@ -1190,6 +1303,7 @@ export default {
               this.today = new Date();
               this.q = Math.abs(this.today - this.start);
               this.d = Math.abs(this.end - this.start);
+              console.log();
               this.optimal = Math.round((this.q / this.d) * 100);
               console.log(this.project);
               if (this.project[this.i].Deadline.length < 1) {
