@@ -33,7 +33,7 @@
             <td class="progress currentC">
               <progress
                 class="current"
-                :value="timearray[projects.id - 1]"
+                :value="timearray[index]"
                 min="0"
                 max="100"
               ></progress>
@@ -255,6 +255,7 @@ export default {
       d: 0,
       optimal: 0,
       timearray: [],
+      index: 0,
     };
   },
 
