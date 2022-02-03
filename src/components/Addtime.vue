@@ -18,7 +18,7 @@
       <div class="tbl-content">
         <table cellpadding="0" cellspacing="0" border="0">
           <tbody>
-            <tr class="row" v-for="times in time" :key="times.id">
+            <tr class="row" v-for="(times, index) in time" :key="times.id">
               <td>{{ times.Title }}</td>
               <td>{{ times.Hours }}</td>
               <td>{{ times.Minutes }}</td>
@@ -26,7 +26,7 @@
               <td
                 style="color: red"
                 v-bind:id="times.id"
-                @click="Remove(times.id), (R = !R)"
+                @click="Remove(index), (R = !R)"
               >
                 DELETE
               </td>
@@ -322,6 +322,7 @@ export default {
       dtitle: "",
       dtimeused: "",
       z: 0,
+      index: 0,
     };
   },
   methods: {
@@ -334,17 +335,14 @@ export default {
       };
       this.socketInstance.emit("delet:time", dtimedata);
     },
-    Remove(id) {
+    Remove(index) {
       this.z = id - 1;
-      this.x = id;
-      this.dhours = parseInt(this.time[this.z].Hours);
-      this.dminutes = parseInt(this.time[this.z].Minutes);
-      this.dtitle = this.time[this.z].Title;
+      this.x = this.time[index].id;
+      console.log(this.time);
+      this.dhours = this.time[index].Hours;
+      this.dminutes = this.time[index].Minutes;
+      this.dtitle = this.time[index].Title;
       this.dtimeused = this.dhours + this.dminutes;
-      console.log(this.dtimeused);
-      console.log(this.dtitle);
-      console.log(this.dminutes);
-      console.log(this.dhours);
     },
     reloadPage() {
       setTimeout(window.location.reload(), 2000);
