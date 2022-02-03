@@ -96,7 +96,7 @@
             </span>
             <span class="e">
               <span>Tidsbudget</span>
-              <input type="number" value="0" v-model="timebudget" />
+              <input type="number" value="1" min="1" v-model="timebudget" />
             </span>
             <input
               type="submit"
@@ -105,7 +105,8 @@
                 this.title.replace(/\s/g, '').length > 0 &&
                 this.workers.length > 0 &&
                 this.date.length > 0 &&
-                this.deadline.length > 0
+                this.deadline.length > 0 &&
+                this.timebudget > 0
               "
               @click="createProject(), (show = !show)"
             />

@@ -69,12 +69,12 @@ export default {
   height: 100vh;
 }
 #Navbar {
-  background: -webkit-linear-gradient(120deg, #839dad, #4e7388);
+  background: #1988c9;
   display: flex;
   flex-direction: column;
   align-items: center;
   grid-gap: 5vh;
-  padding-top: 10px;
+  padding-top: 65px;
   overflow-x: hidden;
   width: 70px;
 }
@@ -85,17 +85,18 @@ export default {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 #Navbar::-webkit-scrollbar-thumb {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.164);
 }
 .links {
   width: 30px;
   padding: 10px;
   padding-top: 15px;
   padding-bottom: 15px;
-  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.603);
-  border: solid 1px rgb(15, 61, 34);
+  box-shadow: 0px 0px 10px 3px rgba(2, 6, 46, 0.226);
+
   border-radius: 5px;
   transition: 1s;
+  background: #1988c9;
 }
 .links:active {
   transition: 1s;
