@@ -1,6 +1,5 @@
 <template>
   <div id="Home">
-    <Victory />
     <Workernav />
     <div class="Grid">
       <div class="Card" v-for="projects in project" :key="projects.id">
@@ -1030,7 +1029,7 @@ import Workernav from "@/components/Workernav.vue";
 import io from "socket.io-client";
 import { invalid } from "moment";
 export default {
-  components: { Victory, Postit, Workernav, RadialProgressBar },
+  components: { Postit, Workernav, RadialProgressBar },
   data() {
     return {
       arkiveraoverlay: false,
