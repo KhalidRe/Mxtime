@@ -815,7 +815,9 @@ input[type="radio"]:after {
   width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  background: -webkit-linear-gradient(120deg, #ffffff, #ffffff);
+  background: white;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .Grid {
   display: grid;

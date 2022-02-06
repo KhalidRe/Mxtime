@@ -3,19 +3,19 @@
     <transition name="normal">
       <div v-if="show" id="Navbar">
         <router-link class="links" to="/Home"
-          ><img width="25vw" src="@/assets/projecticon.png" alt=""
+          ><img width="25vw" src="@/assets/projecticon2.png" alt=""
         /></router-link>
         <router-link class="links" to="/Charts"
-          ><img width="25vw" src="@/assets/charticon.png" alt=""
+          ><img width="25vw" src="@/assets/charticon2.png" alt=""
         /></router-link>
         <router-link class="links" to="/Users"
-          ><img width="25vw" src="@/assets/usericon.png" alt=""
+          ><img width="25vw" src="@/assets/usericon2.png" alt=""
         /></router-link>
         <router-link class="links" to="/Histor"
-          ><img width="25vw" src="@/assets/historyicon.png" alt=""
+          ><img width="25vw" src="@/assets/historyicon2.png" alt=""
         /></router-link>
         <router-link class="links" to="/Chat"
-          ><img width="25vw" src="@/assets/Chat.png" alt=""
+          ><img width="25vw" src="@/assets/Chat2.png" alt=""
         /></router-link>
       </div>
     </transition>
