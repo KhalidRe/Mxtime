@@ -407,12 +407,15 @@ export default {
         .then((response) => response.json())
         .then((result) => {
           this.time = result;
-          this.time = this.time.filter((results) => {
-            return (
-              parseInt(results.Datum) >= this.startholder &&
-              parseInt(results.Datum) <= this.endholder
-            );
-          });
+          if (this.startholder.length > 0 && this.endholder > 0) {
+            this.time = this.time.filter((results) => {
+              return (
+                parseInt(results.Datum) >= this.startholder &&
+                parseInt(results.Datum) <= this.endholder
+              );
+            });
+          }
+
           console.log(this.startholder, "START");
 
           console.log(this.time, "hej");

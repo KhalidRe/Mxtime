@@ -37,15 +37,17 @@ export default {
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Scada&family=Sen:wght@700&family=Ubuntu:ital@0;1&display=swap");
 body {
   background: rgb(245, 245, 245);
 
   margin: 0;
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: "Scada", sans-serif;
+  font-family: "Sen", sans-serif;
+  font-family: "Ubuntu", sans-serif;
+  font-weight: bolder;
   text-align: center;
   color: #2c3e50;
   display: flex;

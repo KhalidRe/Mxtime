@@ -18,7 +18,7 @@
       <div class="tbl-content">
         <table cellpadding="0" cellspacing="0" border="0">
           <tbody>
-            <tr class="row" v-for="times in time" :key="times.id">
+            <tr class="row" v-for="(times, index) in time" :key="times.id">
               <td>{{ times.Title }}</td>
               <td>{{ times.Hours }}</td>
               <td>{{ times.Minutes }}</td>
@@ -26,7 +26,7 @@
               <td
                 style="color: red"
                 v-bind:id="times.id"
-                @click="Remove(times.id), (R = !R)"
+                @click="Remove(index), (R = !R)"
               >
                 DELETE
               </td>
@@ -45,11 +45,7 @@
             id="dummyframe"
             style="display: none"
           ></iframe>
-          <form
-            action="https://mxserver-simdf.ondigitalocean.app/deletetime"
-            target="dummyframe"
-            method="POST"
-          >
+          <form action="" target="dummyframe" method="POST">
             <img class="danger" src="@/assets/Danger.png" alt="" />
             <h2 class="dangertext">Raderade Tider försvinner permanent!</h2>
             <h1 class="dsure">Säker att du vill radera detta projekt?</h1>
@@ -87,7 +83,7 @@
               class="deletebtn"
               type="submit"
               value="JA"
-              @click="reloadPage"
+              @click="sendDelete(), reloadPage()"
             />
           </form>
         </div>
@@ -324,18 +320,29 @@ export default {
       dhours: 0,
       dminutes: 0,
       dtitle: "",
+      dtimeused: "",
+      z: 0,
+      index: 0,
     };
   },
   methods: {
-    Remove(id) {
+    sendDelete() {
+      let dtimedata = {
+        id: this.x,
+        title: this.dtitle,
+        timmar: this.dhours,
+        minuter: this.dminutes,
+      };
+      this.socketInstance.emit("delet:time", dtimedata);
+    },
+    Remove(index) {
       this.z = id - 1;
-      this.x = id;
-      this.dhours = parseInt(this.time[this.z].Hours);
-      this.dminutes = parseInt(this.time[this.z].Minutes);
-      this.dtitle = this.time[this.z].Title;
-      console.log(this.dtitle);
-      console.log(this.dminutes);
-      console.log(this.dhours);
+      this.x = this.time[index].id;
+      console.log(this.time);
+      this.dhours = this.time[index].Hours;
+      this.dminutes = this.time[index].Minutes;
+      this.dtitle = this.time[index].Title;
+      this.dtimeused = this.dhours + this.dminutes;
     },
     reloadPage() {
       setTimeout(window.location.reload(), 2000);
