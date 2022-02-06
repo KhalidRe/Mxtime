@@ -1,7 +1,7 @@
 <template>
   <div id="Addtime">
     <section>
-      <h1>Lägg in tid</h1>
+      <h1 class="hd">Lägg in tid</h1>
       <div class="tbl-header">
         <table cellpadding="0" cellspacing="0" border="0">
           <thead>
@@ -18,7 +18,7 @@
       <div class="tbl-content">
         <table cellpadding="0" cellspacing="0" border="0">
           <tbody>
-            <tr class="row" v-for="(times, index) in time" :key="times.id">
+            <tr class="Card" v-for="(times, index) in time" :key="times.id">
               <td>{{ times.Title }}</td>
               <td>{{ times.Hours }}</td>
               <td>{{ times.Minutes }}</td>
@@ -92,6 +92,11 @@
   </div>
 </template>
 <style scoped>
+.hd {
+  background: #1988c9;
+  padding: 10px;
+  margin: 0px;
+}
 @import url("https://fonts.googleapis.com/css2?family=Scada&family=Sen:wght@700&display=swap");
 .dflex {
   display: flex;
@@ -140,6 +145,16 @@
   padding-left: 20px;
   padding-right: 20px;
   height: 20px;
+}
+.Card:nth-of-type(odd) {
+  background-color: #0089d0;
+
+  color: white;
+}
+.Card:nth-of-type(even) {
+  background-color: #006aae;
+
+  color: white;
 }
 .dAvbryt {
   background: linear-gradient(180deg, #4dacc1 0%, #5578ad 50.52%, #4dacc1 100%);
@@ -209,6 +224,7 @@
   line-height: 50px;
 }
 #Addtime {
+  margin-top: 1px;
   width: 100%;
 }
 
@@ -226,22 +242,21 @@ table {
   table-layout: fixed;
 }
 .tbl-header {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: #006aae;
 }
 
 .tbl-content {
   height: 300px;
   overflow-x: auto;
   margin-top: 0px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: inset 0px 0px 10px 1px rgba(0, 0, 0, 0.137);
-  background-color: rgba(255, 255, 255, 0.068);
+  background-color: #006aae;
 }
 th {
   padding: 20px 15px;
   text-align: left;
-  font-weight: 500;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 600;
   color: #fff;
   text-transform: uppercase;
 }
@@ -249,8 +264,8 @@ td {
   padding: 15px;
   text-align: left;
   vertical-align: middle;
-  font-weight: 300;
-  font-size: 12px;
+  font-weight: 600;
+  font-size: 14px;
   color: #fff;
   border-bottom: solid 1px rgba(255, 255, 255, 0.1);
 }
@@ -338,7 +353,6 @@ export default {
     Remove(index) {
       this.z = id - 1;
       this.x = this.time[index].id;
-      console.log(this.time);
       this.dhours = this.time[index].Hours;
       this.dminutes = this.time[index].Minutes;
       this.dtitle = this.time[index].Title;

@@ -16,7 +16,7 @@
     <div class="tbl-content">
       <table cellpadding="0" cellspacing="0" border="0">
         <tbody>
-          <tr v-for="projects in project" :key="projects.id">
+          <tr class="Card" v-for="projects in project" :key="projects.id">
             <td>{{ projects.Title }}</td>
             <td class="progress optimalC">
               <progress
@@ -44,7 +44,8 @@
 <style scoped>
 .Metricschart {
   overflow-y: scroll;
-  max-height: 250px;
+  max-height: 300px;
+  color: white;
 }
 
 progress {
@@ -95,12 +96,14 @@ progress[value]::-webkit-progress-bar {
 }
 
 .Metricschart .Card:nth-of-type(odd) {
-  background-color: rgb(17, 65, 57);
-  box-shadow: inset 0px 0px 1px 1px white;
+  background-color: #0089d0;
+
   color: white;
 }
 .Metricschart .Card:nth-of-type(even) {
-  box-shadow: inset 0px 0px 1px 1px rgb(0, 0, 0);
+  background-color: #006aae;
+
+  color: white;
 }
 .Card {
 }
@@ -115,40 +118,42 @@ progress[value]::-webkit-progress-bar {
 
 h1 {
   font-size: 30px;
-  color: #fff;
+  color: white;
   text-transform: uppercase;
   font-weight: 300;
   text-align: center;
-  margin-bottom: 15px;
+  background: #1988c9;
+  margin: 0;
+  padding: 10px;
 }
 table {
   width: 100%;
   table-layout: fixed;
 }
 .tbl-header {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: #004e95;
 }
 .tbl-content {
   height: 300px;
   overflow-x: auto;
   margin-top: 0px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(10, 0, 0, 0.3);
 }
 th {
   padding: 20px 15px;
   text-align: left;
-  font-weight: 500;
-  font-size: 12px;
-  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  color: white;
   text-transform: uppercase;
 }
 td {
   padding: 15px;
   text-align: left;
   vertical-align: middle;
-  font-weight: 300;
-  font-size: 12px;
-  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
   border-bottom: solid 1px rgba(255, 255, 255, 0.1);
 }
 
@@ -166,7 +171,7 @@ section {
   text-align: center;
   font-size: 10px;
   font-family: arial;
-  color: #fff;
+  color: white;
 }
 .made-with-love i {
   font-style: normal;
@@ -176,7 +181,7 @@ section {
   top: 2px;
 }
 .made-with-love a {
-  color: #fff;
+  color: white;
   text-decoration: none;
 }
 .made-with-love a:hover {
@@ -243,7 +248,6 @@ export default {
     fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.length == 0) {
           location.replace("https://flexnet.se/#/");
         }
@@ -259,14 +263,14 @@ export default {
                 this.tu = this.project[this.i].Timeused;
                 this.tb = this.project[this.i].Timebudget;
                 this.timep = Math.round((this.tu / this.tb) * 100);
-                console.log(this.timep, "hej");
+
                 this.start = new Date(this.project[this.i].Date);
                 this.end = new Date(this.project[this.i].Deadline);
                 this.today = new Date();
                 this.q = Math.abs(this.today - this.start);
                 this.d = Math.abs(this.end - this.start);
                 this.optimal = Math.round((this.q / this.d) * 100);
-                console.log(this.project);
+
                 if (this.project[this.i].Deadline.length < 1) {
                   this.optimal = 0;
                 }
@@ -275,7 +279,6 @@ export default {
                 }
                 this.timearray.push(this.timep);
                 this.array.push(this.optimal);
-                console.log(this.array);
               }
             });
           fetch("https://mxserver-simdf.ondigitalocean.app/getusers")

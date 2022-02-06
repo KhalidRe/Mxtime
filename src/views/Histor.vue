@@ -32,49 +32,56 @@
   </div>
 </template>
 <style scoped>
+tbody {
+  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.37);
+}
+.tbl-content {
+}
+h1 {
+  background-color: #006aae;
+  margin: 0;
+  padding: 10px;
+}
 tr:nth-child(odd) {
-  background: rgba(156, 156, 156, 0.411);
+  background-color: #0089d0;
+}
+tr:nth-child(even) {
+  background-color: #006aae;
 }
 table {
   width: 100%;
   table-layout: fixed;
 }
 .tbl-header {
-  background-color: rgb(43, 131, 131);
 }
-.trhead {
-  background-color: rgb(43, 131, 131) !important;
-}
+
 .tbl-content {
   height: 80%;
   overflow-x: auto;
   margin-top: 0px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 th {
   padding: 20px 15px;
   text-align: left;
-  font-weight: 500;
-  font-size: 12px;
+  font-weight: 600;
+  font-size: 14px;
   color: #fff;
   text-transform: uppercase;
+  background-color: #004e95 !important;
 }
 td {
   padding: 15px;
   text-align: left;
   vertical-align: middle;
-  font-weight: 300;
-  font-size: 12px;
+  font-weight: 600;
+  font-size: 14px;
   color: #fff;
   border-bottom: solid 1px rgba(255, 255, 255, 0.1);
 }
 #Histor {
   width: 100%;
   height: 100vh;
-  background: -webkit-linear-gradient(120deg, #053250, #000000);
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+  background-color: #ffffff;
 }
 ::-webkit-scrollbar {
   width: 6px;
@@ -108,7 +115,6 @@ export default {
     fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.length == 0) {
           location.replace("https://flexnet.se/#/");
         }
@@ -129,7 +135,6 @@ export default {
             .then((response) => response.json())
             .then((result) => {
               this.arkiv = result;
-              console.log(this.arkiv);
             });
         }
       });

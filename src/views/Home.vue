@@ -1213,7 +1213,6 @@ export default {
     fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.length === 0) {
           location.replace("https://flexnet.se/#/");
         }
@@ -1222,7 +1221,6 @@ export default {
             .then((response) => response.json())
             .then((result) => {
               this.user = result;
-              console.log(user);
             });
 
           const requestOptionsget = {
@@ -1238,7 +1236,7 @@ export default {
             .then((response) => response.json())
             .then((result) => {
               this.project = result;
-              console.log(this.project);
+         
               for (this.i = 0; this.i < this.project.length; this.i++) {
                 this.start = new Date(this.project[this.i].Date);
                 this.end = new Date(this.project[this.i].Deadline);
@@ -1251,7 +1249,7 @@ export default {
                 }
                 this.array.push(this.optimal);
               }
-              console.log(this.project);
+
             }); */
           this.socketInstance = io("https://mxserver-simdf.ondigitalocean.app");
 
@@ -1263,15 +1261,15 @@ export default {
               this.tu = this.project[this.i].Timeused;
               this.tb = this.project[this.i].Timebudget;
               this.timep = Math.round((this.tu / this.tb) * 100);
-              console.log(this.timep, "hej");
+
               this.start = new Date(this.project[this.i].Date);
               this.end = new Date(this.project[this.i].Deadline);
               this.today = new Date();
               this.q = Math.abs(this.today - this.start);
               this.d = Math.abs(this.end - this.start);
-              console.log();
+
               this.optimal = Math.round((this.q / this.d) * 100);
-              console.log(this.project);
+
               if (this.project[this.i].Deadline.length < 1) {
                 this.optimal = 0;
               }
@@ -1280,7 +1278,6 @@ export default {
               }
               this.timearray.push(this.timep);
               this.array.push(this.optimal);
-              console.log(this.array);
             }
           });
         }
@@ -1345,8 +1342,6 @@ export default {
       this.z = id;
       this.x = id - 1;
       this.eproject = this.project.find((result) => result.id == this.z);
-
-      console.log(this.eproject, "hello");
 
       this.estatus = this.eproject.Statu;
       this.etitle = this.eproject.Title;

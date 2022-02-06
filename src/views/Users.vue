@@ -39,7 +39,7 @@
         <video autoplay muted loop>
           <source src="@/assets/energy.webm" type="video/mp4" />
         </video>
-        <audio src="@/assets/pep.mp3" autoplay></audio>
+
         <div class="metrics">
           <div class="close" @click="showprofile = !showprofile">
             <img width="40vw" src="@/assets/closebtn.png" alt="" />
@@ -209,7 +209,8 @@ video {
   width: 100%;
 }
 .Users {
-  background: -webkit-linear-gradient(120deg, #053250, #000000);
+  background-color: #006aae;
+  color: white;
   width: 100%;
   height: 100vh;
   overflow-y: scroll;
@@ -382,7 +383,6 @@ export default {
     fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.length == 0) {
           location.replace("https://flexnet.se/#/");
         }
@@ -406,7 +406,6 @@ export default {
             .then((response) => response.json())
             .then((result) => {
               this.arkivs = result;
-              console.log(this.arkivs);
             });
         }
       });
@@ -427,7 +426,7 @@ export default {
       );
 
       this.count = this.chartdata.map((item) => item.Datum);
-      console.log(this.count);
+
       this.second = {};
       for (let i = 0; i < this.count.length; i++) {
         this.second[this.count[i]] = this.second[this.count[i]] + 1 || 1;
@@ -436,13 +435,12 @@ export default {
         acc.push({ Datum: cur, result: this.second[cur] });
         return [...acc];
       }, []);
-      console.log(this.filteredArray);
+
       this.index = this.chartdata
         .map((e) => e["Datum"])
         .map((e, i, final) => final.indexOf(e) === i && i)
         .filter((obj) => this.chartdata[obj])
         .map((e) => this.chartdata[e]);
-      console.log(this.index);
     },
   },
 };

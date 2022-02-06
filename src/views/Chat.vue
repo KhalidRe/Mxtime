@@ -31,7 +31,6 @@
             id="text-Message"
             ref="textmessage"
             v-model="text"
-            v-on:keyup.enter="sendMessage"
             maxlength="150"
           ></textarea>
           <button class="sendmessage" @click="sendMessage()">Send</button>
@@ -121,7 +120,7 @@
 }
 
 .sendmessage {
-  width: 5%;
+  width: 60px;
   height: 45px;
   border-radius: 10px;
   background-color: #72eb4d;
@@ -200,7 +199,6 @@ export default {
     };
   },
   created() {
-    console.log();
     const auth = {
       method: "POST",
       mode: "cors",
@@ -214,8 +212,9 @@ export default {
     fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
-
+        if (result.length === 0) {
+          location.replace("https://flexnet.se/#/");
+        }
         if (result.length > 0) {
           const requestOptions = {
             method: "POST",

@@ -44,20 +44,12 @@
               <span>Deltagare</span
               ><select name="workers" id="workers" v-model="workers">
                 <option value="Ensam">Eget</option>
-                <option v-if="this.loggedin.Name != 'Ljung'" value="Ljung">
-                  Ljung
-                </option>
-                <option v-if="this.loggedin.Name != 'Kvist'" value="Kvist">
-                  Kvist
-                </option>
-                <option v-if="this.loggedin.Name != 'Anders'" value="Anders">
-                  Anders
-                </option>
-                <option v-if="this.loggedin.Name != 'Philip'" value="Philip">
-                  Philip
-                </option>
-                <option v-if="this.loggedin.Name != 'Khalid'" value="Khalid">
-                  Khalid
+                <option
+                  v-for="deltag in deltagare"
+                  :key="deltag.Name"
+                  value="Ljung"
+                >
+                  {{ deltag.Name }}
                 </option>
               </select>
             </span>
@@ -329,6 +321,7 @@ export default {
       date: "",
       deadline: "",
       timebudget: 0,
+      deltagare: "",
     };
   },
   created() {
@@ -346,7 +339,16 @@ export default {
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
+        fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
+          .then((response) => response.json())
+          .then((result) => {
+            this.user = result;
+            this.deltagare = this.user.filter(
+              (e) => !e.Name.includes(this.loggedin.Name)
+            );
+          });
       });
+
     this.socketInstance = io("https://mxserver-simdf.ondigitalocean.app");
   },
   methods: {

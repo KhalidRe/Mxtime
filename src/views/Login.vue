@@ -105,9 +105,7 @@ export default {
       };
       fetch("https://192.168.1.65:3000/test", auth)
         .then((response) => response.json())
-        .then((result) => {
-          console.log(result);
-        });
+        .then((result) => {});
     },
     setvalue() {
       this.someValue = this.$refs.Username.value;

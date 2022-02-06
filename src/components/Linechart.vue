@@ -60,8 +60,6 @@ export default {
       },
       { responsive: true, maintainAspectRatio: false }
     );
-
-    console.log(this.toChart, "Hej LINECHART");
   },
 };
 </script>

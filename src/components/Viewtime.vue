@@ -363,7 +363,7 @@ export default {
       .then((response) => response.json())
       .then((result) => {
         this.userstatus = result[0].Status;
-        console.log(this.userstatus);
+
         if (this.userstatus === "Admin") {
           fetch(
             "https://mxserver-simdf.ondigitalocean.app/alltime",
@@ -377,7 +377,6 @@ export default {
             .then((response) => response.json())
             .then((result) => {
               this.users = result;
-              console.log(this.users);
             });
         }
       });
@@ -416,18 +415,12 @@ export default {
             });
           }
 
-          console.log(this.startholder, "START");
-
-          console.log(this.time, "hej");
-
-          console.log(this.endholder, "END");
           if (this.selectedfilter !== "alla") {
             this.time = this.time.filter((results) => {
               return results.Name.includes(this.selectedfilter);
             });
           }
         });
-      console.log(this.selectedfilter);
     },
   },
 };

@@ -24,9 +24,7 @@ export default {
     //SocketioService.setupSocketConnection();
   },
   methods: {
-    onClickChild(value) {
-      console.log(value);
-    },
+    onClickChild(value) {},
   },
   computed: {
     isLogin() {

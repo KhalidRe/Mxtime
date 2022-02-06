@@ -1,6 +1,6 @@
 <template>
   <div class="Usermetrics">
-    <h1>Mina Projekt</h1>
+    <h1 class="fokoff">Mina Projekt</h1>
     <div class="tbl-header">
       <table cellpadding="0" cellspacing="0" border="0">
         <thead>
@@ -17,7 +17,7 @@
       <table cellpadding="0" cellspacing="0" border="0">
         <tbody class="tablebod">
           <tr
-            class="row"
+            class="Card"
             v-for="(projects, index) in project"
             :key="projects.id"
           >
@@ -50,6 +50,18 @@
   </div>
 </template>
 <style scoped>
+.Usermetrics {
+  background: #006aae;
+  color: white;
+  box-shadow: inset 0px 0px 5px 5px rgba(0, 0, 0, 0.185);
+}
+
+.fokoff {
+  background: black;
+  margin: 0px;
+  padding: 10px;
+  background-color: #1988c9;
+}
 .slash {
   font-size: 20px;
 }
@@ -87,10 +99,10 @@ progress[value]::-webkit-progress-bar {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
 }
 tr:nth-child(even) {
-  background: rgb(33, 116, 155);
+  background: #0089d0;
 }
 tr:nth-child(odd) {
-  background: rgb(3, 79, 114);
+  background: #006aae;
 }
 .currentC progress[value]::-webkit-progress-value {
   background-image: -webkit-linear-gradient(
@@ -121,12 +133,12 @@ tr:nth-child(odd) {
   background-size: 35px 20px, 100% 100%, 100% 100%;
 }
 
-.Metricschart .Card:nth-of-type(odd) {
-  box-shadow: inset 0px 0px 1px 1px white;
+.Usermetrics .Card:nth-of-type(odd) {
+  background: #0089d0;
   color: white;
 }
-.Metricschart .Card:nth-of-type(even) {
-  box-shadow: inset 0px 0px 1px 1px rgb(0, 0, 0);
+.Usermetrics .Card:nth-of-type(even) {
+  background: #006aae;
 }
 .Card {
 }
@@ -152,22 +164,21 @@ table {
   table-layout: fixed;
 }
 .tbl-header {
-  background-color: rgb(43, 131, 131);
+  background-color: #d4d4d4;
+  margin: 0;
 }
 .trhead {
-  background-color: rgb(43, 131, 131) !important;
 }
 .tbl-content {
   height: 300px;
   overflow-x: auto;
   margin-top: 0px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 th {
   padding: 20px 15px;
   text-align: left;
-  font-weight: 500;
-  font-size: 12px;
+  font-weight: 600;
+  font-size: 14px;
   color: #fff;
   text-transform: uppercase;
 }
@@ -175,8 +186,8 @@ td {
   padding: 15px;
   text-align: left;
   vertical-align: middle;
-  font-weight: 300;
-  font-size: 12px;
+  font-weight: 600;
+  font-size: 14px;
   color: #fff;
   border-bottom: solid 1px rgba(255, 255, 255, 0.1);
 }
@@ -273,7 +284,6 @@ export default {
     fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.length == 0) {
           location.replace("https://flexnet.se/#/");
         }
@@ -301,14 +311,14 @@ export default {
                 this.tu = this.project[this.i].Timeused;
                 this.tb = this.project[this.i].Timebudget;
                 this.timep = Math.round((this.tu / this.tb) * 100);
-                console.log(this.timep, "hej");
+
                 this.start = new Date(this.project[this.i].Date);
                 this.end = new Date(this.project[this.i].Deadline);
                 this.today = new Date();
                 this.q = Math.abs(this.today - this.start);
                 this.d = Math.abs(this.end - this.start);
                 this.optimal = Math.round((this.q / this.d) * 100);
-                console.log(this.project);
+
                 if (this.project[this.i].Deadline.length < 1) {
                   this.optimal = 0;
                 }
@@ -317,9 +327,7 @@ export default {
                 }
                 this.timearray.push(this.timep);
                 this.array.push(this.optimal);
-                console.log(this.array);
               }
-              console.log(this.project);
             });
           fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
             .then((response) => response.json())

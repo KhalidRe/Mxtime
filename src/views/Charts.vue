@@ -24,7 +24,7 @@
   overflow-y: scroll;
   overflow-x: hidden;
 
-  background: -webkit-linear-gradient(120deg, #053250, #000000);
+  background: white;
 
   display: flex;
   flex-direction: column;
@@ -32,7 +32,7 @@
 }
 #aktivP {
   height: 100%;
-  background: linear-gradient(#878f8965, #00000054);
+  background: linear-gradient(#5c9cc2, #4f92b9);
 }
 .barchart {
   height: 80%;
@@ -67,7 +67,6 @@ export default {
     fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.length == 0) {
           location.replace("https://flexnet.se/#/");
         }

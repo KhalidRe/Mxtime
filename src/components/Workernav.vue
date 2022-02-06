@@ -2,30 +2,34 @@
   <div id="Workernav">
     <div class="e aktiv">
       <span>Aktiv</span>
-      <span>{{ loggedin.Active }}</span>
+      <span class="st A">{{ Aktiv.length }}</span>
     </div>
     <div class="e waiting">
       <span>Väntande</span>
-      <span>{{ loggedin.Created }}</span>
+      <span class="st B">{{ Waiting.length }}</span>
     </div>
     <div class="e paused">
       <span>Pausade</span>
-      <span>{{ loggedin.Completion }}</span>
+      <span class="st C">{{ Pausad.length }}</span>
     </div>
     <div class="profname">
       <span>{{ loggedin.Name }}</span>
-      <img
-        class="profile"
-        :src="require(`@/assets/${loggedin.Profile}`)"
-        alt=""
-      />
+      <img class="profile" :src="icon" alt="" />
     </div>
   </div>
 </template>
 <style scoped>
+.st {
+  box-shadow: inset 0px 0px 5px 5px rgba(255, 255, 255, 0.212);
+  border-radius: 25px;
+  width: 40px;
+  text-align: center;
+}
+
 .e {
   display: flex;
   flex-direction: column;
+  align-items: center;
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 20px;
@@ -92,6 +96,10 @@ export default {
       users: {},
       loggedin: "",
       logged: this.$store.state.someValue,
+      Aktiv: "",
+      Waiting: "",
+      Pausad: "",
+      icon: "",
     };
   },
   created() {
@@ -110,16 +118,25 @@ export default {
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
+
+        this.icon =
+          this.loggedin.Profile && require(`@/assets/${this.loggedin.Profile}`);
       });
 
-    fetch(
-      "https://mxserver-simdf.ondigitalocean.app/viewprojects",
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        this.loggedin = result[0];
+    this.socketInstance = io("https://mxserver-simdf.ondigitalocean.app");
+    this.socketInstance.on("data:received", (projectdata) => {
+      this.project = projectdata;
+
+      this.Aktiv = this.project.filter((results) => {
+        return results.Statu.includes("A");
       });
+      this.Waiting = this.project.filter((results) => {
+        return results.Statu.includes("B");
+      });
+      this.Pausad = this.project.filter((results) => {
+        return results.Statu.includes("C");
+      });
+    });
   },
 };
 </script>
