@@ -380,29 +380,26 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
+    fetch("188.166.114.141:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         if (result.length == 0) {
           location.replace("https://flexnet.se/#/");
         }
         if (result.length > 0) {
-          fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
+          fetch("188.166.114.141:3000/getusers")
             .then((response) => response.json())
             .then((result) => {
               this.user = result;
             });
 
-          fetch(
-            "https://mxserver-simdf.ondigitalocean.app/myprojects",
-            requestOptions
-          )
+          fetch("188.166.114.141:3000/myprojects", requestOptions)
             .then((response) => response.json())
             .then((result) => {
               this.myprojects = result;
             });
 
-          fetch("https://mxserver-simdf.ondigitalocean.app/getarkiv")
+          fetch("188.166.114.141:3000/getarkiv")
             .then((response) => response.json())
             .then((result) => {
               this.arkivs = result;

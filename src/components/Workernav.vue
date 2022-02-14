@@ -114,7 +114,7 @@ export default {
       body: JSON.stringify({ user: this.logged }),
     };
 
-    fetch("https://mxserver-simdf.ondigitalocean.app/workernav", requestOptions)
+    fetch("188.166.114.141:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
@@ -123,7 +123,7 @@ export default {
           this.loggedin.Profile && require(`@/assets/${this.loggedin.Profile}`);
       });
 
-    this.socketInstance = io("https://mxserver-simdf.ondigitalocean.app");
+    this.socketInstance = io("188.166.114.141:3000");
     this.socketInstance.on("data:received", (projectdata) => {
       this.project = projectdata;
 

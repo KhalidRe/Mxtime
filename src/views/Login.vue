@@ -9,10 +9,7 @@
     ></iframe>
     <div id="LoginForm">
       <h2>Logga in</h2>
-      <form
-        action="https://mxserver-simdf.ondigitalocean.app/authenticate"
-        method="POST"
-      >
+      <form action="188.166.114.141:3000/authenticate" method="POST">
         <div>
           <input type="text" id="Username" name="Username" ref="Username" />
         </div>

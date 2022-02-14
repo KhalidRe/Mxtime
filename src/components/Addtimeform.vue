@@ -360,17 +360,17 @@ export default {
       body: JSON.stringify({ user: this.logged }),
     };
 
-    fetch("https://mxserver-simdf.ondigitalocean.app/workernav", requestOptions)
+    fetch("188.166.114.141:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
       });
-    fetch("https://mxserver-simdf.ondigitalocean.app/viewprojects")
+    fetch("188.166.114.141:3000/viewprojects")
       .then((response) => response.json())
       .then((result) => {
         this.project = result;
       });
-    this.socketInstance = io("https://mxserver-simdf.ondigitalocean.app");
+    this.socketInstance = io("188.166.114.141:3000");
   },
   methods: {
     reloadPage() {

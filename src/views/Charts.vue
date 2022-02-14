@@ -64,7 +64,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
+    fetch("188.166.114.141:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         if (result.length == 0) {

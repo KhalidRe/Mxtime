@@ -373,12 +373,12 @@ export default {
       },
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://mxserver-simdf.ondigitalocean.app/mytime", requestOptions)
+    fetch("188.166.114.141:3000/mytime", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.time = result;
       });
-    this.socketInstance = io("https://mxserver-simdf.ondigitalocean.app");
+    this.socketInstance = io("188.166.114.141:3000");
     this.socketInstance.on("time:received", (timedata) => {
       this.time = timedata;
     });

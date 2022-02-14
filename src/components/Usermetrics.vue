@@ -281,7 +281,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
+    fetch("188.166.114.141:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         if (result.length == 0) {
@@ -298,10 +298,7 @@ export default {
             },
             body: JSON.stringify({ user: this.logged }),
           };
-          fetch(
-            "https://mxserver-simdf.ondigitalocean.app/myprojects",
-            requestOptions
-          )
+          fetch("188.166.114.141:3000/myprojects", requestOptions)
             .then((response) => response.json())
             .then((result) => {
               this.project = result;
@@ -329,7 +326,7 @@ export default {
                 this.array.push(this.optimal);
               }
             });
-          fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
+          fetch("188.166.114.141:3000/getusers")
             .then((response) => response.json())
             .then((result) => {
               this.user = result;

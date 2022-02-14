@@ -245,14 +245,14 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", auth)
+    fetch("188.166.114.141:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         if (result.length == 0) {
           location.replace("https://flexnet.se/#/");
         }
         if (result.length > 0) {
-          fetch("https://mxserver-simdf.ondigitalocean.app/viewprojects")
+          fetch("188.166.114.141:3000/viewprojects")
             .then((response) => response.json())
             .then((result) => {
               this.project = result;
@@ -281,7 +281,7 @@ export default {
                 this.array.push(this.optimal);
               }
             });
-          fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
+          fetch("188.166.114.141:3000/getusers")
             .then((response) => response.json())
             .then((result) => {
               this.user = result;

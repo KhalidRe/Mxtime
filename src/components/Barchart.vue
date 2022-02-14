@@ -12,7 +12,7 @@ export default {
     };
   },
   created() {
-    fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
+    fetch("188.166.114.141:3000/getusers")
       .then((response) => response.json())
       .then((result) => {
         this.user = result;
@@ -26,7 +26,7 @@ export default {
   mounted() {
     let names = [];
     let pointer = [];
-    fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
+    fetch("188.166.114.141:3000/getusers")
       .then((response) => response.json())
       .then((result) => {
         let user = result;

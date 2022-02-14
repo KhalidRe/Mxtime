@@ -62,7 +62,7 @@
             style="display: none"
           ></iframe>
           <form
-            action="https://mxserver-simdf.ondigitalocean.app/deletetime"
+            action="188.166.114.141:3000/deletetime"
             target="dummyframe"
             method="POST"
           >
@@ -359,21 +359,18 @@ export default {
       },
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://mxserver-simdf.ondigitalocean.app/loggedin", requestOptions)
+    fetch("188.166.114.141:3000/loggedin", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.userstatus = result[0].Status;
 
         if (this.userstatus === "Admin") {
-          fetch(
-            "https://mxserver-simdf.ondigitalocean.app/alltime",
-            requestOptions
-          )
+          fetch("188.166.114.141:3000/alltime", requestOptions)
             .then((response) => response.json())
             .then((result) => {
               this.time = result;
             });
-          fetch("https://mxserver-simdf.ondigitalocean.app/getusers")
+          fetch("188.166.114.141:3000/getusers")
             .then((response) => response.json())
             .then((result) => {
               this.users = result;
@@ -402,11 +399,11 @@ export default {
         },
         body: JSON.stringify({ user: this.logged }),
       };
-      fetch("https://mxserver-simdf.ondigitalocean.app/alltime", requestOptions)
+      fetch("188.166.114.141:3000/alltime", requestOptions)
         .then((response) => response.json())
         .then((result) => {
           this.time = result;
-          if (this.startholder.length > 0 && this.endholder > 0) {
+          if (this.startholder > 0 && this.endholder > 0) {
             this.time = this.time.filter((results) => {
               return (
                 parseInt(results.Datum) >= this.startholder &&
