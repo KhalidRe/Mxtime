@@ -380,26 +380,26 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("188.166.114.141:3000/loggedin", auth)
+    fetch("https://flexn.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         if (result.length == 0) {
-          location.replace("https://flexnet.se/#/");
+          location.replace("https//flexnet.se/#/");
         }
         if (result.length > 0) {
-          fetch("188.166.114.141:3000/getusers")
+          fetch("https://flexn.se:3000/getusers")
             .then((response) => response.json())
             .then((result) => {
               this.user = result;
             });
 
-          fetch("188.166.114.141:3000/myprojects", requestOptions)
+          fetch("https://flexn.se:3000/myprojects", requestOptions)
             .then((response) => response.json())
             .then((result) => {
               this.myprojects = result;
             });
 
-          fetch("188.166.114.141:3000/getarkiv")
+          fetch("https://flexn.se:3000/getarkiv")
             .then((response) => response.json())
             .then((result) => {
               this.arkivs = result;

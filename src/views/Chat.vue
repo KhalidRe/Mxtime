@@ -209,7 +209,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("188.166.114.141:3000/loggedin", auth)
+    fetch("https://flexn.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         if (result.length === 0) {
@@ -226,7 +226,7 @@ export default {
             },
             body: JSON.stringify({ user: this.logged }),
           };
-          fetch("188.166.114.141:3000/workernav", requestOptions)
+          fetch("https://flexn.se:3000/workernav", requestOptions)
             .then((response) => response.json())
             .then((result) => {
               this.loggedin = result;
@@ -236,7 +236,7 @@ export default {
             });
         }
       });
-    this.socketInstance = io("188.166.114.141:3000");
+    this.socketInstance = io("https://flexn.se:3000/");
 
     this.socketInstance.on("message:received", (result) => {
       this.messages = result;

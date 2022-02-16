@@ -251,8 +251,15 @@
                 </radial-progress-bar>
               </radial-progress-bar>
             </radial-progress-bar>
+            <div
+              class="opentrello"
+              @click="viewtrello(projects.id), (trelloopen = !trelloopen)"
+            >
+              Open
+            </div>
           </div>
         </div>
+
         <div class="desc">
           <div class="inf">
             <span class="fontgradient">Börjar:</span>
@@ -523,11 +530,247 @@
           </div>
         </div>
       </transition>
+      <transition name="slide-fade-left">
+        <div class="Minitrello" v-if="trelloopen">
+          <div class="closetrello" @click="trelloopen = !trelloopen">close</div>
+          <div class="trellocapsule">
+            <div class="trellocard" v-for="trello in atrello" :key="trello.id">
+              <div class="trellohead">
+                <div>{{ trello.title }}</div>
+              </div>
+              <div class="trellooptions">
+                <div class="trellodelete" @click="trellodelete(trello.id)">
+                  X
+                </div>
+                <div class="trellodone" @click="trellodone(trello.id)">
+                  {{ trello.completed }}
+                </div>
+              </div>
+
+              <div class="trellodesc">{{ trello.description }}</div>
+            </div>
+          </div>
+          <div class="addtrello">
+            <button @click="addT = !addT" class="addtrello-btn">
+              Lägg till uppgifter
+            </button>
+          </div>
+        </div>
+      </transition>
     </div>
+    <transition name="slide-fade">
+      <div class="addtrelloform" v-if="!addT">
+        <div class="addtrellocard">
+          <h1>Skapa Uppdrag</h1>
+          <h3 style="margin: 0">title</h3>
+
+          <input type="text" name="title" v-model="Ttitle" />
+          <h3 style="margin-bottom: 0">Beskrivning</h3>
+          <textarea
+            style="resize: none"
+            class="trellotext"
+            name="description"
+            id=""
+            cols="30"
+            rows="10"
+            v-model="Tdescription"
+          ></textarea
+          ><br />
+          <button
+            v-if="this.Ttitle.length > 0 && this.Tdescription.length > 0"
+            @click="addtrello(projects.id), (addT = !addT)"
+            class="creatitnow"
+          >
+            Skapa
+          </button>
+          <button
+            v-if="this.Ttitle.length < 1 || this.Tdescription.length < 1"
+            class="creatitnowfaker"
+          >
+            Skapa
+          </button>
+          <br />
+          <button @click="addT = !addT" class="stopitnow">Avbryt</button>
+        </div>
+      </div>
+    </transition>
     <Postit />
   </div>
 </template>
 <style scoped>
+.trellodelete {
+  display: flex;
+
+  box-shadow: inset 0px 0px 5px 1px rgba(255, 0, 0, 0.425);
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.trellodone {
+  display: flex;
+  box-shadow: inset 0px 0px 5px 1px rgba(0, 255, 85, 0.425);
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.trellodone:hover {
+  transition: 1s;
+  box-shadow: inset 0px 0px 20px 5px rgba(0, 255, 85, 0.425);
+}
+.trellodelete:hover {
+  transition: 1s;
+  box-shadow: inset 0px 0px 20px 5px rgba(255, 0, 0, 0.425);
+}
+.trellooptions {
+  display: flex;
+  justify-content: space-around;
+  height: 30px;
+  background: #e4e4e4;
+  align-items: center;
+}
+.creatitnowfaker {
+  border: none;
+  width: 100px;
+
+  padding: 10px;
+  background: #5e5e5e;
+  color: white;
+  font-size: 18px;
+  border-radius: 20px;
+}
+.stopitnow {
+  border: none;
+  width: 70px;
+
+  padding: 7px;
+  background: #d00000;
+  color: white;
+  font-size: 14px;
+  border-radius: 20px;
+  margin-top: 5px;
+}
+.creatitnow {
+  border: none;
+  width: 100px;
+
+  padding: 10px;
+  background: #0089d0;
+  color: white;
+  font-size: 18px;
+  border-radius: 20px;
+}
+.trellotext {
+  height: 65%;
+}
+.addtrellocard {
+  position: absolute;
+  right: 2%;
+  top: 10%;
+  background: white;
+  width: 300px;
+  height: 80%;
+  z-index: 99999;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.377);
+  border-radius: 20px;
+}
+.addtrelloform {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  z-index: 99998;
+}
+.trellodesc {
+  max-width: 90%;
+  text-align: center;
+  padding-left: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  /* or inline-block */
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-align: left;
+}
+.addtrello-btn {
+  border: none;
+  background-color: #0089d0;
+  padding: 20px;
+  border-radius: 20px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+}
+.addtrello-btn:active {
+  border: none;
+  background-color: #052b3d;
+  padding: 20px;
+  border-radius: 20px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+}
+.addtrello {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10%;
+}
+.trellohead {
+  background-color: #0089d0;
+  border-radius: 10px 10px 0px 0px;
+  font-size: 25px;
+  font-weight: 800px;
+  color: white;
+}
+.trellocard {
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.329);
+
+  margin-top: 25px;
+  border-radius: 10px;
+  width: 80%;
+}
+.trellocapsule {
+  display: flex;
+
+  align-items: center;
+  flex-direction: column;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 85%;
+  background: white;
+}
+.closetrello {
+  padding: 20px;
+  transition: 1s;
+  background: white;
+  border: 1px solid rgb(223, 223, 223);
+}
+.closetrello:hover {
+  transition: 1s;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.253);
+  background: #dfdfdf;
+}
+.Minitrello {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: rgb(214, 214, 214);
+  position: absolute;
+  width: 300px;
+  right: 0%;
+  top: 0%;
+  height: 100%;
+  z-index: 10000;
+  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.363);
+}
+.opentrello {
+  margin-top: -180px;
+  margin-right: -40px;
+}
 .canit {
   display: grid;
   grid-template-columns: 75px 105px;
@@ -853,6 +1096,17 @@ input[type="radio"]:after {
   transform: translateY(-100%);
   opacity: 0;
 }
+.slide-fade-left-enter-active {
+  transition: all 0.6s ease;
+}
+.slide-fade-left-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-left-enter, .slide-fade-left-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  width: 0px;
+  opacity: 0;
+}
 .esd {
   margin-top: -20px;
   margin-bottom: 20px;
@@ -1156,8 +1410,9 @@ import Workernav from "@/components/Workernav.vue";
 import io from "socket.io-client";
 import { invalid } from "moment";
 import swal from "sweetalert";
+import Minitrello from "../components/Minitrello.vue";
 export default {
-  components: { Postit, Workernav, RadialProgressBar },
+  components: { Postit, Workernav, RadialProgressBar, Minitrello },
   data() {
     return {
       arkiveraoverlay: false,
@@ -1167,6 +1422,7 @@ export default {
       R: true,
       x: "",
       etitle: "",
+      trelloopen: false,
       eauthor: "",
       edate: "",
       edeadline: "",
@@ -1180,6 +1436,7 @@ export default {
       estatus: "",
       project: "",
       project: [],
+      addT: true,
       obj: {},
       start: 0,
       end: 0,
@@ -1196,6 +1453,12 @@ export default {
       belopp: "",
       fakturerat: "",
       eproject: [],
+      trellodata: [],
+      vtrello: [],
+      trelloprojectid: 0,
+      Ttitle: "",
+      Tdescription: "",
+      atrello: [],
     };
   },
 
@@ -1210,14 +1473,14 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("188.166.114.141:3000/loggedin", auth)
+    fetch("https://flexn.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         if (result.length === 0) {
           location.replace("https://flexnet.se/#/");
         }
         if (result.length > 0) {
-          fetch("188.166.114.141:3000/getusers")
+          fetch("https://flexn.se:3000/getusers")
             .then((response) => response.json())
             .then((result) => {
               this.user = result;
@@ -1236,7 +1499,7 @@ export default {
             .then((response) => response.json())
             .then((result) => {
               this.project = result;
-         
+
               for (this.i = 0; this.i < this.project.length; this.i++) {
                 this.start = new Date(this.project[this.i].Date);
                 this.end = new Date(this.project[this.i].Deadline);
@@ -1251,7 +1514,7 @@ export default {
               }
 
             }); */
-          this.socketInstance = io("188.166.114.141:3000");
+          this.socketInstance = io("https://flexn.se:3000/");
 
           this.socketInstance.on("data:received", (projectdata) => {
             this.project = projectdata;
@@ -1279,6 +1542,12 @@ export default {
               this.timearray.push(this.timep);
               this.array.push(this.optimal);
             }
+          });
+          this.socketInstance.on("trello:received", (trellodata) => {
+            this.trellodata = trellodata;
+            this.atrello = this.trellodata.filter(
+              (result) => result.fatherid == this.trelloprojectid
+            );
           });
         }
       });
@@ -1363,7 +1632,47 @@ export default {
     reloadPage() {
       setTimeout(window.location.reload(), 2000);
     },
+    viewtrello(id) {
+      this.trelloprojectid = id;
+      console.log();
+      this.vtrello = [];
+      if (
+        this.trellodata.filter(
+          (result) => result.fatherid == this.trelloprojectid
+        ).length > 0
+      ) {
+        this.atrello = this.trellodata.filter(
+          (result) => result.fatherid == id
+        );
+      } else this.atrello = [];
+
+      console.log(this.atrello);
+    },
+    refreshtrello() {},
+    addtrello(id) {
+      const trello = {
+        fatherid: this.trelloprojectid,
+        project: "Null",
+        title: this.Ttitle,
+        description: this.Tdescription,
+      };
+      this.socketInstance.emit("trello:created", trello);
+    },
+    trellodone(id) {
+      const trellostatus = {
+        id: id,
+      };
+      this.socketInstance.emit("trello:status", trellostatus);
+    },
+    trellodelete(id) {
+      console.log(id);
+      const deletetrello = {
+        id: id,
+      };
+      this.socketInstance.emit("trello:delete", deletetrello);
+    },
   },
+
   computed: {
     someValue: {
       get() {

@@ -373,12 +373,12 @@ export default {
       },
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("188.166.114.141:3000/mytime", requestOptions)
+    fetch("https://flexn.se:3000/mytime", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.time = result;
       });
-    this.socketInstance = io("188.166.114.141:3000");
+    this.socketInstance = io("https://flexn.se:3000/");
     this.socketInstance.on("time:received", (timedata) => {
       this.time = timedata;
     });

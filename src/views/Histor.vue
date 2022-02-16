@@ -112,7 +112,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("188.166.114.141:3000/loggedin", auth)
+    fetch("https://flexn.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         if (result.length == 0) {
@@ -128,7 +128,7 @@ export default {
               "Access-Control-Allow-Origin": "*",
             },
           };
-          fetch("188.166.114.141:3000/getarkiv", requestOptionsget)
+          fetch("https://flexn.se:3000/getarkiv", requestOptionsget)
             .then((response) => response.json())
             .then((result) => {
               this.arkiv = result;

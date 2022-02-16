@@ -9,7 +9,7 @@
     ></iframe>
     <div id="LoginForm">
       <h2>Logga in</h2>
-      <form action="188.166.114.141:3000/authenticate" method="POST">
+      <form action="https://flexn.se:3000/authenticate" method="POST">
         <div>
           <input type="text" id="Username" name="Username" ref="Username" />
         </div>
@@ -100,7 +100,7 @@ export default {
           Password: this.$refs.Password.value,
         }),
       };
-      fetch("https://192.168.1.65:3000/test", auth)
+      fetch("https://flexn.se:3000/test", auth)
         .then((response) => response.json())
         .then((result) => {});
     },

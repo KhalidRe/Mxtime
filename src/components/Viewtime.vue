@@ -62,7 +62,7 @@
             style="display: none"
           ></iframe>
           <form
-            action="188.166.114.141:3000/deletetime"
+            action="https://flexn.se:3000/deletetime"
             target="dummyframe"
             method="POST"
           >
@@ -359,18 +359,18 @@ export default {
       },
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("188.166.114.141:3000/loggedin", requestOptions)
+    fetch("https://flexn.se:3000/loggedin", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.userstatus = result[0].Status;
 
         if (this.userstatus === "Admin") {
-          fetch("188.166.114.141:3000/alltime", requestOptions)
+          fetch("https://flexn.se:3000/alltime", requestOptions)
             .then((response) => response.json())
             .then((result) => {
               this.time = result;
             });
-          fetch("188.166.114.141:3000/getusers")
+          fetch("https://flexn.se:3000/getusers")
             .then((response) => response.json())
             .then((result) => {
               this.users = result;
@@ -399,7 +399,7 @@ export default {
         },
         body: JSON.stringify({ user: this.logged }),
       };
-      fetch("188.166.114.141:3000/alltime", requestOptions)
+      fetch("https://flexn.se:3000/alltime", requestOptions)
         .then((response) => response.json())
         .then((result) => {
           this.time = result;
