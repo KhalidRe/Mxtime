@@ -1,9 +1,6 @@
 ## mx-time
 # Time your timing when time is timeless time..(this app is about time)
 
-# Cant share backend Build
-
-### #JuniorLivesMatter
 
 ## Project setup
 ```
