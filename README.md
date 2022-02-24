@@ -1,5 +1,5 @@
 ## mx-time
-#Time your timing when time is timeless time..(this app is about time)
+# Time your timing when time is timeless time..(this app is about time)
 
 ## Project setup
 ```
