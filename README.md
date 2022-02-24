@@ -1,4 +1,5 @@
-# mx-time
+## mx-time
+# fukboi app, Time your timing when time is timeless time..(this app is about time)
 
 ## Project setup
 ```
