@@ -80,6 +80,7 @@
               type="submit"
               class="skapaknapp"
               @click="createTime(), reloadPage()"
+              name="ok"
             />
             <button @click="show = !show" class="avbryt">Avbryt</button>
           </form>
