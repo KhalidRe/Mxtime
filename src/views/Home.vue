@@ -307,6 +307,7 @@
                     <span class="dwrite"
                       >Skriv in projektetsnamn för att radera</span
                     >
+
                     <input
                       type="text"
                       v-model="sure"
@@ -535,19 +536,52 @@
           <div class="closetrello" @click="trelloopen = !trelloopen">close</div>
           <div class="trellocapsule">
             <div class="trellocard" v-for="trello in atrello" :key="trello.id">
-              <div class="trellohead">
-                <div>{{ trello.title }}</div>
-              </div>
-              <div class="trellooptions">
-                <div class="trellodelete" @click="trellodelete(trello.id)">
-                  X
-                </div>
-                <div class="trellodone" @click="trellodone(trello.id)">
-                  {{ trello.completed }}
-                </div>
-              </div>
+              <transition name="notsoepic-form">
+                <div v-if="trello.completed === 0">
+                  <div class="trellohead">
+                    <div>{{ trello.title }}</div>
+                  </div>
+                  <div class="trellooptions">
+                    <div class="trellodelete" @click="trellodelete(trello.id)">
+                      X
+                    </div>
+                    <div class="trellodone" @click="trellodone(trello.id)">
+                      <img
+                        width="25px"
+                        src="@/assets/Trellocomplete.png"
+                        alt=""
+                      />
+                    </div>
+                  </div>
 
-              <div class="trellodesc">{{ trello.description }}</div>
+                  <div class="trellodesc">
+                    <pre class="prerenderstuff">{{ trello.description }}</pre>
+                  </div>
+                </div>
+              </transition>
+              <transition name="epic-form">
+                <div class="trellochecked" v-if="trello.completed === 1">
+                  <div class="trellohead">
+                    <div>{{ trello.title }}</div>
+                  </div>
+                  <div class="trellooptions">
+                    <div class="trellodelete" @click="trellodelete(trello.id)">
+                      X
+                    </div>
+                    <div class="trellodone" @click="trellodone(trello.id)">
+                      <img
+                        width="25px"
+                        src="@/assets/Trellocomplete.png"
+                        alt=""
+                      />
+                    </div>
+                  </div>
+
+                  <div class="trellodesc">
+                    <pre class="prerenderstuff">{{ trello.description }}</pre>
+                  </div>
+                </div>
+              </transition>
             </div>
           </div>
           <div class="addtrello">
@@ -598,6 +632,19 @@
   </div>
 </template>
 <style scoped>
+.trellochecked {
+  box-shadow: inset 0px 0px 10px 5px rgb(73, 230, 73);
+  background-color: rgb(133, 250, 133);
+  border-radius: 10px;
+}
+.prerenderstuff {
+  font-family: "Scada", sans-serif;
+  font-family: "Sen", sans-serif;
+  font-family: "Ubuntu", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+}
 .trellodelete {
   display: flex;
 
@@ -685,7 +732,7 @@
 }
 .trellodesc {
   max-width: 90%;
-  text-align: center;
+
   padding-left: 15px;
   padding-top: 15px;
   padding-bottom: 15px;
@@ -693,7 +740,6 @@
   text-overflow: ellipsis;
   word-wrap: break-word;
   overflow: hidden;
-  text-align: left;
 }
 .addtrello-btn {
   border: none;
@@ -703,6 +749,8 @@
   color: white;
   font-size: 15px;
   font-weight: 600;
+  border: 1px solid #057bb6;
+  box-shadow: 0px 0px 10px 5px #0471a8;
 }
 .addtrello-btn:active {
   border: none;
@@ -718,6 +766,8 @@
   justify-content: center;
   align-items: center;
   height: 10%;
+  background: #0089d0;
+  border: solid 1px rgb(139, 139, 139);
 }
 .trellohead {
   background-color: #0089d0;
@@ -830,6 +880,7 @@ input[type="radio"]:after {
   justify-content: space-between;
   width: 55%;
   align-items: center;
+  justify-content: center;
 }
 .noclick {
   position: absolute;
@@ -847,6 +898,8 @@ input[type="radio"]:after {
 .dinputcapsule {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .dinputcapsule input[type="text"] {
   background: rgb(255, 164, 164);
@@ -861,6 +914,7 @@ input[type="radio"]:after {
   height: 40px;
   font-size: 15px;
   font-weight: 600;
+  margin-top: 20px;
 }
 .deletebtn {
   background: linear-gradient(180deg, #dd7070 0%, #c24a4a 50.06%, #e47878 100%);
@@ -870,6 +924,7 @@ input[type="radio"]:after {
   height: 40px;
   font-size: 15px;
   font-weight: 600;
+  margin-top: 20px;
 }
 .dAvbryt {
   background: linear-gradient(180deg, #4dacc1 0%, #5578ad 50.52%, #4dacc1 100%);
@@ -1107,7 +1162,46 @@ input[type="radio"]:after {
   width: 0px;
   opacity: 0;
 }
-.esd {
+.epic-form-enter-active {
+  transition: all 0.6s ease;
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+}
+.epic-form-leave-active {
+}
+.epic-form-enter, .epic-form-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  display: none;
+}
+.notsoepic-form-enter-active {
+  transition: all 0.1s;
+}
+.notsoepic-form-leave-active {
+}
+.notsoepic-form-enter, .notsoepic-form-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  display: none;
+}
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(1px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-2px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(2px, 0, 0);
+  }
+}
+epic-form .esd {
   margin-top: -20px;
   margin-bottom: 20px;
   font-family: Scada;
@@ -1149,26 +1243,18 @@ input[type="radio"]:after {
   font-size: 20px;
   line-height: 25px;
 
-  color: #d5d5d5;
+  color: black;
 }
 #Editform {
   position: absolute;
   z-index: 1;
   top: 25%;
   left: 40%;
-  background: linear-gradient(
-    154.98deg,
-    #000000 1.35%,
-    #252525 22.93%,
-    #515151 49.38%,
-    #343434 74.82%,
-    #000000 100%
-  );
+  background: white;
   width: 300px;
-  padding: 20px;
-
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.377);
   border-radius: 10px;
+  padding-bottom: 20px;
 }
 @media only screen and (max-width: 1000px) {
   #ArkivForm {
@@ -1228,8 +1314,13 @@ input[type="radio"]:after {
   font-weight: normal;
   font-size: 36px;
   line-height: 45px;
-
-  color: #4cdb63;
+  background: #1988c9;
+  color: white;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  margin-top: 0px;
+  border-radius: 10px 10px 0px 0px;
+  width: 300px;
 }
 #inputsStyle {
   display: flex;
@@ -1242,6 +1333,7 @@ input[type="radio"]:after {
   justify-content: space-between;
   align-items: center;
   grid-gap: 20px;
+  color: black;
 }
 input[type="text"] {
   background-color: rgb(238, 238, 238);
@@ -1264,7 +1356,7 @@ input[type="date"] {
   border: none;
   box-shadow: 0px 0px 5px 1px black;
   width: 50%;
-  background: linear-gradient(180deg, #6df983 0%, #40cf57 46.88%, #82ed93 100%);
+  background: #1988c9;
 }
 .arkivavbryt {
   font-style: normal;
@@ -1459,6 +1551,7 @@ export default {
       Ttitle: "",
       Tdescription: "",
       atrello: [],
+      loggedstatus: "",
     };
   },
 
@@ -1476,6 +1569,8 @@ export default {
     fetch("https://flexn.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
+        this.loggedstatus = result[0].Status;
+
         if (result.length === 0) {
           location.replace("https://flexnet.se/#/");
         }
@@ -1515,9 +1610,15 @@ export default {
 
             }); */
           this.socketInstance = io("https://flexn.se:3000/");
-
           this.socketInstance.on("data:received", (projectdata) => {
-            this.project = projectdata;
+            if (this.loggedstatus == "Admin") {
+              this.project = projectdata;
+            } else {
+              this.project = projectdata.filter(
+                (result) => result.Authorstatus == this.loggedstatus
+              );
+            }
+
             this.timearray = [];
             this.array = [];
             for (this.i = 0; this.i < this.project.length; this.i++) {
@@ -1551,6 +1652,12 @@ export default {
           });
         }
       });
+    console.log(this.Tdescription);
+  },
+  watch: {
+    see: function () {
+      console.log(this.Tdescription);
+    },
   },
   methods: {
     toVictory() {

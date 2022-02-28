@@ -82,6 +82,7 @@ td {
   width: 100%;
   height: 100vh;
   background-color: #ffffff;
+  overflow-x: scroll;
 }
 ::-webkit-scrollbar {
   width: 6px;

@@ -1,5 +1,5 @@
 <template>
-  <div id="Viewtime" v-if="userstatus === 'Admin'">
+  <div id="Viewtime" v-if="userstatus === 'Admin' || userstatus === 'Finanse'">
     <section>
       <h1>Admin view</h1>
       <select

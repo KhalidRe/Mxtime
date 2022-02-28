@@ -34,7 +34,7 @@
                 <option value="Egen tid">Egen tid</option>
                 <option
                   v-for="projects in project"
-                  :key="projects"
+                  :key="projects.id"
                   :value="projects.Title"
                 >
                   {{ projects.Title }}
@@ -95,7 +95,7 @@
 #Formen {
   position: absolute;
   z-index: 1;
-  top: 25%;
+  top: 20%;
   left: 40%;
   background: rgb(255, 255, 255);
   width: 300px;
@@ -152,6 +152,7 @@ input[type="date"] {
 }
 .e {
   width: 100%;
+  color: black;
 }
 .slide-fade-enter-active {
   transition: all 0.6s ease;
@@ -174,8 +175,10 @@ input[type="date"] {
   font-weight: normal;
   font-size: 36px;
   line-height: 45px;
-
-  color: #4cdb63;
+  background: #1988c9;
+  border-radius: 10px 10px 0px 0px;
+  padding: 20px;
+  color: white;
 }
 .avbryt {
   font-style: normal;
@@ -250,16 +253,9 @@ input[type="date"] {
 #Formen {
   position: absolute;
   z-index: 1;
-  top: 25%;
+  top: 10%;
   left: 40%;
-  background: linear-gradient(
-    154.98deg,
-    #000000 1.35%,
-    #252525 22.93%,
-    #515151 49.38%,
-    #343434 74.82%,
-    #000000 100%
-  );
+  background: white;
   width: 300px;
   min-height: 50vh;
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.377);
@@ -291,7 +287,7 @@ input[type="text"] {
 }
 select {
   border: none;
-  background: linear-gradient(180deg, #6df983 0%, #40cf57 46.88%, #82ed93 100%);
+  background: #1988c9;
   padding: 10px;
   border-radius: 10px 10px 0px 0px;
   font-weight: bolder;
@@ -307,7 +303,7 @@ input[type="date"] {
   border: none;
   box-shadow: 0px 0px 5px 1px black;
   width: 50%;
-  background: linear-gradient(180deg, #6df983 0%, #40cf57 46.88%, #82ed93 100%);
+  background: #1988c9;
 }
 
 input[type="range"] {
@@ -324,7 +320,7 @@ input[type="range"] {
   font-size: 20px;
   line-height: 25px;
 
-  color: #d5d5d5;
+  color: black;
 }
 .noclick {
   position: absolute;
@@ -346,6 +342,7 @@ export default {
       precentage: 0,
       logged: this.$store.state.someValue,
       project: "",
+      loggedstatus: "",
     };
   },
   created() {
@@ -364,14 +361,24 @@ export default {
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
+        this.loggedstatus = this.loggedin.Status;
+        console.log(this.loggedstatus == "Admin");
+        fetch("https://flexn.se:3000/viewprojects")
+          .then((response) => response.json())
+          .then((result) => {
+            if (this.loggedstatus == "Admin") {
+              this.project = result;
+            } else {
+              this.project = result.filter(
+                (result) => result.Authorstatus == this.loggedstatus
+              );
+            }
+          });
       });
-    fetch("https://flexn.se:3000/viewprojects")
-      .then((response) => response.json())
-      .then((result) => {
-        this.project = result;
-      });
+
     this.socketInstance = io("https://flexn.se:3000/");
   },
+
   methods: {
     reloadPage() {
       setTimeout(window.location.reload(), 2000);

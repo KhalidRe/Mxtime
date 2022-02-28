@@ -100,6 +100,7 @@ export default {
       Waiting: "",
       Pausad: "",
       icon: "",
+      loggedstatus: "",
     };
   },
   created() {
@@ -125,7 +126,13 @@ export default {
 
     this.socketInstance = io("https://flexn.se:3000");
     this.socketInstance.on("data:received", (projectdata) => {
-      this.project = projectdata;
+      if (this.loggedstatus == "Admin") {
+        this.project = projectdata;
+      } else {
+        this.project = projectdata.filter(
+          (result) => result.Authorstatus == this.loggedin.Status
+        );
+      }
 
       this.Aktiv = this.project.filter((results) => {
         return results.Statu.includes("A");

@@ -36,7 +36,7 @@
         class="profileview"
         v-if="showprofile"
       >
-        <video autoplay muted loop>
+        <video autoplay muted loop playsinline>
           <source src="@/assets/energy.webm" type="video/mp4" />
         </video>
 
@@ -175,8 +175,8 @@ video {
   opacity: 0;
 }
 .profileview {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   position: absolute;
   z-index: 1;
 

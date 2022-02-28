@@ -139,8 +139,11 @@
   font-weight: normal;
   font-size: 36px;
   line-height: 45px;
-
-  color: #4cdb63;
+  background: #1988c9;
+  color: white;
+  margin-top: 0px;
+  padding: 20px;
+  border-radius: 10px 10px 0px 0px;
 }
 .avbryt {
   font-style: normal;
@@ -160,18 +163,18 @@
   border: none;
   background: linear-gradient(180deg, #aab1ab 0%, #c3cec5 46.88%, #bdc9bf 100%);
   box-shadow: 0px 5px 5px 1px rgba(255, 255, 255, 0.151);
-  width: 260px;
+  width: 150px;
   height: 60px;
   border-radius: 25px;
   font-size: 30px;
   font-weight: bold;
-  color: #01537c;
+  color: #666666;
 }
 .skapaknapp {
   border: none;
   background: linear-gradient(180deg, #6df983 0%, #3db951 46.88%, #82ed93 100%);
   box-shadow: 0px 5px 5px 1px rgba(255, 255, 255, 0.151);
-  width: 260px;
+  width: 150px;
   height: 60px;
   border-radius: 25px;
   font-size: 30px;
@@ -215,18 +218,9 @@
 #Formen {
   position: absolute;
   z-index: 1;
-  top: 25%;
+  top: 10%;
   left: 40%;
-  background: linear-gradient(
-    154.98deg,
-    #000000 1.35%,
-    #252525 22.93%,
-    #515151 49.38%,
-    #343434 74.82%,
-    #000000 100%
-  );
-  width: 300px;
-
+  background: white;
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.377);
   border-radius: 10px;
   padding-bottom: 10px;
@@ -245,6 +239,7 @@
 
   grid-gap: 10px;
   text-align: center;
+  color: white;
 }
 input[type="text"] {
   background-color: rgb(238, 238, 238);
@@ -252,7 +247,8 @@ input[type="text"] {
   border-radius: 5px;
   height: 25px;
   box-shadow: inset 0px 0px 1px 1px rgb(15, 130, 196);
-  background: linear-gradient(180deg, #129426 0%, #40cf57 46.88%, #129628 100%);
+  background: #1988c9;
+  color: white;
 }
 input[type="number"] {
   background-color: rgb(238, 238, 238);
@@ -261,11 +257,12 @@ input[type="number"] {
   width: 50%;
   height: 25px;
   box-shadow: inset 0px 0px 1px 1px rgb(15, 130, 196);
-  background: linear-gradient(180deg, #129426 0%, #40cf57 46.88%, #129628 100%);
+  background: #1988c9;
+  color: white;
 }
 select {
   border: none;
-  background: linear-gradient(180deg, #6df983 0%, #40cf57 46.88%, #82ed93 100%);
+  background: #1988c9;
   padding: 10px;
   border-radius: 10px 10px 0px 0px;
   font-weight: bolder;
@@ -281,7 +278,8 @@ input[type="date"] {
   border: none;
   box-shadow: 0px 0px 5px 1px black;
   width: 50%;
-  background: linear-gradient(180deg, #6df983 0%, #40cf57 46.88%, #82ed93 100%);
+  background: #1988c9;
+  color: white;
 }
 
 input[type="range"] {
@@ -298,7 +296,7 @@ input[type="range"] {
   font-size: 20px;
   line-height: 25px;
 
-  color: #d5d5d5;
+  color: black;
 }
 .avk {
   background: rgba(0, 0, 0, 0.336);
@@ -322,6 +320,7 @@ export default {
       deadline: "",
       timebudget: 0,
       deltagare: "",
+      authorstatus: "",
     };
   },
   created() {
@@ -364,6 +363,7 @@ export default {
         timebudget: this.timebudget,
         timeused: 0,
         status: "A",
+        Authorstatus: this.loggedin.Status,
       };
 
       this.socketInstance.emit("post", postdata);

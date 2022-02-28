@@ -32,7 +32,9 @@
           />
         </div>
       </form>
-      <button style="margin: 5px">Forgot password</button>
+      <a href="tel:0707533884">
+        <button style="margin: 5px">Forgot password</button>
+      </a>
     </div>
   </div>
 </template>
