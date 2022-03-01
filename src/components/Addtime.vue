@@ -24,7 +24,7 @@
               <td>{{ times.Minutes }}</td>
               <td>{{ times.Description }}</td>
               <td
-                style="color: red"
+                style="color: red; cursor: pointer"
                 v-bind:id="times.id"
                 @click="Remove(index), (R = !R)"
               >
@@ -210,6 +210,8 @@
 /* .slide-fade-leave-active below version 2.1.8 */ {
   transform: translateY(-100%);
   opacity: 0;
+}
+.o {
 }
 .Openoverlay {
   background-color: rgb(79, 165, 79);

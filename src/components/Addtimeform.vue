@@ -115,6 +115,7 @@
   color: white;
   text-align: center;
   line-height: 50px;
+  cursor: pointer;
 }
 @media only screen and (max-width: 1000px) {
   #Formen {
@@ -232,6 +233,7 @@ input[type="date"] {
   right: 5vw;
   top: 80vh;
   z-index: 3;
+  cursor: pointer;
 }
 #Addbtn:active {
   background-color: rgb(6, 143, 36);

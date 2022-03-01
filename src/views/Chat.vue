@@ -125,6 +125,7 @@
   border-radius: 10px;
   background-color: #72eb4d;
   color: green;
+  cursor: pointer;
 }
 #text-Message {
   width: 95%;

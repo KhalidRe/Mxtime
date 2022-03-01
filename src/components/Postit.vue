@@ -158,6 +158,7 @@
   border: none;
   font-weight: 600;
   color: #01537c;
+  cursor: pointer;
 }
 .fakerskapaknapp {
   border: none;
@@ -180,6 +181,7 @@
   font-size: 30px;
   font-weight: bold;
   color: #01537c;
+  cursor: pointer;
 }
 #Addbtn {
   overflow: hidden;
@@ -195,6 +197,7 @@
   box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.39);
   right: 5vw;
   top: 80vh;
+  cursor: pointer;
   z-index: 0;
 }
 #Addbtn:active {

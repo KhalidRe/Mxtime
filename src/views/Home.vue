@@ -36,7 +36,7 @@
           <span
             v-bind:id="projects.id"
             @click="Remove(projects.id), (R = !R)"
-            style="float: right; color: red"
+            style="float: right; color: red; cursor: pointer"
             ><img width="16px" src="@/assets/Kryss2.png" alt=""
           /></span>
         </div>
@@ -257,6 +257,10 @@
             >
               Open
             </div>
+            <span class="nrtrello">{{
+              trellodata.filter((result) => result.fatherid == projects.id)
+                .length
+            }}</span>
           </div>
         </div>
 
@@ -423,9 +427,10 @@
                 ><input
                   type="date"
                   name="deadline"
-                  v-model="deadline"
                   id="deadline"
                   onkeydown="return false"
+                  ref="fdeadline"
+                  :value="edeadline"
                 />
               </span>
 
@@ -463,8 +468,11 @@
               style="display: none"
             ></iframe>
             <form method="POST" action="" target="dummyframe">
-              <h1 class="arkivtitle">Arkivera</h1>
-              <h2 class="arkivtitle">{{ this.etitle }}</h2>
+              <div class="arkivtitle">
+                <h1 style="margin: 0px">Arkivera</h1>
+                <h2>{{ this.etitle }}</h2>
+              </div>
+
               <input type="hidden" name="id" id="id" :value="this.z" />
               <input
                 type="hidden"
@@ -751,6 +759,7 @@
   font-weight: 600;
   border: 1px solid #057bb6;
   box-shadow: 0px 0px 10px 5px #0471a8;
+  cursor: pointer;
 }
 .addtrello-btn:active {
   border: none;
@@ -819,7 +828,28 @@
 }
 .opentrello {
   margin-top: -180px;
-  margin-right: -40px;
+  margin-right: -65px;
+}
+.nrtrello {
+  color: white;
+  background-color: rgb(83, 175, 187);
+  border-radius: 100%;
+  padding: 5px;
+  height: 8px;
+  margin-top: -180px;
+  margin-right: 4px;
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+.opentrello:hover {
+  text-decoration: underline 2px;
+  cursor: pointer;
+  background: linear-gradient(90deg, #dd707000 0%, #78b0e446 100%);
+
+  border-radius: 5px;
 }
 .canit {
   display: grid;
@@ -925,6 +955,7 @@ input[type="radio"]:after {
   font-size: 15px;
   font-weight: 600;
   margin-top: 20px;
+  cursor: pointer;
 }
 .dAvbryt {
   background: linear-gradient(180deg, #4dacc1 0%, #5578ad 50.52%, #4dacc1 100%);
@@ -934,6 +965,7 @@ input[type="radio"]:after {
   padding-left: 20px;
   padding-right: 20px;
   height: 20px;
+  cursor: pointer;
 }
 .dsure {
   color: rgb(255, 255, 255);
@@ -956,16 +988,13 @@ input[type="radio"]:after {
 .now {
   background: #1988c9;
   border: none;
-
   padding: 5px;
   border-radius: 50px;
   color: rgb(255, 255, 255);
-
   transition: 1s;
-
   font-weight: bold;
-
   font-size: 12px;
+  cursor: pointer;
 }
 
 .progresscont {
@@ -1075,18 +1104,13 @@ input[type="radio"]:after {
 }
 #ArkivForm {
   position: absolute;
+  padding-bottom: 15px;
   z-index: 1;
   top: 25%;
   left: 40%;
-  background: linear-gradient(
-    154.98deg,
-    #000000 1.35%,
-    #252525 22.93%,
-    #515151 49.38%,
-    #343434 74.82%,
-    #000000 100%
-  );
-  padding: 20px;
+  width: 300px;
+  background: white;
+
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.377);
   border-radius: 10px;
 }
@@ -1300,13 +1324,17 @@ epic-form .esd {
   font-family: Scada;
   font-style: normal;
   font-weight: normal;
-  font-size: 36px;
   line-height: 45px;
-  margin: 0;
-  color: #4cdb63;
+  margin: 0px;
+  border-radius: 10px 10px 0px 0px;
+  color: white;
+  background: #1988c9;
 }
 .edit {
   display: flex;
+}
+.edit:hover {
+  cursor: pointer;
 }
 .edittitle {
   font-family: Scada;
@@ -1372,6 +1400,7 @@ input[type="date"] {
   font-weight: 600;
   color: #01537c;
   margin-top: 20px;
+  cursor: pointer;
 }
 .avbryt {
   font-style: normal;
@@ -1386,6 +1415,7 @@ input[type="date"] {
   border: none;
   font-weight: 600;
   color: #01537c;
+  cursor: pointer;
 }
 .skapaknapp {
   border: none;
@@ -1397,6 +1427,7 @@ input[type="date"] {
   font-size: 30px;
   font-weight: bold;
   color: #01537c;
+  cursor: pointer;
 }
 .e {
   width: 100%;
@@ -1420,9 +1451,9 @@ input[type="date"] {
   text-transform: uppercase;
   letter-spacing: 4px;
   overflow: hidden;
-
+  margin-top: 20px;
   box-shadow: 0 0 10px rgb(0, 0, 0, 1);
-
+  cursor: pointer;
   font-size: 28px;
   font-weight: bolder;
   text-decoration: none;
@@ -1503,6 +1534,8 @@ import io from "socket.io-client";
 import { invalid } from "moment";
 import swal from "sweetalert";
 import Minitrello from "../components/Minitrello.vue";
+
+import water from "../assets/soundeffect/water.mp3";
 export default {
   components: { Postit, Workernav, RadialProgressBar, Minitrello },
   data() {
@@ -1552,6 +1585,7 @@ export default {
       Tdescription: "",
       atrello: [],
       loggedstatus: "",
+      watersound: "../assets/soundeffect/water.mp3",
     };
   },
 
@@ -1652,12 +1686,9 @@ export default {
           });
         }
       });
-    console.log(this.Tdescription);
   },
   watch: {
-    see: function () {
-      console.log(this.Tdescription);
-    },
+    see: function () {},
   },
   methods: {
     toVictory() {
@@ -1685,7 +1716,7 @@ export default {
       const editdata = {
         id: this.z,
         title: this.etitle,
-        deadline: this.deadline,
+        deadline: this.$refs.fdeadline.value,
         completed: this.ecompleted,
         precentage: 0,
         status: this.estatus,
@@ -1770,6 +1801,7 @@ export default {
         id: id,
       };
       this.socketInstance.emit("trello:status", trellostatus);
+      this.watersound.play("../assets/soundeffect/water.mp3");
     },
     trellodelete(id) {
       console.log(id);

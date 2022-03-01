@@ -36,7 +36,7 @@
         class="profileview"
         v-if="showprofile"
       >
-        <video autoplay muted loop playsinline>
+        <video autoplay muted loop webkit-playsinline="true" playsinline="true">
           <source src="@/assets/energy.webm" type="video/mp4" />
         </video>
 
@@ -197,6 +197,7 @@ video {
   font-size: 20px;
   border: solid 1px#30a2b1;
   font-weight: bold;
+  cursor: pointer;
 }
 .readmorebtn:hover {
   background: -webkit-linear-gradient(left, #3bf0a4, #38c6d3);
