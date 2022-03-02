@@ -255,7 +255,7 @@
               class="opentrello"
               @click="viewtrello(projects.id), (trelloopen = !trelloopen)"
             >
-              Open
+              Tasks
             </div>
             <span class="nrtrello">{{
               trellodata.filter((result) => result.fatherid == projects.id)
@@ -1536,10 +1536,15 @@ import swal from "sweetalert";
 import Minitrello from "../components/Minitrello.vue";
 
 import water from "../assets/soundeffect/water.mp3";
+import cash from "../assets/soundeffect/cash.mp3";
+import ding from "../assets/soundeffect/ding.mp3";
+import pop from "../assets/soundeffect/pop.mp3";
 export default {
   components: { Postit, Workernav, RadialProgressBar, Minitrello },
+
   data() {
     return {
+      audioSources: ["assets/soundeffect/water.mp3"],
       arkiveraoverlay: false,
       completedSteps: 0,
       totalSteps: 10,
@@ -1585,7 +1590,10 @@ export default {
       Tdescription: "",
       atrello: [],
       loggedstatus: "",
-      watersound: "../assets/soundeffect/water.mp3",
+      watersound: "",
+      popsound: "",
+      dingsound: "",
+      cashsound: "",
     };
   },
 
@@ -1710,6 +1718,7 @@ export default {
         text: "Du har Arkiverat projektet!",
         icon: "success",
       });
+      this.cashsound.play();
     },
 
     sendEdit() {
@@ -1744,6 +1753,7 @@ export default {
         text: "Du har raderat projektet!",
         icon: "success",
       });
+      this.popsound.play();
     },
     Edit(id) {
       this.z = id;
@@ -1795,13 +1805,14 @@ export default {
         description: this.Tdescription,
       };
       this.socketInstance.emit("trello:created", trello);
+      this.dingsound.play();
     },
     trellodone(id) {
       const trellostatus = {
         id: id,
       };
       this.socketInstance.emit("trello:status", trellostatus);
-      this.watersound.play("../assets/soundeffect/water.mp3");
+      this.watersound.play();
     },
     trellodelete(id) {
       console.log(id);
@@ -1809,9 +1820,15 @@ export default {
         id: id,
       };
       this.socketInstance.emit("trello:delete", deletetrello);
+      this.popsound.play();
     },
   },
-
+  mounted() {
+    this.watersound = new Audio(water);
+    this.dingsound = new Audio(ding);
+    this.cashsound = new Audio(cash);
+    this.popsound = new Audio(pop);
+  },
   computed: {
     someValue: {
       get() {

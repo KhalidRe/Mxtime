@@ -5,6 +5,9 @@
         <router-link class="links" to="/Home"
           ><img width="25vw" src="@/assets/projecticon2.png" alt=""
         /></router-link>
+        <router-link class="links" to="/Time">
+          <img width="25vw" src="@/assets/Timeicon.png" alt="" />
+        </router-link>
         <router-link class="links" to="/Charts"
           ><img width="25vw" src="@/assets/charticon2.png" alt=""
         /></router-link>

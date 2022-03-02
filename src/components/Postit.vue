@@ -308,6 +308,7 @@ input[type="range"] {
 </style>
 <script>
 import io from "socket.io-client";
+import ding from "../assets/soundeffect/ding.mp3";
 export default {
   data() {
     return {
@@ -324,6 +325,7 @@ export default {
       timebudget: 0,
       deltagare: "",
       authorstatus: "",
+      dingsound: "",
     };
   },
   created() {
@@ -370,6 +372,7 @@ export default {
       };
 
       this.socketInstance.emit("post", postdata);
+      this.dingsound.play();
       swal({
         title: "Projekt Skapat!",
         text: "Du har skapat ett projekt!",
@@ -379,6 +382,9 @@ export default {
     reloadPage() {
       setTimeout(window.location.reload(), 2000);
     },
+  },
+  mounted() {
+    this.dingsound = new Audio(ding);
   },
 };
 </script>
