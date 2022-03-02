@@ -34,13 +34,6 @@
               <td>{{ times.Hours }}</td>
               <td>{{ times.Minutes }}</td>
               <td>{{ times.Description }}</td>
-              <td
-                style="color: red; cursor: pointer"
-                v-bind:id="times.id"
-                @click="Remove(index), (R = !R)"
-              >
-                DELETE
-              </td>
             </tr>
           </tbody>
         </table>
@@ -91,8 +84,6 @@
 }
 
 .accordion > input[type="checkbox"]:checked ~ .content {
-  padding: 15px;
-  border: 1px solid #e8e8e8;
   border-top: 0;
   transition: 1s;
 }
