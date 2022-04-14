@@ -7,6 +7,7 @@ import Users from "../views/Users.vue";
 import Login from "../views/Login.vue";
 import Chat from "../views/Chat.vue";
 import Time from "../views/Time.vue";
+import Planner from "../views/Planner.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -44,6 +45,11 @@ const routes = [
     path: "/Time",
     name: "Time",
     component: Time,
+  },
+  {
+    path: "/Planner",
+    name: "Planner",
+    component: Planner,
   },
 ];
 

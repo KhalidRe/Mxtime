@@ -17,6 +17,9 @@
         <router-link class="links" to="/Histor"
           ><img width="25vw" src="@/assets/historyicon2.png" alt=""
         /></router-link>
+        <router-link class="links" to="/Planner"
+          ><img width="25vw" src="@/assets/Chat2.png" alt=""
+        /></router-link>
         <router-link class="links" to="/Chat"
           ><img width="25vw" src="@/assets/Chat2.png" alt=""
         /></router-link>
