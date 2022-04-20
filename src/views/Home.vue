@@ -1770,6 +1770,7 @@ export default {
       this.eworker = this.eproject.Workers;
     },
     Remove(id) {
+      console.log(id);
       this.z = id - 1;
       this.x = id;
       this.rproject = this.project.find((result) => result.id == this.x);

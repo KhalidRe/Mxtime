@@ -68,6 +68,7 @@ export default {
   z-index: 1;
   border-radius: 0% 25px 25px 0px;
   background: #6aec87;
+  cursor: pointer;
 }
 
 #father {

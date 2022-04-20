@@ -43,7 +43,7 @@
             <span class="e">
               <span>Deltagare</span
               ><select name="workers" id="workers" v-model="workers">
-                <option value="Ensam">Eget</option>
+                <option selected value="Ensam">Eget</option>
                 <option
                   v-for="deltag in deltagare"
                   :key="deltag.Name"
@@ -52,6 +52,19 @@
                   {{ deltag.Name }}
                 </option>
               </select>
+              <div class="workerscaps">
+                <div
+                  id="tblFruits"
+                  v-for="deltag in deltagare"
+                  :key="deltag.Name"
+                  class="workcheck"
+                >
+                  <input class="chk" type="checkbox" :value="deltag.id" /><label
+                    for="chk"
+                    >{{ deltag.Name }}</label
+                  >
+                </div>
+              </div>
             </span>
             <div class="dateanddead">
               <span class="e">
@@ -113,6 +126,8 @@
               Avbryt
             </button>
           </form>
+
+          <input type="button" value="Get" @click="GetSelected()" />
         </div>
       </div>
     </transition>
@@ -122,6 +137,12 @@
 </template>
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Scada&family=Sen:wght@700&display=swap");
+
+.workerscaps {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
 .dateanddead {
   display: flex;
 }
@@ -356,6 +377,18 @@ export default {
     this.socketInstance = io("https://flexn.se:3000/");
   },
   methods: {
+    GetSelected() {
+      var selected = new Array();
+      var tblFruits = document.getElementById("tblFruits");
+      var chks = document.getElementsByClassName("chk");
+      console.log(chks);
+      for (var i = 0; i < chks.length; i++) {
+        if (chks[i].checked) {
+          selected.push(chks[i].value);
+        }
+      }
+      console.log(selected);
+    },
     createProject() {
       const postdata = {
         title: this.title.replace(/'/g, ``),
@@ -369,6 +402,7 @@ export default {
         timeused: 0,
         status: "A",
         Authorstatus: this.loggedin.Status,
+        deltag: this.selected,
       };
 
       this.socketInstance.emit("post", postdata);

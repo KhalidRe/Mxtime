@@ -16,12 +16,16 @@
     <div class="tbl-content">
       <table cellpadding="0" cellspacing="0" border="0">
         <tbody>
-          <tr class="Card" v-for="projects in project" :key="projects.id">
+          <tr
+            class="Card"
+            v-for="(projects, index) in project"
+            :key="projects.id"
+          >
             <td>{{ projects.Title }}</td>
             <td class="progress optimalC">
               <progress
                 class="optimal"
-                :value="array[projects.id - 1]"
+                :value="array[index]"
                 min="0"
                 max="100"
               ></progress>
@@ -29,7 +33,7 @@
             <td class="progress currentC">
               <progress
                 class="current"
-                :value="timearray[projects.id - 1]"
+                :value="timearray[index]"
                 min="0"
                 max="100"
               ></progress>
