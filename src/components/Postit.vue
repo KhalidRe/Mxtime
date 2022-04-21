@@ -47,7 +47,7 @@
                 <option
                   v-for="deltag in deltagare"
                   :key="deltag.Name"
-                  value="Ljung"
+                  :value="deltag.Name"
                 >
                   {{ deltag.Name }}
                 </option>
@@ -126,8 +126,6 @@
               Avbryt
             </button>
           </form>
-
-          <input type="button" value="Get" @click="GetSelected()" />
         </div>
       </div>
     </transition>
@@ -377,19 +375,17 @@ export default {
     this.socketInstance = io("https://flexn.se:3000/");
   },
   methods: {
-    GetSelected() {
+    GetSelected() {},
+    createProject() {
       var selected = new Array();
-      var tblFruits = document.getElementById("tblFruits");
+
       var chks = document.getElementsByClassName("chk");
       console.log(chks);
       for (var i = 0; i < chks.length; i++) {
         if (chks[i].checked) {
-          selected.push(chks[i].value);
+          selected.push(parseInt(chks[i].value));
         }
       }
-      console.log(selected);
-    },
-    createProject() {
       const postdata = {
         title: this.title.replace(/'/g, ``),
         author: this.$refs.author.value,
@@ -402,7 +398,7 @@ export default {
         timeused: 0,
         status: "A",
         Authorstatus: this.loggedin.Status,
-        deltag: this.selected,
+        deltag: selected,
       };
 
       this.socketInstance.emit("post", postdata);

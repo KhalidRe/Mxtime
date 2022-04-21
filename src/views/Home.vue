@@ -2,7 +2,7 @@
   <div id="Home">
     <Workernav />
     <div class="Grid">
-      <div class="Card" v-for="projects in project" :key="projects.id">
+      <div class="Card" v-for="(projects, index) in project" :key="projects.id">
         <div class="tabletop">
           <span
             style="color: blue; float: left"
@@ -276,15 +276,17 @@
         </div>
         <div class="deltagareC">
           <span class="fontgradient">Deltagare: </span>
+
           <img
             class="deltagare"
             :src="require(`@/assets/${projects.Author}.jpg`)"
             alt=""
           />
           <img
+            v-for="sparrs in sparr[index]"
+            :key="sparrs.index"
             class="deltagare va"
-            v-if="projects.Workers !== 'Ensam'"
-            :src="require(`@/assets/${projects.Workers}.jpg`)"
+            :src="require(`@/assets/${sparrs.Name}.jpg`)"
             alt=""
           />
         </div>
@@ -1303,6 +1305,10 @@ epic-form .esd {
   width: 30px;
   border-radius: 25px;
   box-shadow: 0px 2px 5px 1px rgba(100, 100, 100, 0.5);
+  transition: 1;
+}
+.deltagare:hover {
+  margin-top: -10px;
 }
 .va {
   margin-left: -10px;
@@ -1594,6 +1600,10 @@ export default {
       popsound: "",
       dingsound: "",
       cashsound: "",
+      workersassignd: [],
+      forinpw: 0,
+      sparr: [],
+      index: 0,
     };
   },
 
@@ -1691,6 +1701,22 @@ export default {
             this.atrello = this.trellodata.filter(
               (result) => result.fatherid == this.trelloprojectid
             );
+          });
+          this.socketInstance.on("workerdeltag:received", (workerdeltag) => {
+            this.workersassignd = workerdeltag;
+            this.sparr = [];
+            for (
+              this.forinpw = 0;
+              this.project.length > this.forinpw;
+              this.forinpw++
+            ) {
+              this.sparr.push(
+                this.workersassignd.filter(
+                  (result) => result.projectid == this.project[this.forinpw].id
+                )
+              );
+            }
+            console.log(this.sparr);
           });
         }
       });
