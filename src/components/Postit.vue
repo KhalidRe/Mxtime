@@ -40,18 +40,8 @@
                 ref="userid"
               />
             </span>
-            <span class="e">
-              <span>Deltagare</span
-              ><select name="workers" id="workers" v-model="workers">
-                <option selected value="Ensam">Eget</option>
-                <option
-                  v-for="deltag in deltagare"
-                  :key="deltag.Name"
-                  :value="deltag.Name"
-                >
-                  {{ deltag.Name }}
-                </option>
-              </select>
+            <span class="e w">
+              <span>Deltagare</span>
               <div class="workerscaps">
                 <div
                   id="tblFruits"
@@ -59,10 +49,21 @@
                   :key="deltag.Name"
                   class="workcheck"
                 >
-                  <input class="chk" type="checkbox" :value="deltag.id" /><label
-                    for="chk"
-                    >{{ deltag.Name }}</label
-                  >
+                  <label class="container">
+                    <input
+                      :id="deltag.Name + deltag.id"
+                      class="deltagcheckbox"
+                      type="checkbox"
+                      :value="deltag.id"
+                    />
+                    <label :for="deltag.Name + deltag.id" class="checkmark"
+                      ><img
+                        class="icons"
+                        :src="require(`@/assets/${deltag.Name}.jpg`)"
+                      />
+                      <div>{{ deltag.Name }}</div>
+                    </label>
+                  </label>
                 </div>
               </div>
             </span>
@@ -108,7 +109,6 @@
               class="skapaknapp"
               v-if="
                 this.title.replace(/\s/g, '').length > 0 &&
-                this.workers.length > 0 &&
                 this.date.length > 0 &&
                 this.deadline.length > 0 &&
                 this.timebudget > 0
@@ -135,12 +135,101 @@
 </template>
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Scada&family=Sen:wght@700&display=swap");
+#tblFruits {
+  height: 50px;
+  width: 50px;
+  margin-top: 10px;
+  margin: 10px;
+  box-shadow: 0px 5px 10px rgb(0, 0, 0);
+  border-radius: 100%;
+}
+.icons {
+  width: 50px;
+  border-radius: 100%;
+}
+.container {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  height: 32px;
+  width: 45px;
+  border-radius: 100%;
+}
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(81, 182, 250, 0.3);
+}
+::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 0px 5px rgb(84, 161, 224);
+}
+.Texten {
+  font-size: 14px;
+}
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
 
+  border-radius: 100%;
+}
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  background-color: #e0eeff;
+
+  border: solid white 2px;
+  border-radius: 100%;
+}
+.container:hover input ~ .checkmark {
+  background-color: #e0eeff;
+}
+.container input:checked ~ .checkmark {
+  background-color: #44f321;
+  border: 2px rgb(103, 218, 103) solid;
+  border-radius: 100%;
+}
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  display: none;
+}
+.e {
+  width: 80%;
+}
 .workerscaps {
+  justify-content: center;
+  overflow-y: scroll;
+  background: rgb(255, 255, 255);
+  width: 100%;
+  height: 150px;
   display: grid;
+  grid-gap: 20px;
   grid-template-columns: auto auto;
 }
-
+.deltagcheckbox {
+  appearance: none;
+}
 .dateanddead {
   display: flex;
 }
@@ -379,7 +468,7 @@ export default {
     createProject() {
       var selected = new Array();
 
-      var chks = document.getElementsByClassName("chk");
+      var chks = document.getElementsByClassName("deltagcheckbox");
       console.log(chks);
       for (var i = 0; i < chks.length; i++) {
         if (chks[i].checked) {
@@ -389,7 +478,6 @@ export default {
       const postdata = {
         title: this.title.replace(/'/g, ``),
         author: this.$refs.author.value,
-        workers: this.workers,
         date: this.date,
         deadline: this.deadline,
         precentage: 0,

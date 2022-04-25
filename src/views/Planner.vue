@@ -23,15 +23,24 @@
       <div class="pads">
         <div class="ovone">
           <h3>Delete plan</h3>
-          <div class="closeaddplan" @click="plansure = !plansure">close</div>
+          <div
+            class="closeaddplan"
+            @click="(plansure = !plansure), (plansurechecked = false)"
+          >
+            close
+          </div>
         </div>
 
         <div class="suretext">
           You are about to permanently delete this plan and all of its tasks.
         </div>
         <div class="plansurecheckbox">
-          <input @click="plansurechecked = !plansurechecked" type="checkbox" />
-          <label for="checkbox"
+          <input
+            id="surely"
+            @click="plansurechecked = !plansurechecked"
+            type="checkbox"
+          />
+          <label class="surely" for="surely"
             >I understand that this plan and all of its tasks will be
             permanently deleted</label
           >
@@ -40,11 +49,7 @@
       <div
         v-if="plansurechecked"
         class="planbtncreate"
-        @click="
-          deletePlan(),
-            (plansure = !plansure),
-            (plansurechecked = !plansurechecked)
-        "
+        @click="deletePlan(), (plansure = !plansure), (plansurechecked = false)"
       >
         Delete plan
       </div>
@@ -150,9 +155,26 @@
             >
               <div class="cardhead">
                 <div>{{ buckets.title }}</div>
-                <div>. . .</div>
+                <div
+                  class="logmenmens"
+                  v-if="buckets.id == logdel"
+                  @click="deleteBucket(buckets.id), (logdel = null)"
+                >
+                  DELETE
+                </div>
+                <div @click="logdelbucket(buckets.id)" class="thredots">
+                  ...
+                </div>
+                <div
+                  @click="logbucket = !logbucket"
+                  v-if="logbucket"
+                  class="logmenover"
+                ></div>
               </div>
-              <div class="addtrel">
+              <div
+                @click="BucketId(buckets.id), (addworkoverlay = false)"
+                class="addtrel"
+              >
                 <div class="trelicon">
                   <svg
                     width="20"
@@ -167,20 +189,124 @@
                     ></path>
                   </svg>
                 </div>
+
                 <div class="treltext">Add task</div>
               </div>
+              <div class="addtaskcont" v-if="buckets.id == bucketid">
+                <div class="addtasktopcont">
+                  <label class="circle" for=""></label>
+                  <input type="text" placeholder="Enter a task name" />
+                </div>
+                <div class="addtasksetdue">
+                  <label for="pickduedate"
+                    ><img
+                      class="datepickerimg"
+                      src="@/assets/datepicker.png"
+                      alt=""
+                  /></label>
+                  <date-picker
+                    id="pickduedate"
+                    v-model="time1"
+                    valueType="format"
+                  ></date-picker>
+                </div>
+                <div
+                  @click="addworkoverlay = !addworkoverlay"
+                  class="addtasksetworker"
+                >
+                  <img
+                    class="datepickerimg"
+                    src="@/assets/addusers.png"
+                    alt=""
+                  />
+                  <div>Assign</div>
+                </div>
+                <transition name="open-fade">
+                  <div class="workerlist" v-show="addworkoverlay">
+                    <div
+                      id="tblFruits"
+                      v-for="deltag in deltagare"
+                      :key="deltag.Name"
+                      class="workcheck"
+                    >
+                      <label class="container">
+                        <input
+                          :id="deltag.Name + deltag.id"
+                          class="deltagcheckbox"
+                          type="checkbox"
+                          :value="deltag.id"
+                        />
+                        <label :for="deltag.Name + deltag.id" class="checkmark"
+                          ><img
+                            class="icons"
+                            :src="require(`@/assets/${deltag.Name}.jpg`)"
+                          />
+                          <div>{{ deltag.Name }}</div>
+                        </label>
+                      </label>
+                    </div>
+                  </div>
+                </transition>
+                <div class="addtaskinnerbtn"><div>Add task</div></div>
+              </div>
+              <div
+                v-for="tasks in task"
+                :key="tasks.id"
+                v-if="tasks.fatherid == buckets.id"
+                class="taskcont"
+              >
+                <div class="iconntext">
+                  <div>
+                    <div class="child-one" v-show="showByIndex === null">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="svg"
+                        fill="currentColor"
+                        focusable="false"
+                      >
+                        <path
+                          d="M10 3a7 7 0 100 14 7 7 0 000-14zm-8 7a8 8 0 1116 0 8 8 0 01-16 0z"
+                        ></path>
+                      </svg>
+                    </div>
+                    <div class="child-two" v-show="showByIndex === i">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="svg"
+                        fill="currentColor"
+                        focusable="false"
+                      >
+                        <path
+                          d="M10 2a8 8 0 110 16 8 8 0 010-16zm0 1a7 7 0 100 14 7 7 0 000-14zm3.36 4.65c.17.17.2.44.06.63l-.06.07-4 4a.5.5 0 01-.64.07l-.07-.06-2-2a.5.5 0 01.63-.77l.07.06L9 11.3l3.65-3.65c.2-.2.51-.2.7 0z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div>{{ tasks.title }}</div>
+                </div>
+
+                <div>...</div>
+              </div>
             </div>
-            <input
-              v-if="plan.length > 0"
-              v-on:keyup.enter="createBucket()"
-              v-model="buckettitle"
-              type="text"
-              class="s"
-              maxlength="30"
-              minlength="1"
-              required
-              placeholder="Add Bucket"
-            />
+            <div id="space">
+              <input
+                v-if="plan.length > 0"
+                v-on:keyup.enter="createBucket()"
+                v-model="buckettitle"
+                type="text"
+                class="s"
+                maxlength="30"
+                minlength="1"
+                required
+                placeholder="Add Bucket"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -188,6 +314,187 @@
   </div>
 </template>
 <style scoped>
+.iconntext {
+  display: flex;
+  grid-gap: 20px;
+}
+.taskcont {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 30px;
+  padding: 10px;
+  box-shadow: 0px 0px 5px 1px rgb(133, 133, 133);
+  margin-top: 50px;
+}
+#space {
+  margin-top: 62px;
+  margin-right: 200px;
+  width: 500px;
+}
+.surely {
+  cursor: pointer;
+}
+.surely:hover {
+  color: #969696;
+}
+#tblFruits {
+  height: 50px;
+  width: 50px;
+  margin-top: 10px;
+  margin: 10px;
+  box-shadow: 0px 5px 10px rgb(0, 0, 0);
+  border-radius: 100%;
+}
+.icons {
+  width: 50px;
+  border-radius: 100%;
+}
+.container {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  height: 32px;
+  width: 45px;
+  border-radius: 100%;
+}
+.workerlist::-webkit-scrollbar {
+  width: 6px;
+}
+.workerlist::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(81, 182, 250, 0.3);
+}
+.workerlist::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 0px 5px rgb(84, 161, 224);
+}
+.Texten {
+  font-size: 14px;
+}
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+
+  border-radius: 100%;
+}
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  background-color: #e0eeff;
+
+  border: solid white 2px;
+  border-radius: 100%;
+}
+.container:hover input ~ .checkmark {
+  background-color: #e0eeff;
+}
+.container input:checked ~ .checkmark {
+  background-color: #44f321;
+  border: 2px rgb(103, 218, 103) solid;
+  border-radius: 100%;
+}
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  display: none;
+}
+.workerlist {
+  justify-content: center;
+  overflow-y: scroll;
+  background: rgb(255, 255, 255);
+  width: 250px;
+  height: 250px;
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: auto auto;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+.workerlist {
+  transition: 1s;
+}
+.addtasktopcont input {
+  border: none;
+  border-bottom-style: solid;
+
+  font-weight: 400;
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-bottom: 1px solid #217346;
+}
+.addtasktopcont input:focus {
+  outline: none;
+}
+.datepickerimg {
+  width: 20px;
+}
+.circle {
+  width: 15px;
+  height: 15px;
+  border-radius: 10px;
+  border: solid 1px rgb(138, 138, 138);
+}
+.addtasksetworker {
+  margin-left: 20px;
+  display: flex;
+  grid-gap: 10px;
+}
+.addtasksetdue {
+  margin-left: 20px;
+  display: flex;
+  grid-gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.addtasktopcont {
+  margin-left: 20px;
+  display: flex;
+  grid-gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.addtaskinnerbtn {
+  font-weight: 400;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  background: #217346;
+}
+.addtaskcont {
+  margin-top: 20px;
+  width: 100%;
+  min-height: 160px;
+  box-shadow: 0px 2px 5px 1px rgba(66, 66, 66, 0.158);
+  border-radius: 3px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  padding-top: 20px;
+  align-items: baseline;
+}
 .plansurecheckbox {
   margin-top: 20px;
 }
@@ -220,6 +527,13 @@
   background: rgb(194, 194, 194);
   padding: 10px;
   cursor: pointer;
+}
+.logmenmens {
+  position: relative;
+  color: rgb(253, 144, 144);
+  cursor: pointer;
+  margin: 0px;
+  margin-right: -140px;
 }
 .logowthredot {
   display: flex;
@@ -264,6 +578,8 @@
   background: rgb(155, 155, 155);
 }
 .planicon {
+  box-shadow: 0px 0px 5px 1px rgba(160, 160, 160, 0.562);
+
   font-weight: 900;
   font-size: 10px;
   color: white;
@@ -327,6 +643,7 @@
 .planformcaps > .pads > input[type="text"]:focus {
   outline: none;
 }
+
 .ovone h3 {
   margin: 0px;
   padding: 0px;
@@ -365,6 +682,7 @@
   padding-right: 10px;
 }
 .addtrel {
+  cursor: pointer;
   margin-top: 20px;
   border-radius: 5px;
   box-shadow: 0px 3px 5px 1px rgba(66, 66, 66, 0.158);
@@ -373,9 +691,22 @@
   color: #217346;
 }
 .cardhead {
+  font-weight: 600;
   display: flex;
+  padding: 20px;
+  margin: 0;
   justify-content: space-between;
+  align-items: center;
+  width: 98%;
 }
+.cardhead:hover .thredots {
+  display: block;
+}
+.thredots {
+  display: none;
+  font-weight: 900;
+}
+
 .s {
   height: 30px;
 
@@ -388,11 +719,13 @@
 }
 .cardcaps {
   white-space: nowrap;
-  overflow-x: scroll;
+  overflow: auto;
+
   min-width: 100%;
 }
 .cardcont {
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   display: grid;
   grid-auto-flow: column dense;
   grid-gap: 50px;
@@ -404,6 +737,10 @@
 }
 .whatis {
   margin-bottom: 20px;
+}
+.planlist {
+  height: 74vh;
+  overflow-y: auto;
 }
 .planoptions {
   margin-top: 25px;
@@ -469,6 +806,10 @@
   font-weight: 400;
   background: rgb(141, 141, 141);
   width: 100%;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
 }
 ::-webkit-scrollbar {
   width: 5px;
@@ -491,20 +832,37 @@
   transform: translateY(-100%);
   opacity: 0;
 }
+.open-fade-enter-active {
+  transition: all 0.6s ease;
+}
+.open-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.open-fade-enter, .open-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  height: 0px;
+  opacity: 0;
+}
 </style>
+
 <script>
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
 import io from "socket.io-client";
 import $ from "jquery";
 import { dragscroll } from "vue-dragscroll";
 export default {
+  components: { DatePicker },
   directives: {
     dragscroll: dragscroll,
   },
   data() {
     return {
+      logged: this.$store.state.someValue,
       addplan: false,
       addtask: false,
       plan: [],
+      i: 0,
       plantitle: "",
       x: 0,
       bucket: [],
@@ -514,9 +872,44 @@ export default {
       plansure: false,
       plansurechecked: false,
       bucketarray: [],
+      openaddtask: false,
+      bucketid: null,
+      time1: null,
+      addworkoverlay: false,
+      deltagare: [],
+      user: [],
+      deletebucket: null,
+      logbucket: false,
+      delbucketov: false,
+      logdel: null,
+      showByIndex: null,
+      task: [],
+      taskarray: [],
     };
   },
   created() {
+    const requestOptions = {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+
+      body: JSON.stringify({ user: this.logged }),
+    };
+    fetch("https://flexn.se:3000/workernav", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        this.loggedin = result[0];
+        fetch("https://flexn.se:3000/getusers")
+          .then((response) => response.json())
+          .then((result) => {
+            this.user = result;
+            this.deltagare = this.user;
+          });
+      });
+
     this.socketInstance = io("https://flexn.se:3000/");
 
     this.socketInstance.on("planner:received", (plannerarr) => {
@@ -534,8 +927,10 @@ export default {
         (result) => result.fatherid == this.x
       );
     });
-
-    console.log(this.bucketarray);
+    this.socketInstance.on("task:received", (taskarr) => {
+      this.task = taskarr;
+      console.log(this.task);
+    });
   },
   methods: {
     createPlan() {
@@ -553,6 +948,13 @@ export default {
 
       this.socketInstance.emit("deleteplanner", deleteplandata);
     },
+    logdelbucket(id) {
+      if (this.logdel == null) {
+        this.logdel = id;
+      } else {
+        this.logdel = null;
+      }
+    },
     createBucket() {
       const bucketdata = {
         buckettitle: this.buckettitle.replace(/'/g, ``),
@@ -562,6 +964,21 @@ export default {
         this.socketInstance.emit("bucket", bucketdata);
         this.buckettitle = "";
       }
+    },
+    deleteBucket(ff) {
+      const deletebucketdata = {
+        id: ff,
+      };
+      this.socketInstance.emit("deletebucket", deletebucketdata);
+    },
+    BucketId(id) {
+      if (this.bucketid == null) {
+        this.bucketid = id;
+      } else {
+        this.bucketid = null;
+      }
+
+      console.log(this.bucketid);
     },
     intoplan(id) {
       this.x = id;
