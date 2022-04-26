@@ -16,7 +16,7 @@
     </div>
     <div
       class="planoverlay"
-      @click="plansure = !plansure"
+      @click="(plansure = !plansure), (plansurechecked = false)"
       v-if="plansure"
     ></div>
     <div class="planformcapsdelete" v-if="plansure">
@@ -55,6 +55,8 @@
       </div>
       <div v-if="!plansurechecked" class="fakerplanbtncreate">Delete plan</div>
     </div>
+    <div class="planoverlay" @click="openMod = !openMod" v-if="openMod"></div>
+    <div class="planformcapsdelete" v-if="openMod"></div>
 
     <div class="topnav">
       <div class="maincaps">
@@ -123,19 +125,31 @@
               }}
             </div>
             <div>
-              <div @click="logmen = !logmen" class="thredot">...</div>
-              <div
-                @click="logmen = !logmen"
-                v-if="logmen"
-                class="logmenover"
-              ></div>
-              <div
-                class="logmenmen"
-                v-if="logmen"
-                @click="(logmen = !logmen), (plansure = !plansure)"
+              <div v-if="plan.length > 0">{{ plan[z].Title }}</div>
+              <dropdown-menu
+                :overlay="false"
+                :withDropdownCloser="true"
+                :closeOnClickOutside="true"
+                class="dropfag"
               >
-                DELETE
-              </div>
+                <div class="taskthredot" slot="trigger">...</div>
+                <div slot="body">
+                  <div
+                    @click="(logmen = !logmen), (plansure = !plansure)"
+                    class="dropdownitemcaps"
+                    dropdown-closer
+                  >
+                    <img
+                      dropdown-closer
+                      width="19px"
+                      height="20px"
+                      src="@/assets/trash.png"
+                      alt=""
+                    />
+                    <div dropdown-closer>Delete plan</div>
+                  </div>
+                </div>
+              </dropdown-menu>
             </div>
           </div>
 
@@ -144,9 +158,19 @@
             <div>Chart</div>
             <div>Schedule</div>
           </div>
-          <div>members</div>
+          <div class="members">
+            <span>Members</span>
+            <div>
+              <img
+                v-for="deltag in deltagare"
+                :key="deltag.Name"
+                class="membersicons"
+                :src="require(`@/assets/${deltag.Name}.jpg`)"
+              />
+            </div>
+          </div>
         </div>
-        <div v-dragscroll class="cardcaps">
+        <div v-dragscroll @scroll="taskmenu = false" class="cardcaps">
           <div class="cardcont">
             <div
               v-for="buckets in bucketarray"
@@ -155,15 +179,32 @@
             >
               <div class="cardhead">
                 <div>{{ buckets.title }}</div>
-                <div
-                  class="logmenmens"
-                  v-if="buckets.id == logdel"
-                  @click="deleteBucket(buckets.id), (logdel = null)"
-                >
-                  DELETE
-                </div>
-                <div @click="logdelbucket(buckets.id)" class="thredots">
-                  ...
+                <div>
+                  <dropdown-menu
+                    @click="logdelbucket(buckets.id)"
+                    :overlay="false"
+                    :withDropdownCloser="true"
+                    :closeOnClickOutside="true"
+                    class="dropfag"
+                  >
+                    <div class="taskthredot" slot="trigger">...</div>
+                    <div slot="body">
+                      <div
+                        @click="deleteBucket(buckets.id), (logdel = null)"
+                        class="dropdownitemcaps"
+                        dropdown-closer
+                      >
+                        <img
+                          dropdown-closer
+                          width="19px"
+                          height="20px"
+                          src="@/assets/trash.png"
+                          alt=""
+                        />
+                        <div dropdown-closer>Delete bucket</div>
+                      </div>
+                    </div>
+                  </dropdown-menu>
                 </div>
                 <div
                   @click="logbucket = !logbucket"
@@ -172,7 +213,13 @@
                 ></div>
               </div>
               <div
-                @click="BucketId(buckets.id), (addworkoverlay = false)"
+                @click="
+                  BucketId(buckets.id),
+                    (addworkoverlay = false),
+                    (tasktitle = ''),
+                    (time1 = ''),
+                    (selected = [])
+                "
                 class="addtrel"
               >
                 <div class="trelicon">
@@ -195,7 +242,13 @@
               <div class="addtaskcont" v-if="buckets.id == bucketid">
                 <div class="addtasktopcont">
                   <label class="circle" for=""></label>
-                  <input type="text" placeholder="Enter a task name" />
+                  <input
+                    v-model="tasktitle"
+                    minlength="1"
+                    maxlength="30"
+                    type="text"
+                    placeholder="Enter a task name"
+                  />
                 </div>
                 <div class="addtasksetdue">
                   <label for="pickduedate"
@@ -247,17 +300,31 @@
                     </div>
                   </div>
                 </transition>
-                <div class="addtaskinnerbtn"><div>Add task</div></div>
+                <div
+                  @click="
+                    createTask(buckets.id),
+                      (addworkoverlay = !addworkoverlay),
+                      (bucketid = false)
+                  "
+                  class="addtaskinnerbtn"
+                >
+                  <div>Add task</div>
+                </div>
               </div>
               <div
                 v-for="tasks in task"
                 :key="tasks.id"
                 v-if="tasks.fatherid == buckets.id"
                 class="taskcont"
+                @mouseover="showByIndex2 = tasks.id"
+                @mouseleave="showByIndex2 = null"
               >
-                <div class="iconntext">
-                  <div>
-                    <div class="child-one" v-show="showByIndex === null">
+                <div @click="openMod = !openMod" class="iconntext">
+                  <div
+                    @mouseover="showByIndex = tasks.id"
+                    @mouseleave="showByIndex = null"
+                  >
+                    <div class="child-one" v-if="showByIndex !== tasks.id">
                       <svg
                         width="20"
                         height="20"
@@ -272,7 +339,7 @@
                         ></path>
                       </svg>
                     </div>
-                    <div class="child-two" v-show="showByIndex === i">
+                    <div class="child-two" v-if="showByIndex === tasks.id">
                       <svg
                         width="20"
                         height="20"
@@ -291,7 +358,25 @@
                   <div>{{ tasks.title }}</div>
                 </div>
 
-                <div>...</div>
+                <dropdown-menu
+                  :overlay="false"
+                  :withDropdownCloser="true"
+                  :closeOnClickOutside="true"
+                  class="dropfag"
+                >
+                  <div class="taskthredot" slot="trigger">...</div>
+                  <div slot="body">
+                    <div class="dropdownitemcaps">
+                      <img
+                        width="19px"
+                        height="20px"
+                        src="@/assets/trash.png"
+                        alt=""
+                      />
+                      <div>Delete task</div>
+                    </div>
+                  </div>
+                </dropdown-menu>
               </div>
             </div>
             <div id="space">
@@ -314,21 +399,69 @@
   </div>
 </template>
 <style scoped>
+.dropdownbody {
+  box-shadow: 0px 3px 10px 3px rgba(66, 66, 66, 0.158);
+}
+.dropdownitemcaps {
+  display: flex;
+  padding: 15px;
+  grid-gap: 10px;
+}
+.dropdownitemcaps:hover {
+  background-color: rgb(237, 235, 233);
+}
+.dropfag {
+}
+.taskmenu {
+}
+.taskthredot {
+  content: "...";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  padding: 2px;
+  padding-bottom: 19px;
+  margin-right: 5px;
+  height: 0px;
+  font-size: 26px;
+  border-radius: 5px;
+}
+.taskthredot:hover {
+  background-color: #c8c6c4;
+}
+.members {
+  display: flex;
+  justify-content: center;
+  grid-gap: 20px;
+}
+.membersicons {
+  width: 30px;
+  border-radius: 100%;
+}
+
 .iconntext {
   display: flex;
   grid-gap: 20px;
+  width: 100%;
+  height: 30px;
+  padding: 15px;
 }
 .taskcont {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 30px;
-  padding: 10px;
-  box-shadow: 0px 0px 5px 1px rgb(133, 133, 133);
-  margin-top: 50px;
+
+  box-shadow: rgb(0 0 0 / 13%) 0px 3.2px 7.2px 0px,
+    rgb(0 0 0 / 11%) 0px 0.6px 1.8px 0px;
+  margin-top: 30px;
+  cursor: pointer;
+}
+.taskcont:hover {
+  box-shadow: 0px 3px 10px 3px rgba(66, 66, 66, 0.158);
 }
 #space {
-  margin-top: 62px;
+  margin-top: 32px;
   margin-right: 200px;
   width: 500px;
 }
@@ -529,11 +662,10 @@
   cursor: pointer;
 }
 .logmenmens {
-  position: relative;
+  overflow: visible;
+
   color: rgb(253, 144, 144);
   cursor: pointer;
-  margin: 0px;
-  margin-right: -140px;
 }
 .logowthredot {
   display: flex;
@@ -575,7 +707,7 @@
   cursor: pointer;
 }
 .active {
-  background: rgb(155, 155, 155);
+  background-color: rgb(237, 235, 233);
 }
 .planicon {
   box-shadow: 0px 0px 5px 1px rgba(160, 160, 160, 0.562);
@@ -685,15 +817,19 @@
   cursor: pointer;
   margin-top: 20px;
   border-radius: 5px;
-  box-shadow: 0px 3px 5px 1px rgba(66, 66, 66, 0.158);
+  box-shadow: rgb(0 0 0 / 13%) 0px 3.2px 7.2px 0px,
+    rgb(0 0 0 / 11%) 0px 0.6px 1.8px 0px;
   padding: 8px;
   display: flex;
   color: #217346;
 }
+.addtrel:hover {
+  box-shadow: 0px 3px 10px 3px rgba(66, 66, 66, 0.158);
+}
 .cardhead {
   font-weight: 600;
   display: flex;
-  padding: 20px;
+  margin-top: 200px;
   margin: 0;
   justify-content: space-between;
   align-items: center;
@@ -714,6 +850,7 @@
   margin-top: 20px;
 }
 .plancards {
+  margin-top: 10px;
   width: 300px;
   height: 400px;
 }
@@ -763,7 +900,7 @@
   display: flex;
   padding-left: 20px;
   height: 50px;
-  border-bottom: solid 1px black;
+  border-bottom: solid 1px rgba(133, 133, 133, 0.171);
 }
 .tryit {
   width: 100%;
@@ -792,7 +929,6 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid rgba(94, 94, 94, 0.384);
 }
 .topnav {
   background: white;
@@ -851,8 +987,10 @@ import "vue2-datepicker/index.css";
 import io from "socket.io-client";
 import $ from "jquery";
 import { dragscroll } from "vue-dragscroll";
+import DropdownMenu from "v-dropdown-menu";
+import "v-dropdown-menu/dist/v-dropdown-menu.css";
 export default {
-  components: { DatePicker },
+  components: { DatePicker, DropdownMenu },
   directives: {
     dragscroll: dragscroll,
   },
@@ -885,6 +1023,12 @@ export default {
       showByIndex: null,
       task: [],
       taskarray: [],
+      selected: [],
+      tasktitle: "",
+      showByIndex2: null,
+      openMod: false,
+      taskmenu: false,
+      show: false,
     };
   },
   created() {
@@ -902,6 +1046,7 @@ export default {
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
+
         fetch("https://flexn.se:3000/getusers")
           .then((response) => response.json())
           .then((result) => {
@@ -931,6 +1076,7 @@ export default {
       this.task = taskarr;
       console.log(this.task);
     });
+    var selected = new Array();
   },
   methods: {
     createPlan() {
@@ -977,8 +1123,26 @@ export default {
       } else {
         this.bucketid = null;
       }
-
       console.log(this.bucketid);
+    },
+    createTask(id) {
+      this.selected = [];
+      var chks = document.getElementsByClassName("deltagcheckbox");
+      console.log(chks);
+      for (var i = 0; i < chks.length; i++) {
+        if (chks[i].checked) {
+          this.selected.push(parseInt(chks[i].value));
+        }
+      }
+
+      const taskdata = {
+        taskfatherid: id,
+        enddate: this.time1,
+        authorid: this.loggedin.id,
+        tasktitle: this.tasktitle,
+        deltag: this.selected,
+      };
+      this.socketInstance.emit("task", taskdata);
     },
     intoplan(id) {
       this.x = id;

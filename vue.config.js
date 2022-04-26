@@ -1,5 +1,5 @@
 module.exports = {
-    devServer: {
-        proxy: "https://flexnet.se/",
-    },
+  devServer: {
+    proxy: "https://flexnet.se/",
+  },
 };
