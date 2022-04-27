@@ -56,7 +56,103 @@
       <div v-if="!plansurechecked" class="fakerplanbtncreate">Delete plan</div>
     </div>
     <div class="planoverlay" @click="openMod = !openMod" v-if="openMod"></div>
-    <div class="planformcapsdelete" v-if="openMod"></div>
+    <div class="taskformcaps" v-if="openMod">
+      <div class="closeformcaps">close</div>
+      <div class="taskforminnercaps">
+        <div class="modcaps">
+          <div class="toptitlemod">
+            <h5 class="taskplantitle" v-if="plan.length > 0">
+              {{ plan[z].Title }}
+            </h5>
+            <input
+              class="tasktitleinput"
+              @change="test(tester)"
+              v-model="tester"
+              type="text"
+            />
+          </div>
+          <div class="assignstuff">
+            <dropdown-menu
+              :overlay="false"
+              :withDropdownCloser="true"
+              :closeOnClickOutside="true"
+              class="dropfag"
+            >
+              <div slot="trigger" class="addtasksetworker">
+                <img class="datepickerimg" src="@/assets/addusers.png" alt="" />
+                <div>Assign</div>
+              </div>
+              <div slot="body">
+                <div class="workerlist">
+                  <div
+                    id="tblFruits"
+                    v-for="deltag in deltagare"
+                    :key="deltag.Name"
+                    class="workcheck"
+                  >
+                    <label class="container">
+                      <input
+                        @click="test()"
+                        :id="deltag.Name + deltag.id"
+                        class="deltagcheckbox"
+                        type="checkbox"
+                        :value="deltag.id"
+                      />
+                      <label :for="deltag.Name + deltag.id" class="checkmark"
+                        ><img
+                          class="icons"
+                          :src="require(`@/assets/${deltag.Name}.jpg`)"
+                        />
+                        <div>{{ deltag.Name }}</div>
+                      </label>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </dropdown-menu>
+          </div>
+          <div class="proprio">
+            <div class="pp">
+              <label for="pet-select">progress</label>
+              <select name="pets" id="pet-select">
+                <option value="">low</option>
+                <option value="dog">Dog</option>
+                <option value="cat">Cat</option>
+              </select>
+            </div>
+            <div class="pp">
+              <label for="pet-select">priority</label>
+              <select name="pets" id="pet-select">
+                <option value="">low</option>
+                <option value="dog">Dog</option>
+                <option value="cat">Cat</option>
+              </select>
+            </div>
+          </div>
+          <div class="proprio">
+            <div class="ppd">
+              <date-picker v-model="time2" valueType="format"></date-picker>
+              <div>Start date</div>
+            </div>
+            <div class="ppd">
+              <div></div>
+              <date-picker v-model="time1" valueType="format"></date-picker>
+              <div>Due date</div>
+            </div>
+          </div>
+          <div class="notecaps">
+            <div>notes</div>
+            <textarea
+              v-model="note"
+              name="textarea"
+              id=""
+              cols="30"
+              rows="10"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="topnav">
       <div class="maincaps">
@@ -312,14 +408,22 @@
                 </div>
               </div>
               <div
-                v-for="tasks in task"
+                v-for="(tasks, index) in task"
                 :key="tasks.id"
                 v-if="tasks.fatherid == buckets.id"
                 class="taskcont"
                 @mouseover="showByIndex2 = tasks.id"
                 @mouseleave="showByIndex2 = null"
               >
-                <div @click="openMod = !openMod" class="iconntext">
+                <div
+                  @click="
+                    (openMod = !openMod),
+                      (tester = tasks.title),
+                      (time1 = tasks.enddate),
+                      (time2 = tasks.startdate)
+                  "
+                  class="iconntext"
+                >
                   <div
                     @mouseover="showByIndex = tasks.id"
                     @mouseleave="showByIndex = null"
@@ -366,14 +470,19 @@
                 >
                   <div class="taskthredot" slot="trigger">...</div>
                   <div slot="body">
-                    <div class="dropdownitemcaps">
+                    <div
+                      @click="deleteTask(tasks.id)"
+                      dropdown-closer
+                      class="dropdownitemcaps"
+                    >
                       <img
+                        dropdown-closer
                         width="19px"
                         height="20px"
                         src="@/assets/trash.png"
                         alt=""
                       />
-                      <div>Delete task</div>
+                      <div dropdown-closer>Delete task</div>
                     </div>
                   </div>
                 </dropdown-menu>
@@ -399,6 +508,103 @@
   </div>
 </template>
 <style scoped>
+.notecaps {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.notecaps textarea {
+  width: 100%;
+}
+.tasktitleinput:hover {
+  border: solid 1px black;
+}
+.tasktitleinput:focus {
+  outline: none;
+  border: #0078d4 solid 2px;
+  border-radius: 3px;
+}
+.tasktitleinput {
+  font-size: 17px;
+  font-weight: 300;
+  font-weight: 600;
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid transparent;
+  height: 32px;
+  line-height: 32px;
+}
+.taskplantitle {
+  color: rgb(33, 115, 70);
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.pp > select {
+  width: 210px;
+  padding: 5px;
+}
+.ppd {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  width: 100%;
+}
+.pp {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+.datep {
+}
+.proprio {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.assignstuff {
+  display: flex;
+
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.modcaps {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  grid-gap: 40px;
+}
+.toptitlemod {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.closeformcaps {
+  float: right !important;
+}
+.taskforminnercaps {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+.taskformcaps {
+  position: absolute;
+
+  width: 40vw;
+  height: 70%;
+  background: white;
+  z-index: 3;
+  border-radius: 3px;
+  padding: 20px;
+  left: 35%;
+  top: 10%;
+}
 .dropdownbody {
   box-shadow: 0px 3px 10px 3px rgba(66, 66, 66, 0.158);
 }
@@ -843,6 +1049,23 @@
   font-weight: 900;
 }
 
+select {
+  font-size: 0.9rem;
+  padding: 2px 5px;
+}
+
+footer {
+  font-size: 0.8rem;
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+}
+
+.output {
+  background: center/cover no-repeat url("/media/cc0-images/hamster.jpg");
+  position: relative;
+}
+
 .s {
   height: 30px;
 
@@ -1029,6 +1252,11 @@ export default {
       openMod: false,
       taskmenu: false,
       show: false,
+      time3: null,
+      time4: null,
+      tester: "",
+      selectedtaskid: null,
+      selectedtaskindex: null,
     };
   },
   created() {
@@ -1101,6 +1329,20 @@ export default {
         this.logdel = null;
       }
     },
+    test(o) {
+      this.selected = [];
+      var chks = document.getElementsByClassName("deltagcheckbox");
+      console.log(chks);
+      for (var i = 0; i < chks.length; i++) {
+        if (chks[i].checked) {
+          this.selected.push(parseInt(chks[i].value));
+        }
+      }
+      console.log(this.selected);
+      console.log(this.tester);
+      console.log(this.time1);
+      console.log(this.time2);
+    },
     createBucket() {
       const bucketdata = {
         buckettitle: this.buckettitle.replace(/'/g, ``),
@@ -1143,6 +1385,12 @@ export default {
         deltag: this.selected,
       };
       this.socketInstance.emit("task", taskdata);
+    },
+    deleteTask(id) {
+      const deletetaskdata = {
+        id: id,
+      };
+      this.socketInstance.emit("deletetask", deletetaskdata);
     },
     intoplan(id) {
       this.x = id;
