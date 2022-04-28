@@ -81,31 +81,48 @@
               <div slot="trigger" class="addtasksetworker">
                 <img class="datepickerimg" src="@/assets/addusers.png" alt="" />
                 <div>Assign</div>
+                <div></div>
               </div>
               <div slot="body">
-                <div class="workerlist">
+                <div class="workerlistmod">
                   <div
-                    id="tblFruits"
+                    id="Fruits"
                     v-for="deltag in deltagare"
-                    :key="deltag.Name"
-                    class="workcheck"
+                    :key="deltag.index"
+                    class="workchecks"
+                    v-if="!usersid.includes(deltag.id)"
                   >
-                    <label class="container">
-                      <input
-                        @click="test()"
-                        :id="deltag.Name + deltag.id"
-                        class="deltagcheckbox"
-                        type="checkbox"
-                        :value="deltag.id"
-                      />
-                      <label :for="deltag.Name + deltag.id" class="checkmark"
-                        ><img
-                          class="icons"
+                    <div class="itemcont">
+                      <div class="imgandtxt">
+                        <img
+                          class="deltagare va"
                           :src="require(`@/assets/${deltag.Name}.jpg`)"
+                          alt=""
                         />
-                        <div>{{ deltag.Name }}</div>
-                      </label>
-                    </label>
+                        {{ deltag.Name }}
+                      </div>
+                      <div>+</div>
+                    </div>
+                  </div>
+                  <div class="showme">add new</div>
+                  <div
+                    id="Fruits"
+                    v-for="deltag in deltagare"
+                    :key="deltag.index"
+                    class="workchecks"
+                    v-if="usersid.includes(deltag.id)"
+                  >
+                    <div class="itemcont">
+                      <div class="imgandtxt">
+                        <img
+                          class="deltagare va"
+                          :src="require(`@/assets/${deltag.Name}.jpg`)"
+                          alt=""
+                        />
+                        {{ deltag.Name }}
+                      </div>
+                      <div>+</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -255,14 +272,9 @@
             <div>Schedule</div>
           </div>
           <div class="members">
-            <span>Members</span>
+            <span></span>
             <div>
-              <img
-                v-for="deltag in deltagare"
-                :key="deltag.Name"
-                class="membersicons"
-                :src="require(`@/assets/${deltag.Name}.jpg`)"
-              />
+              <img />
             </div>
           </div>
         </div>
@@ -411,95 +423,113 @@
                 v-for="(tasks, index) in task"
                 :key="tasks.id"
                 v-if="tasks.fatherid == buckets.id"
-                class="taskcont"
-                @mouseover="showByIndex2 = tasks.id"
-                @mouseleave="showByIndex2 = null"
               >
                 <div
-                  @click="
-                    (openMod = !openMod),
-                      (tester = tasks.title),
-                      (time1 = tasks.enddate),
-                      (time2 = tasks.startdate)
-                  "
-                  class="iconntext"
+                  class="taskcont"
+                  @mouseover="showByIndex2 = tasks.id"
+                  @mouseleave="showByIndex2 = null"
                 >
                   <div
-                    @mouseover="showByIndex = tasks.id"
-                    @mouseleave="showByIndex = null"
+                    @click="
+                      (openMod = !openMod),
+                        (tester = tasks.title),
+                        (time1 = tasks.enddate),
+                        (time2 = tasks.startdate);
+                      modTask(index);
+                    "
+                    class="iconntext"
                   >
-                    <div class="child-one" v-if="showByIndex !== tasks.id">
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="svg"
-                        fill="currentColor"
-                        focusable="false"
-                      >
-                        <path
-                          d="M10 3a7 7 0 100 14 7 7 0 000-14zm-8 7a8 8 0 1116 0 8 8 0 01-16 0z"
-                        ></path>
-                      </svg>
-                    </div>
-                    <div class="child-two" v-if="showByIndex === tasks.id">
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="svg"
-                        fill="currentColor"
-                        focusable="false"
-                      >
-                        <path
-                          d="M10 2a8 8 0 110 16 8 8 0 010-16zm0 1a7 7 0 100 14 7 7 0 000-14zm3.36 4.65c.17.17.2.44.06.63l-.06.07-4 4a.5.5 0 01-.64.07l-.07-.06-2-2a.5.5 0 01.63-.77l.07.06L9 11.3l3.65-3.65c.2-.2.51-.2.7 0z"
-                        ></path>
-                      </svg>
-                    </div>
-                  </div>
-                  <div>{{ tasks.title }}</div>
-                </div>
-
-                <dropdown-menu
-                  :overlay="false"
-                  :withDropdownCloser="true"
-                  :closeOnClickOutside="true"
-                  class="dropfag"
-                >
-                  <div class="taskthredot" slot="trigger">...</div>
-                  <div slot="body">
                     <div
-                      @click="deleteTask(tasks.id)"
-                      dropdown-closer
-                      class="dropdownitemcaps"
+                      @mouseover="showByIndex = tasks.id"
+                      @mouseleave="showByIndex = null"
                     >
-                      <img
-                        dropdown-closer
-                        width="19px"
-                        height="20px"
-                        src="@/assets/trash.png"
-                        alt=""
-                      />
-                      <div dropdown-closer>Delete task</div>
+                      <div class="child-one" v-if="showByIndex !== tasks.id">
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="svg"
+                          fill="currentColor"
+                          focusable="false"
+                        >
+                          <path
+                            d="M10 3a7 7 0 100 14 7 7 0 000-14zm-8 7a8 8 0 1116 0 8 8 0 01-16 0z"
+                          ></path>
+                        </svg>
+                      </div>
+                      <div class="child-two" v-if="showByIndex === tasks.id">
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="svg"
+                          fill="currentColor"
+                          focusable="false"
+                        >
+                          <path
+                            d="M10 2a8 8 0 110 16 8 8 0 010-16zm0 1a7 7 0 100 14 7 7 0 000-14zm3.36 4.65c.17.17.2.44.06.63l-.06.07-4 4a.5.5 0 01-.64.07l-.07-.06-2-2a.5.5 0 01.63-.77l.07.06L9 11.3l3.65-3.65c.2-.2.51-.2.7 0z"
+                          ></path>
+                        </svg>
+                      </div>
                     </div>
+                    <div>{{ tasks.title }}</div>
                   </div>
-                </dropdown-menu>
+
+                  <dropdown-menu
+                    :overlay="false"
+                    :withDropdownCloser="true"
+                    :closeOnClickOutside="true"
+                    class="dropfag"
+                  >
+                    <div class="taskthredot" slot="trigger">...</div>
+                    <div slot="body">
+                      <div
+                        @click="deleteTask(tasks.id)"
+                        dropdown-closer
+                        class="dropdownitemcaps"
+                      >
+                        <img
+                          dropdown-closer
+                          width="19px"
+                          height="20px"
+                          src="@/assets/trash.png"
+                          alt=""
+                        />
+                        <div dropdown-closer>Delete task</div>
+                      </div>
+                    </div>
+                  </dropdown-menu>
+                </div>
+                <div class="taskinfocont">
+                  <div></div>
+                  <div>
+                    <img
+                      v-for="sparrs in sparr[index]"
+                      :key="sparrs.index"
+                      class="deltagare va"
+                      :src="require(`@/assets/${sparrs.Name}.jpg`)"
+                      alt=""
+                    />
+                  </div>
+                </div>
               </div>
             </div>
             <div id="space">
-              <input
-                v-if="plan.length > 0"
-                v-on:keyup.enter="createBucket()"
-                v-model="buckettitle"
-                type="text"
-                class="s"
-                maxlength="30"
-                minlength="1"
-                required
-                placeholder="Add Bucket"
-              />
+              <div>
+                <input
+                  v-if="plan.length > 0"
+                  v-on:keyup.enter="createBucket()"
+                  v-model="buckettitle"
+                  type="text"
+                  class="s"
+                  maxlength="30"
+                  minlength="1"
+                  required
+                  placeholder="Add Bucket"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -508,6 +538,53 @@
   </div>
 </template>
 <style scoped>
+.showme {
+  background: #217346;
+  width: 100%;
+  height: 2px;
+}
+.imgandtxt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-gap: 20px;
+  font-size: 20px;
+}
+.workchecks {
+  width: 100%;
+}
+.itemcont {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+.workerlistmod {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow-y: scroll;
+  background: rgb(255, 255, 255);
+  height: 150px;
+  border-top: #049c4b solid 1px;
+}
+.taskinfocont {
+  border-top: 1px solid rgba(211, 211, 211, 0.733);
+  display: flex;
+  justify-content: space-between;
+  background: white;
+  box-shadow: rgb(0 0 0 / 13%) 0px 3.2px 7.2px 0px,
+    rgb(0 0 0 / 11%) 0px 0.6px 1.8px 0px;
+  border-radius: 0px 0px 3px 3px;
+  padding: 5px;
+}
+.deltagare {
+  width: 30px;
+  border-radius: 25px;
+  box-shadow: 0px 2px 5px 1px rgba(100, 100, 100, 0.5);
+  margin-left: -10px;
+}
 .notecaps {
   width: 100%;
   display: flex;
@@ -1257,6 +1334,15 @@ export default {
       tester: "",
       selectedtaskid: null,
       selectedtaskindex: null,
+      workersassignd: [],
+      sparr: [],
+      forinpw: 0,
+      note: "",
+      lol: 0,
+      usersid: [],
+      anit: 0,
+      selectedusers: [],
+      anits: 0,
     };
   },
   created() {
@@ -1289,7 +1375,6 @@ export default {
       if (plannerarr.length > 0) {
         this.plan = plannerarr;
         this.x = this.plan[0].id;
-        console.log(this.x);
       } else {
         this.plan = [];
       }
@@ -1302,9 +1387,26 @@ export default {
     });
     this.socketInstance.on("task:received", (taskarr) => {
       this.task = taskarr;
-      console.log(this.task);
+      this.workersassignd = [];
+      this.sparr = [];
+      this.forinpw = 0;
     });
-    var selected = new Array();
+
+    this.socketInstance.on("worker:received", (workerarr) => {
+      this.workersassignd = [];
+      this.workersassignd = workerarr;
+      this.sparr = [];
+      this.forinpw = 0;
+
+      for (this.forinpw = 0; this.task.length > this.forinpw; this.forinpw++) {
+        this.sparr.push(
+          this.workersassignd.filter(
+            (result) => result.taskid == this.task[this.forinpw].id
+          )
+        );
+      }
+      console.log(this.sparr);
+    });
   },
   methods: {
     createPlan() {
@@ -1367,8 +1469,28 @@ export default {
       }
       console.log(this.bucketid);
     },
+    modTask(x) {
+      this.selectedusers = [];
+      this.usersid = [];
+      for (this.anit = 0; this.sparr[x].length > this.anit; this.anit++) {
+        this.selectedusers.push(
+          this.deltagare.filter(
+            (result) => result.id == this.sparr[x][this.anit].workerid
+          )
+        );
+      }
+      for (
+        this.anits = 0;
+        this.selectedusers.length > this.anits;
+        this.anits++
+      ) {
+        this.usersid.push(this.selectedusers[this.anits][0].id);
+      }
+      console.log(this.usersid);
+    },
     createTask(id) {
       this.selected = [];
+      this.addworkoverlay = false;
       var chks = document.getElementsByClassName("deltagcheckbox");
       console.log(chks);
       for (var i = 0; i < chks.length; i++) {
@@ -1386,6 +1508,7 @@ export default {
       };
       this.socketInstance.emit("task", taskdata);
     },
+
     deleteTask(id) {
       const deletetaskdata = {
         id: id,
