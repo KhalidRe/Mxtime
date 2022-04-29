@@ -90,9 +90,9 @@
                     v-for="deltag in deltagare"
                     :key="deltag.index"
                     class="workchecks"
-                    v-if="!usersid.includes(deltag.id)"
+                    v-if="usersid.includes(deltag.id)"
                   >
-                    <div class="itemcont">
+                    <div @click="removeUser(deltag.id)" class="itemcont">
                       <div class="imgandtxt">
                         <img
                           class="deltagare va"
@@ -110,7 +110,8 @@
                     v-for="deltag in deltagare"
                     :key="deltag.index"
                     class="workchecks"
-                    v-if="usersid.includes(deltag.id)"
+                    v-if="!usersid.includes(deltag.id)"
+                    @click="addUser(deltag.id)"
                   >
                     <div class="itemcont">
                       <div class="imgandtxt">
@@ -419,99 +420,338 @@
                   <div>Add task</div>
                 </div>
               </div>
-              <div
-                v-for="(tasks, index) in task"
-                :key="tasks.id"
-                v-if="tasks.fatherid == buckets.id"
-              >
+              <div class="alltaskcont">
                 <div
-                  class="taskcont"
-                  @mouseover="showByIndex2 = tasks.id"
-                  @mouseleave="showByIndex2 = null"
+                  v-for="(tasks, index) in task"
+                  :key="tasks.id"
+                  v-if="
+                    (tasks.fatherid == buckets.id && tasks.progress == 0) ||
+                    (tasks.fatherid == buckets.id && tasks.progress == 1)
+                  "
                 >
                   <div
-                    @click="
-                      (openMod = !openMod),
-                        (tester = tasks.title),
-                        (time1 = tasks.enddate),
-                        (time2 = tasks.startdate);
-                      modTask(index);
-                    "
-                    class="iconntext"
+                    class="taskcont"
+                    @mouseover="showByIndex2 = tasks.id"
+                    @mouseleave="showByIndex2 = null"
                   >
-                    <div
-                      @mouseover="showByIndex = tasks.id"
-                      @mouseleave="showByIndex = null"
-                    >
-                      <div class="child-one" v-if="showByIndex !== tasks.id">
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="svg"
-                          fill="currentColor"
-                          focusable="false"
-                        >
-                          <path
-                            d="M10 3a7 7 0 100 14 7 7 0 000-14zm-8 7a8 8 0 1116 0 8 8 0 01-16 0z"
-                          ></path>
-                        </svg>
+                    <div class="iconntext">
+                      <div
+                        class="svgc"
+                        @mouseover="showByIndex = tasks.id"
+                        @mouseleave="showByIndex = null"
+                        @click="completeTask(tasks.id)"
+                      >
+                        <div class="child-one" v-if="showByIndex !== tasks.id">
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="svg"
+                            fill="currentColor"
+                            focusable="false"
+                          >
+                            <path
+                              d="M10 3a7 7 0 100 14 7 7 0 000-14zm-8 7a8 8 0 1116 0 8 8 0 01-16 0z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <div class="child-two" v-if="showByIndex === tasks.id">
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="svg"
+                            fill="currentColor"
+                            focusable="false"
+                          >
+                            <path
+                              d="M10 2a8 8 0 110 16 8 8 0 010-16zm0 1a7 7 0 100 14 7 7 0 000-14zm3.36 4.65c.17.17.2.44.06.63l-.06.07-4 4a.5.5 0 01-.64.07l-.07-.06-2-2a.5.5 0 01.63-.77l.07.06L9 11.3l3.65-3.65c.2-.2.51-.2.7 0z"
+                            ></path>
+                          </svg>
+                        </div>
                       </div>
-                      <div class="child-two" v-if="showByIndex === tasks.id">
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="svg"
-                          fill="currentColor"
-                          focusable="false"
-                        >
-                          <path
-                            d="M10 2a8 8 0 110 16 8 8 0 010-16zm0 1a7 7 0 100 14 7 7 0 000-14zm3.36 4.65c.17.17.2.44.06.63l-.06.07-4 4a.5.5 0 01-.64.07l-.07-.06-2-2a.5.5 0 01.63-.77l.07.06L9 11.3l3.65-3.65c.2-.2.51-.2.7 0z"
-                          ></path>
-                        </svg>
+                      <div
+                        @click="
+                          (openMod = !openMod),
+                            (tester = tasks.title),
+                            (time1 = tasks.enddate),
+                            (time2 = tasks.startdate);
+                          modTask(index, tasks.id);
+                        "
+                        class="tti"
+                      >
+                        {{ tasks.title }}
                       </div>
                     </div>
-                    <div>{{ tasks.title }}</div>
-                  </div>
 
-                  <dropdown-menu
-                    :overlay="false"
-                    :withDropdownCloser="true"
-                    :closeOnClickOutside="true"
-                    class="dropfag"
-                  >
-                    <div class="taskthredot" slot="trigger">...</div>
-                    <div slot="body">
-                      <div
-                        @click="deleteTask(tasks.id)"
-                        dropdown-closer
-                        class="dropdownitemcaps"
-                      >
-                        <img
+                    <dropdown-menu
+                      :overlay="false"
+                      :withDropdownCloser="true"
+                      :closeOnClickOutside="true"
+                      class="dropfag"
+                    >
+                      <div class="taskthredot" slot="trigger">...</div>
+                      <div slot="body">
+                        <div
+                          @click="deleteTask(tasks.id)"
                           dropdown-closer
-                          width="19px"
-                          height="20px"
-                          src="@/assets/trash.png"
+                          class="dropdownitemcaps"
+                        >
+                          <img
+                            dropdown-closer
+                            width="19px"
+                            height="20px"
+                            src="@/assets/trash.png"
+                            alt=""
+                          />
+                          <div dropdown-closer>Delete task</div>
+                        </div>
+                      </div>
+                    </dropdown-menu>
+                  </div>
+                  <div class="taskinfocont">
+                    <div>
+                      <div
+                        v-if="
+                          new Date(tasks.enddate).getTime() <=
+                          new Date().getTime()
+                        "
+                        class="datecaps due"
+                      >
+                        <div>
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="svg"
+                            fill="#FFFFFF"
+                            focusable="false"
+                          >
+                            <path
+                              d="M7 11a1 1 0 100-2 1 1 0 000 2zm1 2a1 1 0 11-2 0 1 1 0 012 0zm2-2a1 1 0 100-2 1 1 0 000 2zm1 2a1 1 0 11-2 0 1 1 0 012 0zm2-2a1 1 0 100-2 1 1 0 000 2zm4-5.5A2.5 2.5 0 0014.5 3h-9A2.5 2.5 0 003 5.5v9A2.5 2.5 0 005.5 17h9a2.5 2.5 0 002.5-2.5v-9zM4 7h12v7.5c0 .83-.67 1.5-1.5 1.5h-9A1.5 1.5 0 014 14.5V7zm1.5-3h9c.83 0 1.5.67 1.5 1.5V6H4v-.5C4 4.67 4.67 4 5.5 4z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <div>
+                          {{
+                            new Date(tasks.enddate).getDate() +
+                            "/" +
+                            (new Date(tasks.enddate).getMonth() + 1)
+                          }}
+                        </div>
+                      </div>
+                      <div
+                        v-if="
+                          new Date(tasks.enddate).getTime() >
+                          new Date().getTime()
+                        "
+                        class="datecaps in"
+                      >
+                        <div>
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="svg"
+                            fill="#5A9675"
+                            focusable="false"
+                          >
+                            <path
+                              d="M7 11a1 1 0 100-2 1 1 0 000 2zm1 2a1 1 0 11-2 0 1 1 0 012 0zm2-2a1 1 0 100-2 1 1 0 000 2zm1 2a1 1 0 11-2 0 1 1 0 012 0zm2-2a1 1 0 100-2 1 1 0 000 2zm4-5.5A2.5 2.5 0 0014.5 3h-9A2.5 2.5 0 003 5.5v9A2.5 2.5 0 005.5 17h9a2.5 2.5 0 002.5-2.5v-9zM4 7h12v7.5c0 .83-.67 1.5-1.5 1.5h-9A1.5 1.5 0 014 14.5V7zm1.5-3h9c.83 0 1.5.67 1.5 1.5V6H4v-.5C4 4.67 4.67 4 5.5 4z"
+                            ></path>
+                          </svg>
+                        </div>
+                        <div>
+                          {{
+                            new Date(tasks.enddate).getDate() +
+                            "/" +
+                            (new Date(tasks.enddate).getMonth() + 1)
+                          }}
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <img
+                        v-for="sparrs in sparr[index]"
+                        :key="sparrs.index"
+                        class="deltagare va"
+                        :src="require(`@/assets/${sparrs.Name}.jpg`)"
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div
+                  v-for="(tasks, index) in task"
+                  :key="tasks.id"
+                  v-if="tasks.fatherid == buckets.id && tasks.progress == 2"
+                >
+                  <div>
+                    <div
+                      class="taskcont completedtask"
+                      @mouseover="showByIndex2 = tasks.id"
+                      @mouseleave="showByIndex2 = null"
+                    >
+                      <div class="iconntext">
+                        <div
+                          class="svgc svgcomplete"
+                          @mouseover="showByIndex = tasks.id"
+                          @mouseleave="showByIndex = null"
+                          @click="completeTask(tasks.id)"
+                        >
+                          <div
+                            class="child-one"
+                            v-if="showByIndex !== tasks.id"
+                          >
+                            <svg
+                              width="20"
+                              height="20"
+                              viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="svg"
+                              fill="currentColor"
+                              focusable="false"
+                            >
+                              <path
+                                d="M10 3a7 7 0 100 14 7 7 0 000-14zm-8 7a8 8 0 1116 0 8 8 0 01-16 0z"
+                              ></path>
+                            </svg>
+                          </div>
+                          <div
+                            class="child-two"
+                            v-if="showByIndex === tasks.id"
+                          >
+                            <svg
+                              width="20"
+                              height="20"
+                              viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="svg"
+                              fill="currentColor"
+                              focusable="false"
+                            >
+                              <path
+                                d="M10 2a8 8 0 110 16 8 8 0 010-16zm0 1a7 7 0 100 14 7 7 0 000-14zm3.36 4.65c.17.17.2.44.06.63l-.06.07-4 4a.5.5 0 01-.64.07l-.07-.06-2-2a.5.5 0 01.63-.77l.07.06L9 11.3l3.65-3.65c.2-.2.51-.2.7 0z"
+                              ></path>
+                            </svg>
+                          </div>
+                        </div>
+                        <div
+                          @click="
+                            (openMod = !openMod),
+                              (tester = tasks.title),
+                              (time1 = tasks.enddate),
+                              (time2 = tasks.startdate);
+                            modTask(index, tasks.id);
+                          "
+                          class="tti tticomplete"
+                        >
+                          {{ tasks.title }}
+                        </div>
+                      </div>
+
+                      <dropdown-menu
+                        :overlay="false"
+                        :withDropdownCloser="true"
+                        :closeOnClickOutside="true"
+                        class="dropfag"
+                      >
+                        <div class="taskthredot" slot="trigger">...</div>
+                        <div slot="body">
+                          <div
+                            @click="deleteTask(tasks.id)"
+                            dropdown-closer
+                            class="dropdownitemcaps"
+                          >
+                            <img
+                              dropdown-closer
+                              width="19px"
+                              height="20px"
+                              src="@/assets/trash.png"
+                              alt=""
+                            />
+                            <div dropdown-closer>Delete task</div>
+                          </div>
+                        </div>
+                      </dropdown-menu>
+                    </div>
+                    <div class="taskinfocont taskinfocomplete">
+                      <div>
+                        <div
+                          v-if="
+                            new Date(tasks.enddate).getTime() <=
+                            new Date().getTime()
+                          "
+                          class="datecaps due"
+                        >
+                          <div>
+                            <svg
+                              width="20"
+                              height="20"
+                              viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="svg"
+                              fill="#FFFFFF"
+                              focusable="false"
+                            >
+                              <path
+                                d="M7 11a1 1 0 100-2 1 1 0 000 2zm1 2a1 1 0 11-2 0 1 1 0 012 0zm2-2a1 1 0 100-2 1 1 0 000 2zm1 2a1 1 0 11-2 0 1 1 0 012 0zm2-2a1 1 0 100-2 1 1 0 000 2zm4-5.5A2.5 2.5 0 0014.5 3h-9A2.5 2.5 0 003 5.5v9A2.5 2.5 0 005.5 17h9a2.5 2.5 0 002.5-2.5v-9zM4 7h12v7.5c0 .83-.67 1.5-1.5 1.5h-9A1.5 1.5 0 014 14.5V7zm1.5-3h9c.83 0 1.5.67 1.5 1.5V6H4v-.5C4 4.67 4.67 4 5.5 4z"
+                              ></path>
+                            </svg>
+                          </div>
+                          <div>
+                            {{
+                              new Date(tasks.enddate).getDate() +
+                              "/" +
+                              (new Date(tasks.enddate).getMonth() + 1)
+                            }}
+                          </div>
+                        </div>
+                        <div
+                          v-if="
+                            new Date(tasks.enddate).getTime() >
+                            new Date().getTime()
+                          "
+                          class="datecaps in"
+                        >
+                          <div>
+                            <svg
+                              width="20"
+                              height="20"
+                              viewBox="0 0 20 20"
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="svg"
+                              fill="#5A9675"
+                              focusable="false"
+                            >
+                              <path
+                                d="M7 11a1 1 0 100-2 1 1 0 000 2zm1 2a1 1 0 11-2 0 1 1 0 012 0zm2-2a1 1 0 100-2 1 1 0 000 2zm1 2a1 1 0 11-2 0 1 1 0 012 0zm2-2a1 1 0 100-2 1 1 0 000 2zm4-5.5A2.5 2.5 0 0014.5 3h-9A2.5 2.5 0 003 5.5v9A2.5 2.5 0 005.5 17h9a2.5 2.5 0 002.5-2.5v-9zM4 7h12v7.5c0 .83-.67 1.5-1.5 1.5h-9A1.5 1.5 0 014 14.5V7zm1.5-3h9c.83 0 1.5.67 1.5 1.5V6H4v-.5C4 4.67 4.67 4 5.5 4z"
+                              ></path>
+                            </svg>
+                          </div>
+                          <div>
+                            {{
+                              new Date(tasks.enddate).getDate() +
+                              "/" +
+                              (new Date(tasks.enddate).getMonth() + 1)
+                            }}
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <img
+                          v-for="sparrs in sparr[index]"
+                          :key="sparrs.index"
+                          class="deltagare va"
+                          :src="require(`@/assets/${sparrs.Name}.jpg`)"
                           alt=""
                         />
-                        <div dropdown-closer>Delete task</div>
                       </div>
                     </div>
-                  </dropdown-menu>
-                </div>
-                <div class="taskinfocont">
-                  <div></div>
-                  <div>
-                    <img
-                      v-for="sparrs in sparr[index]"
-                      :key="sparrs.index"
-                      class="deltagare va"
-                      :src="require(`@/assets/${sparrs.Name}.jpg`)"
-                      alt=""
-                    />
                   </div>
                 </div>
               </div>
@@ -538,6 +778,50 @@
   </div>
 </template>
 <style scoped>
+.taskinfocont {
+  margin-bottom: 30px;
+}
+.taskinfocomplete {
+  margin-bottom: 5px !important;
+  padding: 0px !important;
+}
+.taskcont {
+}
+.completedtask {
+  height: 30px;
+  background: rgb(189, 218, 189);
+  margin-top: 0px !important;
+  margin-bottom: px !important;
+}
+.alltaskcont {
+  margin-top: 20px;
+}
+.due {
+  background: #d13438;
+  color: white;
+  border-radius: 5px;
+}
+.datecaps {
+  display: flex;
+  padding: 5px;
+  grid-gap: 5px;
+}
+.svgc {
+  padding: 20px;
+}
+.svgcomplete {
+  padding: 0px !important;
+  padding-left: 20px !important;
+}
+.tticomplete {
+  height: 100%;
+  padding: 0px !important;
+}
+.tti {
+  width: 100%;
+  height: 30px;
+  padding: 15px;
+}
 .showme {
   background: #217346;
   width: 100%;
@@ -727,8 +1011,9 @@
   display: flex;
   grid-gap: 20px;
   width: 100%;
-  height: 30px;
-  padding: 15px;
+  text-align: left;
+  justify-content: space-around;
+  align-items: center;
 }
 .taskcont {
   display: flex;
@@ -1246,6 +1531,7 @@ footer {
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
+  height: 100%;
 }
 ::-webkit-scrollbar {
   width: 5px;
@@ -1343,6 +1629,9 @@ export default {
       anit: 0,
       selectedusers: [],
       anits: 0,
+      showcompleted: false,
+      showcompletedrow: null,
+      countershown: null,
     };
   },
   created() {
@@ -1405,7 +1694,6 @@ export default {
           )
         );
       }
-      console.log(this.sparr);
     });
   },
   methods: {
@@ -1423,6 +1711,10 @@ export default {
       };
 
       this.socketInstance.emit("deleteplanner", deleteplandata);
+    },
+    showCompleted(x) {
+      this.showcompletedrow = x;
+      console.log(this.showcompletedrow);
     },
     logdelbucket(id) {
       if (this.logdel == null) {
@@ -1469,9 +1761,32 @@ export default {
       }
       console.log(this.bucketid);
     },
-    modTask(x) {
+    removeUser(x) {
+      const removeworkerdata = {
+        id: x,
+        taskid: this.selectedtaskid,
+      };
+      this.socketInstance.emit("removeuser", removeworkerdata);
+      setTimeout(() => {
+        this.modTask(this.selectedtaskindex, this.selectedtaskid);
+      }, 100);
+    },
+    addUser(x) {
+      const addworkerdata = {
+        id: x,
+        taskid: this.selectedtaskid,
+      };
+      this.socketInstance.emit("adduser", addworkerdata);
+      setTimeout(() => {
+        this.modTask(this.selectedtaskindex, this.selectedtaskid);
+      }, 100);
+    },
+    modTask(x, y) {
+      this.selectedtaskid = y;
+      this.selectedtaskindex = x;
       this.selectedusers = [];
       this.usersid = [];
+      this.anit = 0;
       for (this.anit = 0; this.sparr[x].length > this.anit; this.anit++) {
         this.selectedusers.push(
           this.deltagare.filter(
@@ -1479,6 +1794,7 @@ export default {
           )
         );
       }
+      this.anits = 0;
       for (
         this.anits = 0;
         this.selectedusers.length > this.anits;
@@ -1488,6 +1804,7 @@ export default {
       }
       console.log(this.usersid);
     },
+
     createTask(id) {
       this.selected = [];
       this.addworkoverlay = false;
@@ -1508,7 +1825,12 @@ export default {
       };
       this.socketInstance.emit("task", taskdata);
     },
-
+    completeTask(x) {
+      const completetaskdata = {
+        id: x,
+      };
+      this.socketInstance.emit("completetask", completetaskdata);
+    },
     deleteTask(id) {
       const deletetaskdata = {
         id: id,
