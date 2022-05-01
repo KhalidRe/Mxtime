@@ -48,11 +48,66 @@
             v-bind:class="{ innerOnShown: picked !== undefined }"
           >
             <h3>{{ picked }}</h3>
-            <input type="text" />
+            <dropdown-menu
+              :overlay="false"
+              :withDropdownCloser="true"
+              :closeOnClickOutside="true"
+              class="dropfag"
+            >
+              <div
+                v-if="chosenproject.length == 0"
+                dropdown-closer
+                class="chooseproject"
+                slot="trigger"
+              >
+                Välj project
+              </div>
+              <div
+                v-if="chosenproject.length > 0"
+                dropdown-closer
+                class="chooseproject"
+                slot="trigger"
+              >
+                {{ chosenproject }}
+              </div>
+              <div class="dropper" slot="body" dropdown-closer>
+                <div
+                  dropdown-closer
+                  class="drop-item"
+                  v-for="projects in project"
+                  :key="projects.id"
+                  @click="dataPrimer(projects.id, projects.Title)"
+                >
+                  {{ projects.Title }}
+                </div>
+              </div>
+            </dropdown-menu>
             <br />
-            <input type="text" />
+            <div class="mh">
+              <div>
+                <div>Timmar</div>
+                <input v-model="Hours" type="number" min="0" max="15" />
+              </div>
+              <div>
+                <div>Minuter</div>
+                <input v-model="Minutes" type="number" min="0" max="60" />
+              </div>
+            </div>
+
             <br />
-            <input type="text" />
+            <div class="e">
+              <div>Notes</div>
+              <textarea
+                v-model="Notes"
+                name=""
+                id=""
+                cols="30"
+                rows="10"
+              ></textarea>
+            </div>
+            <br />
+            <div class="submittime" @click="addTime()">Lägg till</div>
+            <br />
           </div>
         </div>
       </div>
@@ -75,7 +130,7 @@
               <span class="datatime">{{
                 this.amountonhours + this.amountonminutes
               }}</span
-              ><span class="slash">/</span><span class="worktime">8</span>
+              ><span class="slash">/</span><span class="worktime">8h</span>
             </div>
           </radial-progress-bar>
         </div>
@@ -92,16 +147,63 @@
           </p>
         </div>
 
-        <p>total----------DAMN!</p>
+        <p></p>
       </div>
     </div>
   </div>
 </template>
 <style scoped>
+.mh {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.submittime {
+  background: #1988c9;
+  cursor: pointer;
+  padding: 10px;
+  color: white;
+  border-radius: 20px;
+}
+.e {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  text-align: left;
+  justify-content: flex-start;
+}
+textarea {
+  resize: none;
+  height: 100px;
+}
+.drop-item {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: white;
+  cursor: pointer;
+}
+.drop-item:hover {
+  background: rgb(226, 226, 226);
+}
+.chooseproject {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  background: rgb(238, 244, 249);
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.185);
+}
+.chooseproject:hover {
+  background: rgb(225, 238, 249);
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.32);
+}
 .dayinfo {
   margin-left: 15px;
   color: rgb(105, 105, 105);
   text-align: left;
+  height: 100%;
+  overflow-y: scroll;
+  width: 100%;
 }
 .s {
   align-self: center;
@@ -116,38 +218,47 @@
   font-size: 30px;
 }
 .Forminnershown {
-  opacity: 0;
-  transition: 1s;
-  transition-delay: 0.5s;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin-bottom: 20px;
+  padding: 20px;
+  height: 100%;
+  background: white;
 }
 .innerOnShown {
   opacity: 1;
 }
 .formCont {
-  width: 50vw;
+  min-width: 50vw;
+
   height: 0px;
   border-radius: 20px;
-  background: rgb(243, 243, 243);
-  transition: 1s;
+  background: rgb(255, 255, 255);
+  display: flex;
+  justify-content: center;
+  box-shadow: 0px 4px 5px 1px rgba(55, 55, 55, 0.267);
+  margin-top: 20px;
+  height: 300px;
+  overflow-x: auto;
 }
 .onForm {
-  height: 300px;
 }
 .UrnCaps {
-  background: rgb(223, 223, 223);
+  background: rgb(246, 246, 246);
   padding: 20px;
   width: 250px;
   display: flex;
-  justify-content: center;
+  align-items: center;
   flex-direction: column;
   float: right;
-  box-shadow: 0px -5px 5px 5px rgba(134, 134, 134, 0.514);
+  border-left: 1px solid rgba(128, 128, 128, 0.228);
 }
 .MnW {
   width: 350px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+
   margin-top: 50px;
 }
 .singDate {
@@ -189,12 +300,10 @@ a:focus {
   background-color: rgb(29, 57, 100);
 }
 .datecaps {
-  width: 69%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  float: left;
+  padding-left: 20px;
 }
 .daycont {
   display: flex;
@@ -203,10 +312,8 @@ a:focus {
 }
 #Time {
   width: 100%;
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
 
   overflow-y: auto;
   -webkit-user-select: none; /* Safari */
@@ -216,22 +323,27 @@ a:focus {
 }
 
 .Topcont {
-  background: rgb(141, 141, 141);
   width: 100%;
-  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  background: rgb(241, 241, 241);
 }
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0px 10px 6px rgba(27, 247, 255, 0.993);
+  -webkit-box-shadow: inset 0 0px 10px 6px rgba(221, 221, 221, 0.993);
+  border-radius: 20px;
 }
 ::-webkit-scrollbar-thumb {
-  -webkit-box-shadow: inset 0 0px 6px rgb(0, 0, 0);
+  -webkit-box-shadow: inset 0 0px 10px rgb(139, 139, 139);
+  border-radius: 20px;
 }
 </style>
 
 <script>
+import DropdownMenu from "v-dropdown-menu";
+import "v-dropdown-menu/dist/v-dropdown-menu.css";
 import AddtimeN from "../components/AddtimeN.vue";
 import Usermetrics from "../components/Usermetrics.vue";
 import moment from "moment";
@@ -239,7 +351,7 @@ import RadialProgressBar from "vue-radial-progress";
 import io from "socket.io-client";
 
 export default {
-  components: { AddtimeN, Usermetrics, RadialProgressBar },
+  components: { AddtimeN, Usermetrics, DropdownMenu, RadialProgressBar },
   data() {
     return {
       Sun: 7,
@@ -265,6 +377,13 @@ export default {
       SatDate: moment(moment().day(this.Sat)._d).format("DD/MM"),
       picked: moment(moment().add(0, "d")._d).format("YYYY-MM-DD"),
       incrementday: 0,
+      loggedin: "",
+      project: [],
+      chosenproject: "",
+      chosenid: 0,
+      Hours: 0,
+      Minutes: 0,
+      Notes: "",
     };
   },
   created() {
@@ -278,52 +397,71 @@ export default {
       },
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://flexn.se:3000/mytime", requestOptions)
+    fetch("https://flexn.se:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        this.time = result;
+        this.loggedin = result[0];
+        this.loggedstatus = this.loggedin.Status;
 
-        this.amountonhours = [];
-        this.amountonminutes = [];
+        fetch("https://flexn.se:3000/mytime", requestOptions)
+          .then((response) => response.json())
+          .then((result) => {
+            this.time = result;
 
-        this.picked = moment(moment().add(this.incrementday, "d")._d).format(
-          "YYYY-MM-DD"
-        );
-        this.SunDate = moment(moment().day(this.Sun)._d).format("DD/MM");
-        this.MonDate = moment(moment().day(this.Mon)._d).format("DD/MM");
-        this.TueDate = moment(moment().day(this.Tue)._d).format("DD/MM");
-        this.WedDate = moment(moment().day(this.Wed)._d).format("DD/MM");
-        this.ThuDate = moment(moment().day(this.Thu)._d).format("DD/MM");
-        this.FriDate = moment(moment().day(this.Fri)._d).format("DD/MM");
-        this.SatDate = moment(moment().day(this.Sat)._d).format("DD/MM");
-        this.datetime = this.time.filter(
-          (result) =>
-            new Date(parseInt(result.Datum)).getFullYear() +
-              "" +
-              new Date(parseInt(result.Datum)).getMonth() +
-              "" +
-              new Date(parseInt(result.Datum)).getDate() ==
-            new Date(this.picked).getFullYear() +
-              "" +
-              new Date(this.picked).getMonth() +
-              "" +
-              new Date(this.picked).getDate()
-        );
-        for (this.i = 0; this.datetime.length > this.i; this.i++) {
-          this.amountonhours.push(this.datetime[this.i].Hours);
+            this.amountonhours = [];
+            this.amountonminutes = [];
 
-          this.amountonminutes.push(this.datetime[this.i].Minutes);
-        }
-        this.amountonhours = this.amountonhours.reduce((a, b) => a + b, 0);
-        this.amountonminutes = Math.floor(
-          this.amountonminutes.reduce((a, b) => a + b, 0) / 60
-        );
+            this.picked = moment(
+              moment().add(this.incrementday, "d")._d
+            ).format("YYYY-MM-DD");
+            this.SunDate = moment(moment().day(this.Sun)._d).format("DD/MM");
+            this.MonDate = moment(moment().day(this.Mon)._d).format("DD/MM");
+            this.TueDate = moment(moment().day(this.Tue)._d).format("DD/MM");
+            this.WedDate = moment(moment().day(this.Wed)._d).format("DD/MM");
+            this.ThuDate = moment(moment().day(this.Thu)._d).format("DD/MM");
+            this.FriDate = moment(moment().day(this.Fri)._d).format("DD/MM");
+            this.SatDate = moment(moment().day(this.Sat)._d).format("DD/MM");
+            this.datetime = this.time.filter(
+              (result) =>
+                new Date(parseInt(result.Datum)).getFullYear() +
+                  "" +
+                  new Date(parseInt(result.Datum)).getMonth() +
+                  "" +
+                  new Date(parseInt(result.Datum)).getDate() ==
+                new Date(this.picked).getFullYear() +
+                  "" +
+                  new Date(this.picked).getMonth() +
+                  "" +
+                  new Date(this.picked).getDate()
+            );
+            for (this.i = 0; this.datetime.length > this.i; this.i++) {
+              this.amountonhours.push(this.datetime[this.i].Hours);
+
+              this.amountonminutes.push(this.datetime[this.i].Minutes);
+            }
+            this.amountonhours = this.amountonhours.reduce((a, b) => a + b, 0);
+            this.amountonminutes = Math.floor(
+              this.amountonminutes.reduce((a, b) => a + b, 0) / 60
+            );
+          });
+
+        this.socketInstance = io("https://flexn.se:3000/");
+
+        this.socketInstance.on("time:received", (timedata) => {
+          this.time = timedata;
+        });
+
+        this.socketInstance.on("data:received", (projectdata) => {
+          this.project = projectdata;
+          if (this.loggedstatus == "Admin") {
+            this.project = projectdata;
+          } else {
+            this.project = projectdata.filter(
+              (result) => result.Authorstatus == this.loggedstatus
+            );
+          }
+        });
       });
-
-    this.socketInstance = io("https://flexn.se:3000/");
-    this.socketInstance.on("time:received", (timedata) => {
-      this.time = timedata;
-    });
   },
   methods: {
     nextWeek() {
@@ -449,6 +587,36 @@ export default {
       this.amountonminutes = Math.floor(
         this.amountonminutes.reduce((a, b) => a + b, 0) / 60
       );
+    },
+    dataPrimer(id, title) {
+      this.chosenproject = title;
+      this.chosenid = id;
+    },
+    addTime() {
+      let addtimedata = {
+        projectid: this.chosenid,
+        title: this.chosenproject,
+        name: this.loggedin.Name,
+        user: this.loggedin.Username,
+        description: this.Notes,
+        timmar: this.Hours,
+        minuter: this.Minutes,
+        datepicked: new Date(this.picked).getTime(),
+        fatherid: this.chosenid,
+      };
+      this.socketInstance.emit("time", addtimedata);
+      this.minuter = 0;
+      this.timmar = 0;
+      location.reload();
+    },
+    deleteTime(id, minuter, hours, fatherid) {
+      let dtimedata = {
+        id: id,
+        minuter: minuter,
+        hours: hours,
+        fatherid: fatherid,
+      };
+      this.socketInstance.emit("delete:time", dtimedata);
     },
   },
 };
