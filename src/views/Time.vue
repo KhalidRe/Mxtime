@@ -120,8 +120,8 @@
             "
             :total-steps="8"
             :innerStrokeColor="'#C7C8C9'"
-            :startColor="'#969897'"
-            :stopColor="'#969897'"
+            :startColor="'rgb(57, 124, 226)'"
+            :stopColor="'#397ce2'"
             :strokeLinecap="'flat'"
             :strokeWidth="10"
             :innerStrokeWidth="10"
@@ -134,17 +134,27 @@
             </div>
           </radial-progress-bar>
         </div>
-        <div>
-          <span @click="previousDay()">back</span>
-          <span>{{ picked }}</span>
-          <span @click="nextDay()">next</span>
+        <div class="bfcaps">
+          <div class="bf" @click="previousDay()">back</div>
+          <div class="urndate">{{ picked }}</div>
+          <div class="bf" @click="nextDay()">next</div>
         </div>
 
         <div class="dayinfo">
-          <p v-for="biden in datetime" :key="biden.index">
-            {{ biden.Title }} ->
-            {{ biden.Hours + Math.floor(biden.Minutes / 60) }}h
-          </p>
+          <div class="spacer">
+            <div
+              class="urntimecaps"
+              v-for="biden in datetime"
+              :key="biden.index"
+            >
+              <div class="urntimetitle">
+                {{ biden.Title }}
+              </div>
+              <div class="urntimetime">
+                {{ biden.Hours + Math.floor(biden.Minutes / 60) }}h
+              </div>
+            </div>
+          </div>
         </div>
 
         <p></p>
@@ -153,6 +163,54 @@
   </div>
 </template>
 <style scoped>
+.spacer {
+  margin-top: 20px;
+}
+.urntimecaps {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+  text-align: left;
+}
+.urntimecaps:nth-child(odd) {
+  background: #d8d8d8;
+}
+.urntimecaps:nth-child(even) {
+  background: #f0f0f0;
+  border-top: solid 1px rgba(0, 0, 0, 0.247);
+}
+.urntimetitle {
+  display: flex;
+  align-items: right;
+  text-align: right;
+}
+.urntimetime {
+  display: flex;
+  align-items: left;
+  text-align: left;
+}
+.bfcaps {
+  width: 100%;
+
+  display: flex !important;
+  justify-content: space-around !important;
+  align-items: center;
+}
+.urndate {
+  background: #397ce2;
+  padding: 5px;
+  color: white;
+
+  border-radius: 5px;
+}
+.bf {
+  padding: 5px;
+  cursor: pointer;
+  background: rgb(60, 126, 167);
+  color: white;
+  border-radius: 5px;
+}
 .mh {
   display: flex;
   justify-content: space-around;
@@ -289,7 +347,7 @@ textarea {
   text-align: center;
   width: 6vw;
   height: 50px;
-  background-color: rgb(57, 124, 226);
+  background-color: #397ce2;
   color: white;
   cursor: pointer;
 }

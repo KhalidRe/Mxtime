@@ -48,7 +48,7 @@
 <style scoped>
 .Metricschart {
   overflow-y: scroll;
-  max-height: 300px;
+  height: 300px;
   color: white;
 }
 
@@ -142,6 +142,7 @@ table {
   overflow-x: auto;
   margin-top: 0px;
   border: 1px solid rgba(10, 0, 0, 0.3);
+  background: #006aae;
 }
 th {
   padding: 20px 15px;

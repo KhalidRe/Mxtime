@@ -1,7 +1,10 @@
 <template>
   <div class="Users transform">
-    <Usermetrics />
+    <!--
+ <Usermetrics />
     <Addtime />
+    -->
+
     <h1>Marinex</h1>
     <div class="Grid">
       <div class="s" v-for="users in user" :key="users.id">

@@ -66,7 +66,7 @@
             </h5>
             <input
               class="tasktitleinput"
-              @change="test(tester)"
+              @change="modSend()"
               v-model="tester"
               type="text"
             />
@@ -132,35 +132,56 @@
           <div class="proprio">
             <div class="pp">
               <label for="pet-select">progress</label>
-              <select name="pets" id="pet-select">
-                <option value="">low</option>
-                <option value="dog">Dog</option>
-                <option value="cat">Cat</option>
+              <select
+                @change="modSend()"
+                v-model="progress"
+                :selected="progress"
+                name="pets"
+                id="pet-select"
+              >
+                <option value="0">Not started</option>
+                <option value="1">In progress</option>
+                <option value="2">Completed</option>
               </select>
             </div>
             <div class="pp">
               <label for="pet-select">priority</label>
-              <select name="pets" id="pet-select">
-                <option value="">low</option>
-                <option value="dog">Dog</option>
-                <option value="cat">Cat</option>
+              <select
+                @change="modSend()"
+                v-model="priority"
+                :selected="priority"
+                name="pets"
+                id="pet-select"
+              >
+                <option value="0">low</option>
+                <option value="1">Medium</option>
+                <option value="2">High</option>
               </select>
             </div>
           </div>
           <div class="proprio">
             <div class="ppd">
-              <date-picker v-model="time2" valueType="format"></date-picker>
+              <date-picker
+                @change="modSend()"
+                v-model="time2"
+                valueType="format"
+              ></date-picker>
               <div>Start date</div>
             </div>
             <div class="ppd">
               <div></div>
-              <date-picker v-model="time1" valueType="format"></date-picker>
+              <date-picker
+                @change="modSend()"
+                v-model="time1"
+                valueType="format"
+              ></date-picker>
               <div>Due date</div>
             </div>
           </div>
           <div class="notecaps">
             <div>notes</div>
             <textarea
+              @change="modSend()"
               v-model="note"
               name="textarea"
               id=""
@@ -601,7 +622,7 @@
                           class="svgc svgcomplete"
                           @mouseover="showByIndex = tasks.id"
                           @mouseleave="showByIndex = null"
-                          @click="completeTask(tasks.id)"
+                          @click="notcompleteTask(tasks.id)"
                         >
                           <div
                             class="child-one"
@@ -613,11 +634,11 @@
                               viewBox="0 0 20 20"
                               xmlns="http://www.w3.org/2000/svg"
                               class="svg"
-                              fill="currentColor"
+                              fill="#217346"
                               focusable="false"
                             >
                               <path
-                                d="M10 3a7 7 0 100 14 7 7 0 000-14zm-8 7a8 8 0 1116 0 8 8 0 01-16 0z"
+                                d="M10 2a8 8 0 110 16 8 8 0 010-16zm3.36 5.65a.5.5 0 00-.64-.06l-.07.06L9 11.3 7.35 9.65l-.07-.06a.5.5 0 00-.7.7l.07.07 2 2 .07.06c.17.11.4.11.56 0l.07-.06 4-4 .07-.08a.5.5 0 00-.06-.63z"
                               ></path>
                             </svg>
                           </div>
@@ -650,7 +671,7 @@
                           "
                           class="tti tticomplete"
                         >
-                          {{ tasks.title }}
+                          <s>{{ tasks.title }}</s>
                         </div>
                       </div>
 
@@ -680,68 +701,7 @@
                       </dropdown-menu>
                     </div>
                     <div class="taskinfocont taskinfocomplete">
-                      <div>
-                        <div
-                          v-if="
-                            new Date(tasks.enddate).getTime() <=
-                            new Date().getTime()
-                          "
-                          class="datecaps due"
-                        >
-                          <div>
-                            <svg
-                              width="20"
-                              height="20"
-                              viewBox="0 0 20 20"
-                              xmlns="http://www.w3.org/2000/svg"
-                              class="svg"
-                              fill="#FFFFFF"
-                              focusable="false"
-                            >
-                              <path
-                                d="M7 11a1 1 0 100-2 1 1 0 000 2zm1 2a1 1 0 11-2 0 1 1 0 012 0zm2-2a1 1 0 100-2 1 1 0 000 2zm1 2a1 1 0 11-2 0 1 1 0 012 0zm2-2a1 1 0 100-2 1 1 0 000 2zm4-5.5A2.5 2.5 0 0014.5 3h-9A2.5 2.5 0 003 5.5v9A2.5 2.5 0 005.5 17h9a2.5 2.5 0 002.5-2.5v-9zM4 7h12v7.5c0 .83-.67 1.5-1.5 1.5h-9A1.5 1.5 0 014 14.5V7zm1.5-3h9c.83 0 1.5.67 1.5 1.5V6H4v-.5C4 4.67 4.67 4 5.5 4z"
-                              ></path>
-                            </svg>
-                          </div>
-                          <div>
-                            {{
-                              new Date(tasks.enddate).getDate() +
-                              "/" +
-                              (new Date(tasks.enddate).getMonth() + 1)
-                            }}
-                          </div>
-                        </div>
-                        <div
-                          v-if="
-                            new Date(tasks.enddate).getTime() >
-                            new Date().getTime()
-                          "
-                          class="datecaps in"
-                        >
-                          <div>
-                            <svg
-                              width="20"
-                              height="20"
-                              viewBox="0 0 20 20"
-                              xmlns="http://www.w3.org/2000/svg"
-                              class="svg"
-                              fill="#5A9675"
-                              focusable="false"
-                            >
-                              <path
-                                d="M7 11a1 1 0 100-2 1 1 0 000 2zm1 2a1 1 0 11-2 0 1 1 0 012 0zm2-2a1 1 0 100-2 1 1 0 000 2zm1 2a1 1 0 11-2 0 1 1 0 012 0zm2-2a1 1 0 100-2 1 1 0 000 2zm4-5.5A2.5 2.5 0 0014.5 3h-9A2.5 2.5 0 003 5.5v9A2.5 2.5 0 005.5 17h9a2.5 2.5 0 002.5-2.5v-9zM4 7h12v7.5c0 .83-.67 1.5-1.5 1.5h-9A1.5 1.5 0 014 14.5V7zm1.5-3h9c.83 0 1.5.67 1.5 1.5V6H4v-.5C4 4.67 4.67 4 5.5 4z"
-                              ></path>
-                            </svg>
-                          </div>
-                          <div>
-                            {{
-                              new Date(tasks.enddate).getDate() +
-                              "/" +
-                              (new Date(tasks.enddate).getMonth() + 1)
-                            }}
-                          </div>
-                        </div>
-                      </div>
+                      <div></div>
                       <div>
                         <img
                           v-for="sparrs in sparr[index]"
@@ -936,7 +896,7 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-
+  overflow-y: auto;
   width: 100%;
   grid-gap: 40px;
 }
@@ -1615,6 +1575,7 @@ export default {
       openMod: false,
       taskmenu: false,
       show: false,
+      time2: null,
       time3: null,
       time4: null,
       tester: "",
@@ -1632,6 +1593,8 @@ export default {
       showcompleted: false,
       showcompletedrow: null,
       countershown: null,
+      progress: "0",
+      priority: "0",
     };
   },
   created() {
@@ -1736,6 +1699,9 @@ export default {
       console.log(this.tester);
       console.log(this.time1);
       console.log(this.time2);
+      console.log(this.note);
+      console.log(this.progress);
+      console.log(this.priority);
     },
     createBucket() {
       const bucketdata = {
@@ -1846,6 +1812,25 @@ export default {
     },
     indexplan(index) {
       this.z = index;
+    },
+    notcompleteTask(id) {
+      let notcompletetaskdata = {
+        id: id,
+      };
+      this.socketInstance.emit("notcompletetask", notcompletetaskdata);
+    },
+    modSend(id) {
+      let modtaskdata = {
+        id: this.selected,
+        tasktitle: this.tester,
+        startdate: this.time1,
+        enddate: this.time2,
+        progress: this.progress,
+        priority: this.priority,
+        note: this.note,
+        authorid: this.loggedin.id,
+      };
+      this.socketInstance.emit("modtask", modtaskdata);
     },
   },
 };
