@@ -11,7 +11,8 @@
         <router-link class="links" to="/Charts"
           ><img width="25vw" src="@/assets/charticon2.png" alt=""
         /></router-link>
-        <router-link class="links" to="/Users"
+
+        <router-link class="links" to="/UsersV2"
           ><img width="25vw" src="@/assets/usericon2.png" alt=""
         /></router-link>
         <router-link class="links" to="/Histor"

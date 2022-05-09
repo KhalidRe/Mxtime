@@ -149,7 +149,7 @@
                         <button
                           class="now"
                           @click="
-                            Edit(projects.id),
+                            Edit(projects.id, index),
                               (arkiveraoverlay = !arkiveraoverlay)
                           "
                         >
@@ -239,7 +239,7 @@
                         <button
                           class="now"
                           @click="
-                            Edit(projects.id),
+                            Edit(projects.id, index),
                               (arkiveraoverlay = !arkiveraoverlay)
                           "
                         >
@@ -1604,6 +1604,7 @@ export default {
       forinpw: 0,
       sparr: [],
       index: 0,
+      arkivworkers: [],
     };
   },
 
@@ -1737,6 +1738,7 @@ export default {
         budget: this.budget,
         belopp: this.belopp,
         fakturerat: this.fakturerat,
+        deltagare: this.arkivworkers,
       };
       this.socketInstance.emit("arkiv", arkivdata);
       swal({
@@ -1781,7 +1783,7 @@ export default {
       });
       this.popsound.play();
     },
-    Edit(id) {
+    Edit(id, index) {
       this.z = id;
       this.x = id - 1;
       this.eproject = this.project.find((result) => result.id == this.z);
@@ -1794,6 +1796,15 @@ export default {
       this.eprecentage = this.eproject.precentage;
       this.edate = this.eproject.Date;
       this.eworker = this.eproject.Workers;
+      console.log(this.z);
+      console.log(index);
+      if (this.sparr[index].length > 0) {
+        this.arkivworkers = this.sparr[index].filter(
+          (result) => result.projectid == this.z
+        );
+      } else {
+        this.arkivworkers = [];
+      }
     },
     Remove(id) {
       console.log(id);

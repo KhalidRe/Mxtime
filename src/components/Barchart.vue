@@ -11,6 +11,12 @@ export default {
       pointers: [],
     };
   },
+  props: {
+    width: {
+      type: Number,
+      default: 10,
+    },
+  },
   created() {
     fetch("https://flexn.se:3000/getusers")
       .then((response) => response.json())
@@ -53,7 +59,6 @@ export default {
           labelsArray.push(names[i]);
           ratioArray.push(pointer[i]);
         }
-
         this.renderChart(
           {
             labels: names,
