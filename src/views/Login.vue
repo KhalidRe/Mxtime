@@ -75,7 +75,9 @@ export default {
       Username: "",
     };
   },
-  created() {},
+  created() {
+    this.someValue = "";
+  },
 
   computed: {
     someValue: {

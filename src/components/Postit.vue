@@ -451,6 +451,7 @@ export default {
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
+
         fetch("https://flexn.se:3000/getusers")
           .then((response) => response.json())
           .then((result) => {
@@ -487,6 +488,7 @@ export default {
         status: "A",
         Authorstatus: this.loggedin.Status,
         deltag: selected,
+        Authorid: this.loggedin.id,
       };
 
       this.socketInstance.emit("post", postdata);

@@ -1,9 +1,7 @@
 <template>
   <div class="Charts">
-    <Metricschart />
-
     <div id="aktivP">
-      <h1 style="color: white">Aktiva i project</h1>
+      <h1>Aktiva i project</h1>
       <Barchart class="barchart" />
     </div>
   </div>
@@ -21,6 +19,7 @@
 
 .Charts {
   height: 100%;
+  width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
 
@@ -32,7 +31,11 @@
 }
 #aktivP {
   height: 100%;
-  background: linear-gradient(#5c9cc2, #4f92b9);
+  width: 100%;
+  background: linear-gradient(rgb(205, 228, 241), #72cbff);
+}
+#aktivP > h1 {
+  color: #646464;
 }
 .barchart {
   height: 80%;

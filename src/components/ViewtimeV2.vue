@@ -7,6 +7,16 @@
       <div class="topcont">
         <h2>Admin view</h2>
         <div class="inputsflex">
+          <select
+            name="debited"
+            id="debited"
+            ref="debited"
+            v-model="debitfilter"
+          >
+            <option value="alla" selected>Debit/Ej</option>
+            <option value="1">Debit</option>
+            <option value="0">Ej Debit</option>
+          </select>
           <span
             ><input
               type="date"
@@ -53,7 +63,11 @@
         <table cellpadding="0" cellspacing="0" border="0">
           <tbody>
             <tr class="row" v-for="times in time" :key="times.id">
-              <td>{{ times.Title }}</td>
+              <td>
+                {{ times.Title }}
+                <span class="debinf" v-if="times.debit == 1">(debit)</span>
+                <span class="debinf" v-if="times.debit == 0">(Ejdebit)</span>
+              </td>
               <td>{{ times.Name }}</td>
               <td>{{ times.Hours }}</td>
               <td>{{ times.Minutes }}</td>
@@ -102,6 +116,9 @@
   </div>
 </template>
 <style scoped>
+.debinf {
+  font-size: 8px;
+}
 .inputsflex {
   display: flex;
   justify-content: center;
@@ -374,6 +391,7 @@ export default {
       end: "",
       startholder: "",
       endholder: "getTime(this.end),",
+      debitfilter: "alla",
     };
   },
 
@@ -444,6 +462,11 @@ export default {
           if (this.selectedfilter !== "alla") {
             this.time = this.time.filter((results) => {
               return results.Name.includes(this.selectedfilter);
+            });
+          }
+          if (this.debitfilter !== "alla") {
+            this.time = this.time.filter((results) => {
+              return results.debit == this.debitfilter;
             });
           }
         });

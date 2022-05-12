@@ -1608,6 +1608,13 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
+    fetch("https://flexn.se:3000/loggedin", auth)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.length == 0) {
+          location.replace("https://flexnet.se/#/");
+        }
+      });
     fetch("https://flexn.se:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {

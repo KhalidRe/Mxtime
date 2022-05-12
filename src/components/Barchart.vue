@@ -49,8 +49,8 @@ export default {
         this.gradient2 = this.$refs.canvas
           .getContext("2d")
           .createLinearGradient(0, 0, 0, 450);
-        this.gradient.addColorStop(0, "#1D80AB");
-        this.gradient.addColorStop(1, "#8E00D0");
+        this.gradient.addColorStop(0, "#00AFD6");
+        this.gradient.addColorStop(1, "#007DC6");
 
         var ratioArray = [];
         var labelsArray = [];
@@ -68,6 +68,7 @@ export default {
                 label: "Aktiv i projekt",
                 backgroundColor: this.gradient,
                 data: pointer,
+                font: this.font,
               },
             ],
           },

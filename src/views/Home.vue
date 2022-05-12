@@ -654,6 +654,7 @@
   font-size: 16px;
   font-weight: 600;
   text-align: left;
+  white-space: pre-wrap;
 }
 .trellodelete {
   display: flex;
@@ -1605,6 +1606,10 @@ export default {
       sparr: [],
       index: 0,
       arkivworkers: [],
+      mylogged: [],
+      myfilter: [],
+      loggedin: [],
+      findex: 0,
     };
   },
 
@@ -1622,11 +1627,20 @@ export default {
     fetch("https://flexn.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        this.loggedstatus = result[0].Status;
-
-        if (result.length === 0) {
+        if (result.length == 0) {
           location.replace("https://flexnet.se/#/");
         }
+      });
+    fetch("https://flexn.se:3000/workernav", auth)
+      .then((response) => response.json())
+      .then((result) => {
+        this.loggedin = result[0];
+      });
+    fetch("https://flexn.se:3000/loggedin", auth)
+      .then((response) => response.json())
+      .then((result) => {
+        this.loggedstatus = result[0].Status;
+
         if (result.length > 0) {
           fetch("https://flexn.se:3000/getusers")
             .then((response) => response.json())
@@ -1717,7 +1731,6 @@ export default {
                 )
               );
             }
-            console.log(this.sparr);
           });
         }
       });
@@ -1796,14 +1809,15 @@ export default {
       this.eprecentage = this.eproject.precentage;
       this.edate = this.eproject.Date;
       this.eworker = this.eproject.Workers;
-      console.log(this.z);
-      console.log(index);
-      if (this.sparr[index].length > 0) {
-        this.arkivworkers = this.sparr[index].filter(
-          (result) => result.projectid == this.z
-        );
-      } else {
-        this.arkivworkers = [];
+
+      if (index) {
+        if (this.sparr[index].length > 0) {
+          this.arkivworkers = this.sparr[index].filter(
+            (result) => result.projectid == this.z
+          );
+        } else {
+          this.arkivworkers = [];
+        }
       }
     },
     Remove(id) {

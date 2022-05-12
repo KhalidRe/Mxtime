@@ -10,31 +10,31 @@
           <div class="nextWC">
             <div class="nextW" @click="previousWeek()">Back</div>
           </div>
-          <div @click="selectday(Mon)">
+          <div class="daybtn" @click="selectday(Mon)">
             <a href="/#/Time/#Mon" class="daypick">M</a>
             <div class="singDate">{{ this.MonDate }}</div>
           </div>
-          <div @click="selectday(Tue)">
+          <div class="daybtn" @click="selectday(Tue)">
             <a href="/#/Time/#Tue" class="daypick">T</a>
             <div class="singDate">{{ this.TueDate }}</div>
           </div>
-          <div @click="selectday(Wed)">
+          <div class="daybtn" @click="selectday(Wed)">
             <a href="/#/Time/#Wed" class="daypick">W</a>
             <div class="singDate">{{ this.WedDate }}</div>
           </div>
-          <div @click="selectday(Thu)">
+          <div class="daybtn" @click="selectday(Thu)">
             <a href="/#/Time/#Thu" class="daypick">T</a>
             <div class="singDate">{{ this.ThuDate }}</div>
           </div>
-          <div @click="selectday(Fri)">
+          <div class="daybtn" @click="selectday(Fri)">
             <a href="/#/Time/#Fri" class="daypick">F</a>
             <div class="singDate">{{ this.FriDate }}</div>
           </div>
-          <div @click="selectday(Sat)">
+          <div class="daybtn" @click="selectday(Sat)">
             <a href="/#/Time/#Sat" class="daypick">L</a>
             <div class="singDate">{{ this.SatDate }}</div>
           </div>
-          <div @click="selectday(Sun)">
+          <div class="daybtn" @click="selectday(Sun)">
             <a href="/#/Time/#Sun" class="daypick">S</a>
             <div class="singDate">{{ this.SunDate }}</div>
           </div>
@@ -48,40 +48,44 @@
             v-bind:class="{ innerOnShown: picked !== undefined }"
           >
             <h3>{{ picked }}</h3>
-            <dropdown-menu
-              :overlay="false"
-              :withDropdownCloser="true"
-              :closeOnClickOutside="true"
-              class="dropfag"
-            >
-              <div
-                v-if="chosenproject.length == 0"
-                dropdown-closer
-                class="chooseproject"
-                slot="trigger"
+            <div class="projectcaps">
+              <div>PROJEKT:</div>
+              <dropdown-menu
+                :overlay="false"
+                :withDropdownCloser="true"
+                :closeOnClickOutside="true"
+                class="dropfag"
               >
-                Välj project
-              </div>
-              <div
-                v-if="chosenproject.length > 0"
-                dropdown-closer
-                class="chooseproject"
-                slot="trigger"
-              >
-                {{ chosenproject }}
-              </div>
-              <div class="dropper" slot="body" dropdown-closer>
                 <div
+                  v-if="chosenproject.length == 0"
                   dropdown-closer
-                  class="drop-item"
-                  v-for="projects in project"
-                  :key="projects.id"
-                  @click="dataPrimer(projects.id, projects.Title)"
+                  class="chooseproject"
+                  slot="trigger"
                 >
-                  {{ projects.Title }}
+                  Välj project
                 </div>
-              </div>
-            </dropdown-menu>
+                <div
+                  v-if="chosenproject.length > 0"
+                  dropdown-closer
+                  class="chooseproject"
+                  slot="trigger"
+                >
+                  {{ chosenproject }}
+                </div>
+                <div class="dropper" slot="body" dropdown-closer>
+                  <div
+                    dropdown-closer
+                    class="drop-item"
+                    v-for="projects in project"
+                    :key="projects.id"
+                    @click="dataPrimer(projects.id, projects.Title)"
+                  >
+                    {{ projects.Title }}
+                  </div>
+                </div>
+              </dropdown-menu>
+            </div>
+
             <br />
             <div class="mh">
               <div>
@@ -91,6 +95,34 @@
               <div>
                 <div>Minuter</div>
                 <input v-model="Minutes" type="number" min="0" max="60" />
+              </div>
+            </div>
+            <div class="dbcaps">
+              <div class="db">
+                <label class="container">
+                  <input
+                    v-model="debit"
+                    id="debitja"
+                    class="deltagcheckbox"
+                    type="radio"
+                    value="1"
+                  />
+                  <label for="debitja" class="checkmark">
+                    <div>DEBIT</div>
+                  </label>
+                </label>
+                <label class="container">
+                  <input
+                    v-model="debit"
+                    id="debitnej"
+                    class="deltagcheckbox"
+                    type="radio"
+                    value="0"
+                  />
+                  <label for="debitnej" class="checkmark">
+                    <div>EJ DEBIT</div>
+                  </label>
+                </label>
               </div>
             </div>
 
@@ -149,10 +181,25 @@
             >
               <div class="urntimetitle">
                 {{ biden.Title }}
+                <span class="debinf" v-if="biden.debit == 1">(debit)</span>
+                <span class="debinf" v-if="biden.debit == 0">(Ejdebit)</span>
               </div>
+
               <div class="urntimetime">
                 {{ biden.Hours + Math.floor(biden.Minutes / 60) }}h
               </div>
+              <span
+                @click="
+                  deleteTime(
+                    biden.id,
+                    biden.Minutes,
+                    biden.Hours,
+                    biden.fatherid
+                  )
+                "
+                class="deletetime"
+                >Delete</span
+              >
             </div>
           </div>
         </div>
@@ -163,6 +210,94 @@
   </div>
 </template>
 <style scoped>
+.debinf {
+  font-size: 8px;
+}
+.deletetime {
+  flex: 0;
+  color: #c93319;
+  font-size: 10px;
+  cursor: pointer;
+  align-self: center;
+  margin: 2px;
+}
+.deletetime:hover {
+  transition: 0.2s;
+  color: #ff3916;
+  font-size: 10px;
+  transform: scale(1.2);
+}
+.projectcaps {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  grid-gap: 20px;
+}
+.checkmark {
+  position: absolute;
+  width: 50px;
+  padding: 10px;
+  background-color: #e0eeff;
+
+  border: solid white 2px;
+}
+.container:hover input ~ .checkmark {
+  background-color: #e0eeff;
+}
+.container input:checked ~ .checkmark {
+  background-color: #1988c9;
+  color: white;
+  border: 2px rgb(32, 102, 151) solid;
+}
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  display: none;
+}
+.container {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  margin-right: 70px;
+  font-size: 12px;
+}
+.deltagcheckbox {
+  appearance: none;
+}
+.debitstuff {
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+  border-radius: 20px;
+  color: white;
+  background: #1988c9;
+}
+.debitcheck {
+  appearance: none;
+}
+.dbcaps {
+  margin-top: 15px;
+}
+.db {
+  display: flex;
+  justify-content: center;
+  grid-gap: 20px;
+  height: 50px;
+}
 .spacer {
   margin-top: 20px;
 }
@@ -186,9 +321,11 @@
   text-align: right;
 }
 .urntimetime {
+  flex: 1;
   display: flex;
-  align-items: left;
-  text-align: left;
+  justify-content: flex-end;
+  align-items: right;
+  text-align: right;
 }
 .bfcaps {
   width: 100%;
@@ -213,8 +350,9 @@
 }
 .mh {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
+  grid-gap: 20px;
 }
 .submittime {
   background: #1988c9;
@@ -280,25 +418,19 @@ textarea {
   flex-direction: column;
   width: 50%;
   margin-bottom: 20px;
-  padding: 20px;
-  height: 100%;
-  background: white;
+  padding: 30px;
+
+  background: rgb(238, 249, 255);
 }
 .innerOnShown {
   opacity: 1;
 }
 .formCont {
-  min-width: 50vw;
+  width: 100%;
 
-  height: 0px;
-  border-radius: 20px;
   background: rgb(255, 255, 255);
   display: flex;
   justify-content: center;
-  box-shadow: 0px 4px 5px 1px rgba(55, 55, 55, 0.267);
-  margin-top: 20px;
-  height: 300px;
-  overflow-x: auto;
 }
 .onForm {
 }
@@ -325,27 +457,31 @@ textarea {
 
 .nextWC {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
+  align-items: top;
+  height: 100%;
+}
+.daycont {
 }
 .nextW {
-  height: 40px;
-  width: 40px;
-  background-color: rgb(28, 136, 168);
-  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 5px;
+  text-align: center;
+  width: 6vw;
+  height: 50px;
+  background-color: #397ce2;
   color: white;
+  cursor: pointer;
+}
+.nextW:hover {
+  background: #4d8be9;
 }
 .daypick {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  width: 6vw;
+
   height: 50px;
   background-color: #397ce2;
   color: white;
@@ -358,16 +494,24 @@ a:focus {
   background-color: rgb(29, 57, 100);
 }
 .datecaps {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-left: 20px;
+  padding-right: 20px;
 }
 .daycont {
   display: flex;
-
+  background-color: rgb(255, 255, 255);
   align-items: center;
+  width: 100%;
+  justify-content: center;
 }
+.daybtn {
+  width: 100%;
+}
+
 #Time {
   width: 100%;
   height: 100%;
@@ -396,6 +540,35 @@ a:focus {
 ::-webkit-scrollbar-thumb {
   -webkit-box-shadow: inset 0 0px 10px rgb(139, 139, 139);
   border-radius: 20px;
+}
+@media only screen and (max-width: 800px) {
+  .MnW {
+    width: 100%;
+    justify-content: space-around;
+  }
+  .Topcont {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .datecaps {
+    flex: 0;
+
+    padding-left: 0px;
+    padding-right: 0px;
+    width: 95%;
+  }
+  .UrnCaps {
+    width: 90%;
+    padding: 0px;
+  }
+  .Topcont {
+    font-size: 15px;
+  }
+  .nextW {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
 }
 </style>
 
@@ -442,6 +615,7 @@ export default {
       Hours: 0,
       Minutes: 0,
       Notes: "",
+      debit: 1,
     };
   },
   created() {
@@ -465,7 +639,7 @@ export default {
           .then((response) => response.json())
           .then((result) => {
             this.time = result;
-
+            console.log(this.time);
             this.amountonhours = [];
             this.amountonminutes = [];
 
@@ -650,6 +824,9 @@ export default {
       this.chosenproject = title;
       this.chosenid = id;
     },
+    test() {
+      console.log(this.debit);
+    },
     addTime() {
       let addtimedata = {
         projectid: this.chosenid,
@@ -661,11 +838,96 @@ export default {
         minuter: this.Minutes,
         datepicked: new Date(this.picked).getTime(),
         fatherid: this.chosenid,
+        debit: this.debit,
       };
       this.socketInstance.emit("time", addtimedata);
       this.minuter = 0;
       this.timmar = 0;
-      location.reload();
+      const requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({ user: this.logged }),
+      };
+      fetch("https://flexn.se:3000/loggedin", requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.length == 0) {
+            location.replace("https://flexnet.se/#/");
+          }
+        });
+      fetch("https://flexn.se:3000/workernav", requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          this.loggedin = result[0];
+          this.loggedstatus = this.loggedin.Status;
+
+          fetch("https://flexn.se:3000/mytime", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+              this.time = result;
+              console.log(this.time);
+              this.amountonhours = [];
+              this.amountonminutes = [];
+
+              this.picked = moment(
+                moment().add(this.incrementday, "d")._d
+              ).format("YYYY-MM-DD");
+              this.SunDate = moment(moment().day(this.Sun)._d).format("DD/MM");
+              this.MonDate = moment(moment().day(this.Mon)._d).format("DD/MM");
+              this.TueDate = moment(moment().day(this.Tue)._d).format("DD/MM");
+              this.WedDate = moment(moment().day(this.Wed)._d).format("DD/MM");
+              this.ThuDate = moment(moment().day(this.Thu)._d).format("DD/MM");
+              this.FriDate = moment(moment().day(this.Fri)._d).format("DD/MM");
+              this.SatDate = moment(moment().day(this.Sat)._d).format("DD/MM");
+              this.datetime = this.time.filter(
+                (result) =>
+                  new Date(parseInt(result.Datum)).getFullYear() +
+                    "" +
+                    new Date(parseInt(result.Datum)).getMonth() +
+                    "" +
+                    new Date(parseInt(result.Datum)).getDate() ==
+                  new Date(this.picked).getFullYear() +
+                    "" +
+                    new Date(this.picked).getMonth() +
+                    "" +
+                    new Date(this.picked).getDate()
+              );
+              for (this.i = 0; this.datetime.length > this.i; this.i++) {
+                this.amountonhours.push(this.datetime[this.i].Hours);
+
+                this.amountonminutes.push(this.datetime[this.i].Minutes);
+              }
+              this.amountonhours = this.amountonhours.reduce(
+                (a, b) => a + b,
+                0
+              );
+              this.amountonminutes = Math.floor(
+                this.amountonminutes.reduce((a, b) => a + b, 0) / 60
+              );
+            });
+
+          this.socketInstance = io("https://flexn.se:3000/");
+
+          this.socketInstance.on("time:received", (timedata) => {
+            this.time = timedata;
+          });
+
+          this.socketInstance.on("data:received", (projectdata) => {
+            this.project = projectdata;
+            if (this.loggedstatus == "Admin") {
+              this.project = projectdata;
+            } else {
+              this.project = projectdata.filter(
+                (result) => result.Authorstatus == this.loggedstatus
+              );
+            }
+          });
+        });
     },
     deleteTime(id, minuter, hours, fatherid) {
       let dtimedata = {
@@ -674,7 +936,86 @@ export default {
         hours: hours,
         fatherid: fatherid,
       };
-      this.socketInstance.emit("delete:time", dtimedata);
+
+      this.socketInstance.emit("delet:time", dtimedata);
+      const requestOptions = {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({ user: this.logged }),
+      };
+      fetch("https://flexn.se:3000/workernav", requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          this.loggedin = result[0];
+          this.loggedstatus = this.loggedin.Status;
+
+          fetch("https://flexn.se:3000/mytime", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+              this.time = result;
+              console.log(this.time);
+              this.amountonhours = [];
+              this.amountonminutes = [];
+
+              this.picked = moment(
+                moment().add(this.incrementday, "d")._d
+              ).format("YYYY-MM-DD");
+              this.SunDate = moment(moment().day(this.Sun)._d).format("DD/MM");
+              this.MonDate = moment(moment().day(this.Mon)._d).format("DD/MM");
+              this.TueDate = moment(moment().day(this.Tue)._d).format("DD/MM");
+              this.WedDate = moment(moment().day(this.Wed)._d).format("DD/MM");
+              this.ThuDate = moment(moment().day(this.Thu)._d).format("DD/MM");
+              this.FriDate = moment(moment().day(this.Fri)._d).format("DD/MM");
+              this.SatDate = moment(moment().day(this.Sat)._d).format("DD/MM");
+              this.datetime = this.time.filter(
+                (result) =>
+                  new Date(parseInt(result.Datum)).getFullYear() +
+                    "" +
+                    new Date(parseInt(result.Datum)).getMonth() +
+                    "" +
+                    new Date(parseInt(result.Datum)).getDate() ==
+                  new Date(this.picked).getFullYear() +
+                    "" +
+                    new Date(this.picked).getMonth() +
+                    "" +
+                    new Date(this.picked).getDate()
+              );
+              for (this.i = 0; this.datetime.length > this.i; this.i++) {
+                this.amountonhours.push(this.datetime[this.i].Hours);
+
+                this.amountonminutes.push(this.datetime[this.i].Minutes);
+              }
+              this.amountonhours = this.amountonhours.reduce(
+                (a, b) => a + b,
+                0
+              );
+              this.amountonminutes = Math.floor(
+                this.amountonminutes.reduce((a, b) => a + b, 0) / 60
+              );
+            });
+
+          this.socketInstance = io("https://flexn.se:3000/");
+
+          this.socketInstance.on("time:received", (timedata) => {
+            this.time = timedata;
+          });
+
+          this.socketInstance.on("data:received", (projectdata) => {
+            this.project = projectdata;
+            if (this.loggedstatus == "Admin") {
+              this.project = projectdata;
+            } else {
+              this.project = projectdata.filter(
+                (result) => result.Authorstatus == this.loggedstatus
+              );
+            }
+          });
+        });
     },
   },
 };
