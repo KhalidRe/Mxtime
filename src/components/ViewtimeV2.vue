@@ -116,6 +116,37 @@
   </div>
 </template>
 <style scoped>
+#debited {
+  width: 100px;
+}
+@media only screen and (max-width: 650px) {
+  .topcont {
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .inputsflex {
+    width: 30%;
+    margin: 0px;
+    display: grid !important;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+  }
+  #debited {
+    width: 100%;
+    font-size: 10px;
+    font-weight: 400;
+  }
+  th {
+    padding: 0px 0px !important;
+    text-align: left;
+    font-weight: 600 !important;
+    font-size: 10px !important;
+    color: rgb(100, 100, 100);
+    text-transform: uppercase;
+  }
+}
 .debinf {
   font-size: 8px;
 }
@@ -406,23 +437,39 @@ export default {
       },
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://flexn.se:3000/loggedin", requestOptions)
+    fetch("https://flexn.se:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        this.userstatus = result[0].Status;
+        this.loggedin = result[0];
+        const searchnano = {
+          method: "POST",
 
-        if (this.userstatus === "Admin") {
-          fetch("https://flexn.se:3000/alltime", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-              this.time = result;
-            });
-          fetch("https://flexn.se:3000/getusers")
-            .then((response) => response.json())
-            .then((result) => {
-              this.users = result;
-            });
-        }
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+
+          body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
+        };
+
+        fetch("https://flexn.se:3000/loggedin", requestOptions)
+          .then((response) => response.json())
+          .then((result) => {
+            this.userstatus = result[0].Status;
+
+            if (this.userstatus === "Admin") {
+              fetch("https://flexn.se:3000/alltime", searchnano)
+                .then((response) => response.json())
+                .then((result) => {
+                  this.time = result;
+                });
+              fetch("https://flexn.se:3000/getusers")
+                .then((response) => response.json())
+                .then((result) => {
+                  this.users = result;
+                });
+            }
+          });
       });
   },
   methods: {
@@ -436,17 +483,17 @@ export default {
     filterthatshit() {
       this.startholder = new Date(this.start).getTime();
       this.endholder = new Date(this.end).getTime();
-      const requestOptions = {
+      const searchnano = {
         method: "POST",
-        mode: "cors",
+
         headers: {
-          Accept: "application/json",
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
+          Accept: "application/json",
         },
-        body: JSON.stringify({ user: this.logged }),
+
+        body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
       };
-      fetch("https://flexn.se:3000/alltime", requestOptions)
+      fetch("https://flexn.se:3000/alltime", searchnano)
         .then((response) => response.json())
         .then((result) => {
           this.time = result;

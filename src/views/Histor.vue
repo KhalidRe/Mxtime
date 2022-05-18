@@ -113,28 +113,45 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
+
     fetch("https://flexn.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         if (result.length == 0) {
           location.replace("https://flexnet.se/#/");
         }
-        if (result.length > 0) {
-          const requestOptionsget = {
-            method: "GET",
-            mode: "cors",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              "Access-Control-Allow-Origin": "*",
-            },
-          };
-          fetch("https://flexn.se:3000/getarkiv", requestOptionsget)
-            .then((response) => response.json())
-            .then((result) => {
-              this.arkiv = result;
-            });
-        }
+        const requestOptions = {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+
+          body: JSON.stringify({ user: this.logged }),
+        };
+        fetch("https://flexn.se:3000/workernav", requestOptions)
+          .then((response) => response.json())
+          .then((result) => {
+            this.loggedin = result[0];
+            const searchnano = {
+              method: "POST",
+
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+
+              body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
+            };
+            if (result.length > 0) {
+              fetch("https://flexn.se:3000/getarkiv", searchnano)
+                .then((response) => response.json())
+                .then((result) => {
+                  this.arkiv = result;
+                });
+            }
+          });
       });
   },
 };

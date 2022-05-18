@@ -451,8 +451,17 @@ export default {
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
+        const searchnano = {
+          method: "POST",
 
-        fetch("https://flexn.se:3000/getusers")
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+
+          body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
+        };
+        fetch("https://flexn.se:3000/getusers", searchnano)
           .then((response) => response.json())
           .then((result) => {
             this.user = result;
@@ -476,6 +485,7 @@ export default {
           selected.push(parseInt(chks[i].value));
         }
       }
+
       const postdata = {
         title: this.title.replace(/'/g, ``),
         author: this.$refs.author.value,
@@ -489,6 +499,7 @@ export default {
         Authorstatus: this.loggedin.Status,
         deltag: selected,
         Authorid: this.loggedin.id,
+        authornanoid: this.loggedin.nanoid,
       };
 
       this.socketInstance.emit("post", postdata);

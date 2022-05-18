@@ -1548,7 +1548,7 @@ import ding from "../assets/soundeffect/ding.mp3";
 import pop from "../assets/soundeffect/pop.mp3";
 export default {
   components: { Postit, Workernav, RadialProgressBar, Minitrello },
-
+  //
   data() {
     return {
       audioSources: ["assets/soundeffect/water.mp3"],
@@ -1610,6 +1610,7 @@ export default {
       myfilter: [],
       loggedin: [],
       findex: 0,
+      ok: "hej",
     };
   },
 
@@ -1642,7 +1643,17 @@ export default {
         this.loggedstatus = result[0].Status;
 
         if (result.length > 0) {
-          fetch("https://flexn.se:3000/getusers")
+          const searchnano = {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+
+            body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
+          };
+          fetch("https://flexn.se:3000/getusers", searchnano)
             .then((response) => response.json())
             .then((result) => {
               this.user = result;
@@ -1677,6 +1688,10 @@ export default {
 
             }); */
           this.socketInstance = io("https://flexn.se:3000/");
+          this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
+          if (this.loggedin.nanoid == undefined) {
+            window.location.reload();
+          }
           this.socketInstance.on("data:received", (projectdata) => {
             if (this.loggedstatus == "Admin") {
               this.project = projectdata;
@@ -1752,6 +1767,7 @@ export default {
         belopp: this.belopp,
         fakturerat: this.fakturerat,
         deltagare: this.arkivworkers,
+        authornanoid: this.loggedin.nanoid,
       };
       this.socketInstance.emit("arkiv", arkivdata);
       swal({

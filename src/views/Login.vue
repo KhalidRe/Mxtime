@@ -76,7 +76,7 @@ export default {
     };
   },
   created() {
-    this.someValue = "";
+    // this.someValue = "";
   },
 
   computed: {

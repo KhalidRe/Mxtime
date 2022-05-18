@@ -48,6 +48,61 @@
             v-bind:class="{ innerOnShown: picked !== undefined }"
           >
             <h3>{{ picked }}</h3>
+            <div class="LSVS">
+              <div class="db">
+                <label class="container"
+                  ><input
+                    ref="input"
+                    @click="chosenproject = 'Ledig'"
+                    id="Ledig"
+                    type="radio"
+                    value="1"
+                    class="deltagcheckbox"
+                    name="LSVS"
+                  /><label for="Ledig" class="checkmark"
+                    ><div>Ledig</div></label
+                  ></label
+                ><label class="container"
+                  ><input
+                    ref="input"
+                    @click="chosenproject = 'Semester'"
+                    id="Semester"
+                    type="radio"
+                    value="0"
+                    class="deltagcheckbox"
+                    name="LSVS"
+                  /><label for="Semester" class="checkmark"
+                    ><div>Semester</div></label
+                  ></label
+                >
+                <label class="container"
+                  ><input
+                    ref="input"
+                    @click="chosenproject = 'VAB'"
+                    id="VAB"
+                    type="radio"
+                    value="1"
+                    class="deltagcheckbox"
+                    name="LSVS"
+                  /><label for="VAB" class="checkmark"
+                    ><div>VAB</div></label
+                  ></label
+                >
+                <label class="container"
+                  ><input
+                    ref="input"
+                    @click="chosenproject = 'Sjuk'"
+                    id="Sjuk"
+                    type="radio"
+                    value="1"
+                    class="deltagcheckbox"
+                    name="LSVS"
+                  /><label for="Sjuk" class="checkmark"
+                    ><div>Sjuk</div></label
+                  ></label
+                >
+              </div>
+            </div>
             <div class="projectcaps">
               <div>PROJEKT:</div>
               <dropdown-menu
@@ -186,7 +241,7 @@
               </div>
 
               <div class="urntimetime">
-                {{ biden.Hours + Math.floor(biden.Minutes / 60) }}h
+                {{ biden.Hours + parseFloat((biden.Minutes / 60).toFixed(1)) }}h
               </div>
               <span
                 @click="
@@ -210,6 +265,9 @@
   </div>
 </template>
 <style scoped>
+.LSVS {
+  margin: 20px;
+}
 .debinf {
   font-size: 8px;
 }
@@ -319,6 +377,7 @@
   display: flex;
   align-items: right;
   text-align: right;
+  font-size: 12px;
 }
 .urntimetime {
   flex: 1;
@@ -580,6 +639,7 @@ import Usermetrics from "../components/Usermetrics.vue";
 import moment from "moment";
 import RadialProgressBar from "vue-radial-progress";
 import io from "socket.io-client";
+import $ from "jquery";
 
 export default {
   components: { AddtimeN, Usermetrics, DropdownMenu, RadialProgressBar },
@@ -594,6 +654,10 @@ export default {
       datetime: "s",
       amountonhours: [],
       amountonminutes: [],
+      Ledig: false,
+      Sjuk: false,
+      VAB: false,
+      Semester: false,
       Thu: 4,
       Fri: 5,
       Sat: 6,
@@ -616,6 +680,7 @@ export default {
       Minutes: 0,
       Notes: "",
       debit: 1,
+      toltip: false,
     };
   },
   created() {
@@ -634,6 +699,7 @@ export default {
       .then((result) => {
         this.loggedin = result[0];
         this.loggedstatus = this.loggedin.Status;
+        console.log(this.loggedstatus);
 
         fetch("https://flexn.se:3000/mytime", requestOptions)
           .then((response) => response.json())
@@ -678,7 +744,10 @@ export default {
           });
 
         this.socketInstance = io("https://flexn.se:3000/");
-
+        this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
+        if (this.loggedin.nanoid == undefined) {
+          window.location.reload();
+        }
         this.socketInstance.on("time:received", (timedata) => {
           this.time = timedata;
         });
@@ -823,6 +892,7 @@ export default {
     dataPrimer(id, title) {
       this.chosenproject = title;
       this.chosenid = id;
+      this.$refs.input.ariaChecked = false;
     },
     test() {
       console.log(this.debit);
@@ -839,10 +909,11 @@ export default {
         datepicked: new Date(this.picked).getTime(),
         fatherid: this.chosenid,
         debit: this.debit,
+        nanoid: this.loggedin.nanoid,
       };
+      console.log(addtimedata);
       this.socketInstance.emit("time", addtimedata);
-      this.minuter = 0;
-      this.timmar = 0;
+      window.location.reload();
       const requestOptions = {
         method: "POST",
         mode: "cors",
@@ -929,6 +1000,17 @@ export default {
           });
         });
     },
+    ledig() {
+      if (this.Ledig == true) {
+        this.chosenproject = "Ledig";
+      }
+      if (this.Semester == true) {
+        this.chosenproject = "Semester";
+      }
+      if (this.VAB == true) {
+        this.chosenproject = "VAB";
+      }
+    },
     deleteTime(id, minuter, hours, fatherid) {
       let dtimedata = {
         id: id,
@@ -938,6 +1020,7 @@ export default {
       };
 
       this.socketInstance.emit("delet:time", dtimedata);
+      window.location.reload();
       const requestOptions = {
         method: "POST",
         mode: "cors",
@@ -1017,6 +1100,23 @@ export default {
           });
         });
     },
+  },
+  mounted() {
+    $("input:checkbox").on("click", function () {
+      // in the handler, 'this' refers to the box clicked on
+      var $box = $(this);
+      if ($box.is(":checked")) {
+        // the name of the box is retrieved using the .attr() method
+        // as it is assumed and expected to be immutable
+        var group = "input:checkbox[name='" + $box.attr("name") + "']";
+        // the checked state of the group/box on the other hand will change
+        // and the current value is retrieved using .prop() method
+        $(group).prop("checked", false);
+        $box.prop("checked", true);
+      } else {
+        $box.prop("checked", false);
+      }
+    });
   },
 };
 </script>

@@ -432,6 +432,7 @@ export default {
       second: {},
       filteredArray: [],
       datacollection: null,
+      loggedin: [],
     };
   },
   created() {
@@ -458,26 +459,42 @@ export default {
     fetch("https://flexn.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
+        this.loggedin = result[0];
         if (result.length == 0) {
           location.replace("https//flexnet.se/#/");
         }
         if (result.length > 0) {
-          fetch("https://flexn.se:3000/getusers")
+          fetch("https://flexn.se:3000/workernav", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-              this.user = result;
-            });
+              this.loggedin = result[0];
+              const searchnano = {
+                method: "POST",
 
-          fetch("https://flexn.se:3000/myprojects", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-              this.myprojects = result;
-            });
+                headers: {
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
 
-          fetch("https://flexn.se:3000/getarkiv")
-            .then((response) => response.json())
-            .then((result) => {
-              this.arkivs = result;
+                body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
+              };
+              fetch("https://flexn.se:3000/getusers", searchnano)
+                .then((response) => response.json())
+                .then((result) => {
+                  this.user = result;
+                });
+
+              fetch("https://flexn.se:3000/myprojects", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                  this.myprojects = result;
+                });
+
+              fetch("https://flexn.se:3000/getarkiv")
+                .then((response) => response.json())
+                .then((result) => {
+                  this.arkivs = result;
+                });
             });
         }
       });

@@ -1540,6 +1540,7 @@ export default {
   directives: {
     dragscroll: dragscroll,
   },
+  //
   data() {
     return {
       logged: this.$store.state.someValue,
@@ -1595,10 +1596,21 @@ export default {
       countershown: null,
       progress: "0",
       priority: "0",
+      loggedin: [],
     };
   },
   created() {
     const requestOptions = {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+
+      body: JSON.stringify({ user: this.logged }),
+    };
+    const auth = {
       method: "POST",
 
       headers: {
@@ -1615,56 +1627,76 @@ export default {
           location.replace("https://flexnet.se/#/");
         }
       });
+
     fetch("https://flexn.se:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
+        const searchnano = {
+          method: "POST",
 
-        fetch("https://flexn.se:3000/getusers")
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+
+          body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
+        };
+
+        fetch("https://flexn.se:3000/getusers", searchnano)
           .then((response) => response.json())
           .then((result) => {
             this.user = result;
             this.deltagare = this.user;
           });
+
+        console.log(this.loggedin);
+        this.socketInstance = io("https://flexn.se:3000/");
+        this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
+        if (this.loggedin.nanoid == undefined) {
+          window.location.reload();
+        }
+        this.socketInstance.on("planner:received", (plannerarr) => {
+          if (plannerarr.length > 0) {
+            this.plan = plannerarr;
+            this.x = this.plan[0].id;
+          } else {
+            this.plan = [];
+          }
+        });
+
+        this.socketInstance.on("bucket:received", (bucketarr) => {
+          this.bucket = bucketarr;
+          this.bucketarray = this.bucket.filter(
+            (result) => result.fatherid == this.x
+          );
+        });
+        this.socketInstance.on("task:received", (taskarr) => {
+          this.task = taskarr;
+          this.workersassignd = [];
+          this.sparr = [];
+          this.forinpw = 0;
+        });
+
+        this.socketInstance.on("worker:received", (workerarr) => {
+          this.workersassignd = [];
+          this.workersassignd = workerarr;
+          this.sparr = [];
+          this.forinpw = 0;
+
+          for (
+            this.forinpw = 0;
+            this.task.length > this.forinpw;
+            this.forinpw++
+          ) {
+            this.sparr.push(
+              this.workersassignd.filter(
+                (result) => result.taskid == this.task[this.forinpw].id
+              )
+            );
+          }
+        });
       });
-
-    this.socketInstance = io("https://flexn.se:3000/");
-
-    this.socketInstance.on("planner:received", (plannerarr) => {
-      if (plannerarr.length > 0) {
-        this.plan = plannerarr;
-        this.x = this.plan[0].id;
-      } else {
-        this.plan = [];
-      }
-    });
-    this.socketInstance.on("bucket:received", (bucketarr) => {
-      this.bucket = bucketarr;
-      this.bucketarray = this.bucket.filter(
-        (result) => result.fatherid == this.x
-      );
-    });
-    this.socketInstance.on("task:received", (taskarr) => {
-      this.task = taskarr;
-      this.workersassignd = [];
-      this.sparr = [];
-      this.forinpw = 0;
-    });
-
-    this.socketInstance.on("worker:received", (workerarr) => {
-      this.workersassignd = [];
-      this.workersassignd = workerarr;
-      this.sparr = [];
-      this.forinpw = 0;
-
-      for (this.forinpw = 0; this.task.length > this.forinpw; this.forinpw++) {
-        this.sparr.push(
-          this.workersassignd.filter(
-            (result) => result.taskid == this.task[this.forinpw].id
-          )
-        );
-      }
-    });
   },
   methods: {
     createPlan() {
