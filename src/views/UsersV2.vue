@@ -490,7 +490,7 @@ export default {
                   this.myprojects = result;
                 });
 
-              fetch("https://flexn.se:3000/getarkiv")
+              fetch("https://flexn.se:3000/getarkiv", searchnano)
                 .then((response) => response.json())
                 .then((result) => {
                   this.arkivs = result;

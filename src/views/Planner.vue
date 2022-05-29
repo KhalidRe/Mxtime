@@ -133,8 +133,8 @@
             <div class="pp">
               <label for="pet-select">progress</label>
               <select
-                @change="modSend()"
                 v-model="progress"
+                @change="modSend()"
                 :selected="progress"
                 name="pets"
                 id="pet-select"
@@ -181,8 +181,8 @@
           <div class="notecaps">
             <div>notes</div>
             <textarea
-              @change="modSend()"
               v-model="note"
+              @change="modSend()"
               name="textarea"
               id=""
               cols="30"
@@ -498,7 +498,10 @@
                           (openMod = !openMod),
                             (tester = tasks.title),
                             (time1 = tasks.enddate),
-                            (time2 = tasks.startdate);
+                            (time2 = tasks.startdate),
+                            (progress = tasks.progress),
+                            (priority = tasks.priority),
+                            (note = tasks.notes);
                           modTask(index, tasks.id);
                         "
                         class="tti"
@@ -666,7 +669,10 @@
                             (openMod = !openMod),
                               (tester = tasks.title),
                               (time1 = tasks.enddate),
-                              (time2 = tasks.startdate);
+                              (time2 = tasks.startdate),
+                              (progress = tasks.progress),
+                              (priority = tasks.priority),
+                              (note = tasks.notes);
                             modTask(index, tasks.id);
                           "
                           class="tti tticomplete"
@@ -1703,6 +1709,7 @@ export default {
       const plandata = {
         plantitle: this.plantitle.replace(/'/g, ``),
         plancolor: Math.floor(Math.random() * 16777215).toString(16),
+        nanoid: this.loggedin.nanoid,
       };
 
       this.socketInstance.emit("planner", plandata);
@@ -1787,6 +1794,7 @@ export default {
       }, 100);
     },
     modTask(x, y) {
+      console.log(x, y);
       this.selectedtaskid = y;
       this.selectedtaskindex = x;
       this.selectedusers = [];
@@ -1859,11 +1867,13 @@ export default {
       this.socketInstance.emit("notcompletetask", notcompletetaskdata);
     },
     modSend(id) {
+      console.log(id);
+      console.log(modtaskdata);
       let modtaskdata = {
-        id: this.selected,
+        id: this.selectedtaskid,
         tasktitle: this.tester,
-        startdate: this.time1,
-        enddate: this.time2,
+        startdate: this.time2,
+        enddate: this.time1,
         progress: this.progress,
         priority: this.priority,
         note: this.note,

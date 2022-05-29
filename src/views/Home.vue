@@ -1,8 +1,26 @@
 <template>
   <div id="Home">
     <Workernav />
+    <div class="filterbtncont">
+      <div
+        class="filterbtn"
+        @click="(filterwhereiam = !filterwhereiam), testfilter()"
+        :class="{ filterbtnactive: filterwhereiam }"
+      >
+        <div class="filterball" :class="{ filterballactive: filterwhereiam }">
+          <div
+            class="lightball"
+            :class="{ lightballactive: filterwhereiam }"
+          ></div>
+        </div>
+      </div>
+    </div>
     <div class="Grid">
-      <div class="Card" v-for="(projects, index) in project" :key="projects.id">
+      <div
+        class="Card"
+        v-for="(projects, index) in project"
+        :key="projects.index"
+      >
         <div class="tabletop">
           <span
             style="color: blue; float: left"
@@ -642,6 +660,81 @@
   </div>
 </template>
 <style scoped>
+.filterbtncont {
+  display: flex;
+  width: 100%;
+  height: 50px;
+  justify-content: flex-end;
+  align-items: center;
+}
+.filterbtn {
+  width: 70px;
+  height: 25px;
+  border-radius: 50px;
+  background: rgb(97, 103, 110);
+
+  margin-right: 10%;
+  margin-top: 7px;
+  box-shadow: inset 0px 0px 5px 1px rgba(42, 82, 72, 0.596);
+  display: flex;
+
+  transition: 0.5s;
+}
+.filterbtnactive {
+  width: 70px;
+  height: 25px;
+  border-radius: 50px;
+  background: rgb(113, 198, 255);
+
+  margin-right: 10%;
+  margin-top: 7px;
+  box-shadow: inset 0px 0px 5px 1px rgba(42, 82, 72, 0.596);
+  display: flex;
+
+  transition: 0.5s;
+}
+.filterball {
+  width: 30px;
+  height: 30px;
+  background: rgb(72, 138, 236);
+  border-radius: 30px;
+  box-shadow: #000000 0px 0px 5px 1px;
+  margin-top: -2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 0px;
+  transition: 0.5s;
+}
+.filterballactive {
+  width: 30px;
+  height: 30px;
+  background: rgb(72, 138, 236);
+  border-radius: 30px;
+  box-shadow: #000000 0px 0px 5px 1px;
+  margin-top: -2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 40px;
+  transition: 0.5s;
+}
+.lightball {
+  width: 20px;
+  height: 20px;
+
+  border-radius: 15px;
+  background: rgb(72, 138, 236);
+  box-shadow: inset rgb(54, 99, 168) 0px 0px 5px 5px;
+}
+.lightballactive {
+  width: 20px;
+  height: 20px;
+
+  border-radius: 15px;
+  background: rgb(73, 245, 101);
+  box-shadow: inset rgba(54, 168, 88, 0.349) 0px 0px 5px 5px;
+}
 .trellochecked {
   box-shadow: inset 0px 0px 10px 5px rgb(73, 230, 73);
   background-color: rgb(133, 250, 133);
@@ -1148,7 +1241,9 @@ input[type="radio"]:after {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   width: 80vw;
+
   margin: 30px;
+  margin-top: 0px;
   grid-gap: 20px;
 }
 @import url("https://fonts.googleapis.com/css2?family=Scada&family=Sen:wght@700&family=Ubuntu:ital@0;1&display=swap");
@@ -1611,6 +1706,12 @@ export default {
       loggedin: [],
       findex: 0,
       ok: "hej",
+      testarr: [],
+      filtredproject: [],
+      filterby: "",
+      mycreated: [],
+      filterwhereiam: false,
+      projectplaceholder: [],
     };
   },
 
@@ -1695,8 +1796,12 @@ export default {
           this.socketInstance.on("data:received", (projectdata) => {
             if (this.loggedstatus == "Admin") {
               this.project = projectdata;
+              this.projectplaceholder = projectdata;
             } else {
               this.project = projectdata.filter(
+                (result) => result.Authorstatus == this.loggedstatus
+              );
+              this.projectplaceholder = projectdata.filter(
                 (result) => result.Authorstatus == this.loggedstatus
               );
             }
@@ -1754,6 +1859,64 @@ export default {
     see: function () {},
   },
   methods: {
+    testfilter() {
+      this.testarr = [];
+      this.filtredproject = [];
+      if (this.filterwhereiam == true) {
+        this.mycreated = this.project.filter(
+          (result) => result.Authorid == this.loggedin.id
+        );
+
+        for (this.findex = 0; this.sparr.length > this.findex; this.findex++) {
+          this.testarr.push(
+            this.sparr[this.findex].find(
+              (results) => results.workerid == this.loggedin.id
+            )
+          );
+        }
+
+        this.testarr = this.testarr.filter((element) => {
+          return element !== undefined;
+        });
+        for (this.findex = 0; this.testarr.length > this.findex; this.findex++)
+          this.filtredproject.push(
+            this.project.find(
+              (result) => result.id == this.testarr[this.findex].projectid
+            )
+          );
+        this.filtredproject = this.filtredproject.concat(this.mycreated);
+
+        this.project = this.filtredproject;
+        this.sparr = [];
+        for (
+          this.forinpw = 0;
+          this.project.length > this.forinpw;
+          this.forinpw++
+        ) {
+          this.sparr.push(
+            this.workersassignd.filter(
+              (result) => result.projectid == this.project[this.forinpw].id
+            )
+          );
+        }
+      }
+      if (this.filterwhereiam == false) {
+        this.project = this.projectplaceholder;
+        this.sparr = [];
+        for (
+          this.forinpw = 0;
+          this.project.length > this.forinpw;
+          this.forinpw++
+        ) {
+          this.sparr.push(
+            this.workersassignd.filter(
+              (result) => result.projectid == this.project[this.forinpw].id
+            )
+          );
+        }
+      }
+    },
+
     toVictory() {
       sendArkiv();
     },
@@ -1836,6 +1999,7 @@ export default {
         }
       }
     },
+
     Remove(id) {
       console.log(id);
       this.z = id - 1;

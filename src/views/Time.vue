@@ -51,53 +51,37 @@
             <div class="LSVS">
               <div class="db">
                 <label class="container"
-                  ><input
-                    ref="input"
-                    @click="chosenproject = 'Ledig'"
-                    id="Ledig"
-                    type="radio"
-                    value="1"
-                    class="deltagcheckbox"
-                    name="LSVS"
-                  /><label for="Ledig" class="checkmark"
+                  ><label
+                    @click="(chosenproject = 'Ledig'), (chosenid = 0)"
+                    v-if="chosenproject !== 'Ledig'"
+                    for="Ledig"
+                    class="checkmark"
                     ><div>Ledig</div></label
                   ></label
                 ><label class="container"
-                  ><input
-                    ref="input"
-                    @click="chosenproject = 'Semester'"
-                    id="Semester"
-                    type="radio"
-                    value="0"
-                    class="deltagcheckbox"
-                    name="LSVS"
-                  /><label for="Semester" class="checkmark"
+                  ><label
+                    @click="(chosenproject = 'Semester'), (chosenid = 0)"
+                    v-if="chosenproject !== 'Semester'"
+                    for="Semester"
+                    class="checkmark"
                     ><div>Semester</div></label
                   ></label
                 >
                 <label class="container"
-                  ><input
-                    ref="input"
-                    @click="chosenproject = 'VAB'"
-                    id="VAB"
-                    type="radio"
-                    value="1"
-                    class="deltagcheckbox"
-                    name="LSVS"
-                  /><label for="VAB" class="checkmark"
+                  ><label
+                    @click="(chosenproject = 'VAB'), (chosenid = 0)"
+                    v-if="chosenproject !== 'VAB'"
+                    for="VAB"
+                    class="checkmark"
                     ><div>VAB</div></label
                   ></label
                 >
                 <label class="container"
-                  ><input
-                    ref="input"
-                    @click="chosenproject = 'Sjuk'"
-                    id="Sjuk"
-                    type="radio"
-                    value="1"
-                    class="deltagcheckbox"
-                    name="LSVS"
-                  /><label for="Sjuk" class="checkmark"
+                  ><label
+                    @click="(chosenproject = 'Sjuk'), (chosenid = 0)"
+                    v-if="chosenproject !== 'Sjuk'"
+                    for="Sjuk"
+                    class="checkmark"
                     ><div>Sjuk</div></label
                   ></label
                 >
@@ -265,6 +249,10 @@
   </div>
 </template>
 <style scoped>
+.dropper {
+  height: 250px !important;
+  overflow-y: scroll;
+}
 .LSVS {
   margin: 20px;
 }
@@ -892,7 +880,6 @@ export default {
     dataPrimer(id, title) {
       this.chosenproject = title;
       this.chosenid = id;
-      this.$refs.input.ariaChecked = false;
     },
     test() {
       console.log(this.debit);

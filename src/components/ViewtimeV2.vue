@@ -463,7 +463,7 @@ export default {
                 .then((result) => {
                   this.time = result;
                 });
-              fetch("https://flexn.se:3000/getusers")
+              fetch("https://flexn.se:3000/getusers", searchnano)
                 .then((response) => response.json())
                 .then((result) => {
                   this.users = result;
