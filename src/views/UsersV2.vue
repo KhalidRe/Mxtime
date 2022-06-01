@@ -93,6 +93,7 @@
     </div>
 
     <ViewtimeV2 />
+    <Viewtime />
   </div>
 </template>
 <style scoped>
@@ -409,12 +410,14 @@ import $ from "jquery";
 import Usermetrics from "../components/Usermetrics.vue";
 import Addtime from "../components/Addtime.vue";
 import ViewtimeV2 from "../components/ViewtimeV2.vue";
+import Viewtime from "../components/Viewtime.vue";
 export default {
   components: {
     Addtime,
     Usermetrics,
     Linechart,
     ViewtimeV2,
+    Viewtime,
   },
   data() {
     return {
@@ -433,6 +436,11 @@ export default {
       filteredArray: [],
       datacollection: null,
       loggedin: [],
+      ename: "",
+      eprofile: "",
+      eactive: "",
+      ecreated: "",
+      ecompleted: "",
     };
   },
   created() {
@@ -502,17 +510,19 @@ export default {
   methods: {
     View(id) {
       this.z = id;
-      this.x = id - 1;
-
-      this.ename = this.user[this.x].Name;
-      this.eprofile = this.user[this.x].Profile;
-      this.eactive = this.user[this.x].Active;
-      this.ecreated = this.user[this.x].Created;
-      this.ecompleted = this.user[this.x].Completion;
+      this.x = id;
+      this.euser = this.user.filter((result) => result.id == this.x);
+      console.log(this.euser);
+      this.ename = this.euser[0].Name;
+      this.eprofile = this.euser[0].Profile;
+      this.eactive = this.euser[0].Active;
+      this.ecreated = this.euser[0].Created;
+      this.ecompleted = this.euser[0].Completion;
 
       this.chartdata = this.arkivs.filter(
-        (arkiv) => arkiv.Author == this.ename || arkiv.Workers == this.ename
+        (arkiv) => arkiv.Author == this.euser[0].Name
       );
+      console.log(this.chartdata);
 
       this.count = this.chartdata.map((item) => item.Datum);
 

@@ -1712,6 +1712,7 @@ export default {
       mycreated: [],
       filterwhereiam: false,
       projectplaceholder: [],
+      enanoid: "",
     };
   },
 
@@ -1930,7 +1931,7 @@ export default {
         belopp: this.belopp,
         fakturerat: this.fakturerat,
         deltagare: this.arkivworkers,
-        authornanoid: this.loggedin.nanoid,
+        authornanoid: this.enanoid,
       };
       this.socketInstance.emit("arkiv", arkivdata);
       swal({
@@ -1988,6 +1989,7 @@ export default {
       this.eprecentage = this.eproject.precentage;
       this.edate = this.eproject.Date;
       this.eworker = this.eproject.Workers;
+      this.enanoid = this.eproject.nanoid;
 
       if (index) {
         if (this.sparr[index].length > 0) {

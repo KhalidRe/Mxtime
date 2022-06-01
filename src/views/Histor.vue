@@ -7,7 +7,6 @@
           <tr class="trhead">
             <th>Projekt</th>
             <th>Skapare</th>
-            <th>Deltagare</th>
             <th>Datum</th>
             <th>Budget</th>
             <th>Belopp</th>
@@ -21,7 +20,6 @@
           <tr class="row" v-for="arkivs in arkiv" :key="arkivs.id">
             <td>{{ arkivs.Title }}</td>
             <td>{{ arkivs.Author }}</td>
-            <td>{{ arkivs.Workers }}</td>
             <td>{{ arkivs.Datum }}</td>
             <td>{{ arkivs.Budget }}(.kr)</td>
             <td>{{ arkivs.Belopp }}(.kr)</td>

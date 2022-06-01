@@ -1,35 +1,42 @@
 <template>
-  <div id="Viewtime" v-if="userstatus === 'Admin' || userstatus === 'Finanse'">
+  <div
+    id="ViewtimeV2"
+    v-if="userstatus !== 'Admin' || userstatus !== 'Finanse'"
+  >
     <section>
-      <h1>Admin view</h1>
-      <select
-        name="arbetare"
-        id="arbetare"
-        ref="arbetare"
-        v-model="selectedfilter"
-      >
-        <option value="alla" selected>Alla</option>
-        <option
-          v-for="usersindex in users"
-          :key="usersindex.id"
-          :value="usersindex.Name"
-          @
-        >
-          {{ usersindex.Name }}
-        </option>
-      </select>
-      <span
-        ><input type="date" name="Start" id="Start" v-model="start" ref="start"
-      /></span>
-      <span><input type="date" name="End" id="End" v-model="end" /></span>
+      <div class="topcont">
+        <h2>My Time</h2>
+        <div class="inputsflex">
+          <select
+            name="debited"
+            id="debited"
+            ref="debited"
+            v-model="debitfilter"
+          >
+            <option value="alla" selected>Debit/Ej</option>
+            <option value="1">Debit</option>
+            <option value="0">Ej Debit</option>
+          </select>
+          <span
+            ><input
+              type="date"
+              name="Start"
+              id="Start"
+              v-model="start"
+              ref="start"
+          /></span>
+          <span><input type="date" name="End" id="End" v-model="end" /></span>
 
-      <input type="submit" value="Filtrera" @click="filterthatshit()" />
+          <input type="submit" value="Filtrera" @click="filtertime()" />
+        </div>
+      </div>
+
       <div class="tbl-header">
         <table cellpadding="0" cellspacing="0" border="0">
           <thead>
             <tr>
               <th>Projekt</th>
-              <th>Skapare</th>
+              <th>Datum</th>
               <th>Timmar</th>
               <th>Minuter</th>
               <th>Beskrivning</th>
@@ -41,11 +48,22 @@
         <table cellpadding="0" cellspacing="0" border="0">
           <tbody>
             <tr class="row" v-for="times in time" :key="times.id">
-              <td>{{ times.Title }}</td>
-              <td>{{ times.Name }}</td>
+              <td>
+                {{ times.Title }}
+                <span class="debinf" v-if="times.debit == 1">(debit)</span>
+                <span class="debinf" v-if="times.debit == 0">(Ejdebit)</span>
+              </td>
+              <td>
+                {{ new Date(parseInt(times.Datum)).getFullYear() }}/{{
+                  new Date(parseInt(times.Datum)).getMonth() + 1
+                }}/{{ new Date(parseInt(times.Datum)).getDate() }}
+              </td>
               <td>{{ times.Hours }}</td>
               <td>{{ times.Minutes }}</td>
               <td>{{ times.Description }}</td>
+            </tr>
+            <tr class="totalsum">
+              <td>Totala Tid: {{ sum }}</td>
             </tr>
           </tbody>
         </table>
@@ -90,13 +108,67 @@
   </div>
 </template>
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Scada&family=Sen:wght@700&display=swap");
+.totalsum > td {
+  font-size: 18px;
+  font-weight: 800;
+}
+#debited {
+  width: 100px;
+}
+@media only screen and (max-width: 650px) {
+  .topcont {
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .inputsflex {
+    width: 30%;
+    margin: 0px;
+    display: grid !important;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+  }
+  #debited {
+    width: 100%;
+    font-size: 10px;
+    font-weight: 400;
+  }
+  th {
+    padding: 0px 0px !important;
+    text-align: left;
+    font-weight: 600 !important;
+    font-size: 10px !important;
+    color: rgb(100, 100, 100);
+    text-transform: uppercase;
+  }
+}
+.debinf {
+  font-size: 8px;
+}
+.inputsflex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 50px;
+  grid-gap: 10px;
+}
 .dflex {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   width: 55%;
   align-items: center;
+}
+h2 {
+  margin: 0;
+}
+.topcont {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+.section {
 }
 .noclick {
   position: absolute;
@@ -107,7 +179,7 @@
   z-index: 2;
 }
 .dwrite {
-  color: rgb(255, 164, 164);
+  color: rgb(0, 0, 0);
   font-size: 12px;
   text-align: left;
 }
@@ -149,10 +221,10 @@
   height: 20px;
 }
 .dsure {
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
 }
 .dangertext {
-  color: rgb(252, 97, 97);
+  color: rgb(3, 3, 3);
 }
 .danger {
   width: 100px;
@@ -195,25 +267,25 @@
   opacity: 0;
 }
 .Openoverlay {
-  background-color: rgb(79, 165, 79);
+  background-color: #ececec;
   height: 55px;
   width: 55px;
   border-radius: 100%;
   border: none;
   font-size: 50px;
   align-items: center;
-  color: white;
+  color: rgb(0, 0, 0);
   text-align: center;
   line-height: 50px;
 }
-#Viewtime {
+#ViewtimeV2 {
   width: 100%;
   margin-bottom: 50px;
 }
 
 h1 {
   font-size: 30px;
-  color: #fff;
+  color: rgb(0, 0, 0);
   text-transform: uppercase;
   font-weight: 300;
   text-align: center;
@@ -239,51 +311,52 @@ table {
 th {
   padding: 20px 15px;
   text-align: left;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 12px;
-  color: #fff;
+  color: rgb(100, 100, 100);
   text-transform: uppercase;
 }
 input[type="date"] {
   padding: 5px;
-  border-radius: 5px 5px 0px 0px;
-  border: none;
+  border-radius: 1px;
+  border: solid 1px #51515173;
 
   width: 100px;
   height: 27px;
-  background: linear-gradient(180deg, #6df983 0%, #40cf57 46.88%, #82ed93 100%);
+  background: #ececec;
 }
 td {
   padding: 15px;
   text-align: left;
   vertical-align: middle;
-  font-weight: 300;
+  font-weight: 600;
   font-size: 12px;
-  color: #fff;
+  color: rgb(85, 85, 85);
   border-bottom: solid 1px rgba(255, 255, 255, 0.1);
 }
 select {
-  border: none;
-  background: linear-gradient(180deg, #6df983 0%, #40cf57 46.88%, #82ed93 100%);
-  padding: 10px;
-  border-radius: 10px 10px 0px 0px;
+  border: solid 1px #5151517c;
+  background: #ececec;
+  width: 70px;
+  height: 39px;
+  border-radius: 1px;
   font-weight: bolder;
 }
 input[type="submit"] {
-  background: linear-gradient(180deg, #a0bff8 0%, #6d688a 46.88%, #28274b 100%);
-  border-radius: 5px 5px 0px 0px;
+  background: #1988c9;
+  border-radius: 5px;
+  color: white;
   border: none;
   width: 70px;
   height: 37px;
   font-weight: 700;
+  margin-left: 20px;
 }
 /* demo styles */
 
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
 body {
   background: -webkit-linear-gradient(left, #25c481, #25b7c4);
   background: linear-gradient(to right, #25c481, #25b7c4);
-  font-family: "Roboto", sans-serif;
 }
 section {
 }
@@ -295,18 +368,18 @@ section {
   clear: left;
   text-align: center;
   font-size: 10px;
-  font-family: arial;
-  color: #fff;
+
+  font-weight: 600;
+  color: rgb(0, 0, 0);
 }
 .made-with-love i {
-  font-style: normal;
   color: #f50057;
   font-size: 14px;
   position: relative;
   top: 2px;
 }
 .made-with-love a {
-  color: #fff;
+  color: rgb(0, 0, 0);
   text-decoration: none;
 }
 .made-with-love a:hover {
@@ -327,6 +400,7 @@ section {
 </style>
 <script>
 import Addtimeform from "@/components/Addtimeform.vue";
+import moment from "moment";
 export default {
   components: {
     Addtimeform,
@@ -345,6 +419,10 @@ export default {
       end: "",
       startholder: "",
       endholder: "getTime(this.end),",
+      debitfilter: "alla",
+      sum: 0,
+      i: 0,
+      subar: [],
     };
   },
 
@@ -359,23 +437,47 @@ export default {
       },
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://flexn.se:3000/loggedin", requestOptions)
+    fetch("https://flexn.se:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        this.userstatus = result[0].Status;
+        this.loggedin = result[0];
+        const searchnano = {
+          method: "POST",
 
-        if (this.userstatus === "Admin") {
-          fetch("https://flexn.se:3000/alltime", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-              this.time = result;
-            });
-          fetch("https://flexn.se:3000/getusers")
-            .then((response) => response.json())
-            .then((result) => {
-              this.users = result;
-            });
-        }
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+
+          body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
+        };
+
+        fetch("https://flexn.se:3000/loggedin", requestOptions)
+          .then((response) => response.json())
+          .then((result) => {
+            this.userstatus = result[0].Status;
+
+            fetch("https://flexn.se:3000/mytime", requestOptions)
+              .then((response) => response.json())
+              .then((result) => {
+                this.time = result;
+                this.subar = [];
+                for (this.i = 0; this.time.length > 0; this.i++) {
+                  this.subar.push(
+                    this.time[this.i].Hours +
+                      parseFloat((this.time[this.i].Minutes / 60).toFixed(1))
+                  );
+                  this.sum = parseFloat(
+                    this.subar.reduce((a, b) => a + b, 0)
+                  ).toFixed(1);
+                }
+              });
+            fetch("https://flexn.se:3000/getusers", searchnano)
+              .then((response) => response.json())
+              .then((result) => {
+                this.users = result;
+              });
+          });
       });
   },
   methods: {
@@ -386,7 +488,7 @@ export default {
     reloadPage() {
       setTimeout(window.location.reload(), 2000);
     },
-    filterthatshit() {
+    filtertime() {
       this.startholder = new Date(this.start).getTime();
       this.endholder = new Date(this.end).getTime();
       const requestOptions = {
@@ -399,7 +501,7 @@ export default {
         },
         body: JSON.stringify({ user: this.logged }),
       };
-      fetch("https://flexn.se:3000/alltime", requestOptions)
+      fetch("https://flexn.se:3000/mytime", requestOptions)
         .then((response) => response.json())
         .then((result) => {
           this.time = result;
@@ -412,10 +514,23 @@ export default {
             });
           }
 
-          if (this.selectedfilter !== "alla") {
+          if (this.debitfilter !== "alla") {
             this.time = this.time.filter((results) => {
-              return results.Name.includes(this.selectedfilter);
+              return results.debit == this.debitfilter;
             });
+          }
+          this.subar = [];
+          for (this.i = 0; this.time.length > 0; this.i++) {
+            this.subar.push(
+              this.time[this.i].Hours +
+                parseFloat((this.time[this.i].Minutes / 60).toFixed(1))
+            );
+            this.sum = parseFloat(
+              this.subar.reduce((a, b) => a + b, 0)
+            ).toFixed(1);
+          }
+          if (this.time.length == 0) {
+            this.sum = 0;
           }
         });
     },

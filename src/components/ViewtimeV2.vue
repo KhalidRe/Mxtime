@@ -42,7 +42,7 @@
               {{ usersindex.Name }}
             </option>
           </select>
-          <input type="submit" value="Filtrera" @click="filterthatshit()" />
+          <input type="submit" value="Filtrera" @click="filtertime()" />
         </div>
       </div>
 
@@ -72,6 +72,9 @@
               <td>{{ times.Hours }}</td>
               <td>{{ times.Minutes }}</td>
               <td>{{ times.Description }}</td>
+            </tr>
+            <tr class="totalsum">
+              <td>Totala Tid: {{ sum }}</td>
             </tr>
           </tbody>
         </table>
@@ -116,6 +119,10 @@
   </div>
 </template>
 <style scoped>
+.totalsum > td {
+  font-size: 18px;
+  font-weight: 800;
+}
 #debited {
   width: 100px;
 }
@@ -423,6 +430,9 @@ export default {
       startholder: "",
       endholder: "getTime(this.end),",
       debitfilter: "alla",
+      sum: 0,
+      i: 0,
+      subar: [],
     };
   },
 
@@ -462,6 +472,16 @@ export default {
                 .then((response) => response.json())
                 .then((result) => {
                   this.time = result;
+                  this.subar = [];
+                  for (this.i = 0; this.time.length > 0; this.i++) {
+                    this.subar.push(
+                      this.time[this.i].Hours +
+                        parseFloat((this.time[this.i].Minutes / 60).toFixed(1))
+                    );
+                    this.sum = parseFloat(
+                      this.subar.reduce((a, b) => a + b, 0)
+                    ).toFixed(1);
+                  }
                 });
               fetch("https://flexn.se:3000/getusers", searchnano)
                 .then((response) => response.json())
@@ -480,7 +500,7 @@ export default {
     reloadPage() {
       setTimeout(window.location.reload(), 2000);
     },
-    filterthatshit() {
+    filtertime() {
       this.startholder = new Date(this.start).getTime();
       this.endholder = new Date(this.end).getTime();
       const searchnano = {
@@ -515,6 +535,19 @@ export default {
             this.time = this.time.filter((results) => {
               return results.debit == this.debitfilter;
             });
+          }
+          this.subar = [];
+          for (this.i = 0; this.time.length > 0; this.i++) {
+            this.subar.push(
+              this.time[this.i].Hours +
+                parseFloat((this.time[this.i].Minutes / 60).toFixed(1))
+            );
+            this.sum = parseFloat(
+              this.subar.reduce((a, b) => a + b, 0)
+            ).toFixed(1);
+          }
+          if (this.time.length == 0) {
+            this.sum = 0;
           }
         });
     },
