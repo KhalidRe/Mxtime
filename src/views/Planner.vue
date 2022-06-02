@@ -1427,7 +1427,7 @@ footer {
   margin-bottom: 20px;
 }
 .planlist {
-  height: 74vh;
+  height: 100%;
   overflow-y: auto;
 }
 .planoptions {
