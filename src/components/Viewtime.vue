@@ -1,7 +1,7 @@
 <template>
   <div
     id="ViewtimeV2"
-    v-if="userstatus !== 'Admin' || userstatus !== 'Finanse'"
+    v-if="userstatus !== 'Admin' && userstatus !== 'Finanse'"
   >
     <section>
       <div class="topcont">
