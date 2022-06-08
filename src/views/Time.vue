@@ -3,7 +3,7 @@
     <div class="Topcont">
       <div class="datecaps">
         <div class="MnW">
-          <h3 style="margin: 0px">Vecka {{ this.week }}</h3>
+          <h3 style="margin: 0px">Vecka {{ this.week - 1 }}</h3>
           <h3 style="margin: 0px">Månad {{ this.month + 1 }}</h3>
         </div>
         <div class="daycont">
