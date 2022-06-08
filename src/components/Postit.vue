@@ -59,7 +59,7 @@
                     <label :for="deltag.Name + deltag.id" class="checkmark"
                       ><img
                         class="icons"
-                        :src="require(`@/assets/${deltag.Name}.jpg`)"
+                        :src="require(`@/assets/${deltag.Profile}`)"
                       />
                       <div>{{ deltag.Name }}</div>
                     </label>
@@ -245,12 +245,14 @@
   font-family: Scada;
   font-style: normal;
   font-weight: normal;
-  font-size: 36px;
+  font-size: 30px;
   line-height: 45px;
   background: #1988c9;
   color: white;
   margin-top: 0px;
-  padding: 20px;
+  padding: 10px;
+  padding-left: 35px;
+  padding-right: 35px;
   border-radius: 10px 10px 0px 0px;
 }
 .avbryt {
