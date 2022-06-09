@@ -126,23 +126,32 @@ export default {
 
     this.socketInstance = io("https://flexn.se:3000");
     this.socketInstance.on("data:received", (projectdata) => {
-      if (this.loggedstatus == "Admin") {
+      if (this.loggedin.Status == "Admin") {
         this.project = projectdata;
+
+        this.Aktiv = this.project.filter((results) => {
+          return results.Statu.includes("A");
+        });
+        this.Waiting = this.project.filter((results) => {
+          return results.Statu.includes("B");
+        });
+        this.Pausad = this.project.filter((results) => {
+          return results.Statu.includes("C");
+        });
       } else {
         this.project = projectdata.filter(
           (result) => result.Authorstatus == this.loggedin.Status
         );
+        this.Aktiv = this.project.filter((results) => {
+          return results.Statu.includes("A");
+        });
+        this.Waiting = this.project.filter((results) => {
+          return results.Statu.includes("B");
+        });
+        this.Pausad = this.project.filter((results) => {
+          return results.Statu.includes("C");
+        });
       }
-
-      this.Aktiv = this.project.filter((results) => {
-        return results.Statu.includes("A");
-      });
-      this.Waiting = this.project.filter((results) => {
-        return results.Statu.includes("B");
-      });
-      this.Pausad = this.project.filter((results) => {
-        return results.Statu.includes("C");
-      });
     });
   },
 };

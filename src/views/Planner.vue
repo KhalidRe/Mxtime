@@ -96,7 +96,7 @@
                       <div class="imgandtxt">
                         <img
                           class="deltagare va"
-                          :src="require(`@/assets/${deltag.Name}.jpg`)"
+                          :src="require(`@/assets/${deltag.Profile}`)"
                           alt=""
                         />
                         {{ deltag.Name }}
@@ -111,13 +111,13 @@
                     :key="deltag.index"
                     class="workchecks"
                     v-if="!usersid.includes(deltag.id)"
-                    @click="addUser(deltag.id)"
+                    @click="addUser(deltag)"
                   >
                     <div class="itemcont">
                       <div class="imgandtxt">
                         <img
                           class="deltagare va"
-                          :src="require(`@/assets/${deltag.Name}.jpg`)"
+                          :src="require(`@/assets/${deltag.Profile}`)"
                           alt=""
                         />
                         {{ deltag.Name }}
@@ -409,7 +409,7 @@
                     <div
                       id="tblFruits"
                       v-for="deltag in deltagare"
-                      :key="deltag.Name"
+                      :key="deltag.id"
                       class="workcheck"
                     >
                       <label class="container">
@@ -417,12 +417,12 @@
                           :id="deltag.Name + deltag.id"
                           class="deltagcheckbox"
                           type="checkbox"
-                          :value="deltag.id"
+                          :value="deltag"
                         />
                         <label :for="deltag.Name + deltag.id" class="checkmark"
                           ><img
                             class="icons"
-                            :src="require(`@/assets/${deltag.Name}.jpg`)"
+                            :src="require(`@/assets/${deltag.Profile}`)"
                           />
                           <div>{{ deltag.Name }}</div>
                         </label>
@@ -603,7 +603,7 @@
                         v-for="sparrs in sparr[index]"
                         :key="sparrs.index"
                         class="deltagare va"
-                        :src="require(`@/assets/${sparrs.Name}.jpg`)"
+                        :src="require(`@/assets/${sparrs.profile}`)"
                         alt=""
                       />
                     </div>
@@ -713,7 +713,7 @@
                           v-for="sparrs in sparr[index]"
                           :key="sparrs.index"
                           class="deltagare va"
-                          :src="require(`@/assets/${sparrs.Name}.jpg`)"
+                          :src="require(`@/assets/${sparrs.profile}`)"
                           alt=""
                         />
                       </div>
@@ -1701,6 +1701,7 @@ export default {
               )
             );
           }
+          console.log(this.sparr);
         });
       });
   },
@@ -1738,7 +1739,7 @@ export default {
       console.log(chks);
       for (var i = 0; i < chks.length; i++) {
         if (chks[i].checked) {
-          this.selected.push(parseInt(chks[i].value));
+          this.selected.push(chks[i]._value);
         }
       }
       console.log(this.selected);
@@ -1784,8 +1785,9 @@ export default {
       }, 100);
     },
     addUser(x) {
+      console.log(x);
       const addworkerdata = {
-        id: x,
+        user: x,
         taskid: this.selectedtaskid,
       };
       this.socketInstance.emit("adduser", addworkerdata);
@@ -1825,7 +1827,7 @@ export default {
       console.log(chks);
       for (var i = 0; i < chks.length; i++) {
         if (chks[i].checked) {
-          this.selected.push(parseInt(chks[i].value));
+          this.selected.push(chks[i]._value);
         }
       }
 
@@ -1836,6 +1838,7 @@ export default {
         tasktitle: this.tasktitle,
         deltag: this.selected,
       };
+      console.log(taskdata);
       this.socketInstance.emit("task", taskdata);
     },
     completeTask(x) {

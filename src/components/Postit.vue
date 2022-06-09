@@ -46,7 +46,7 @@
                 <div
                   id="tblFruits"
                   v-for="deltag in deltagare"
-                  :key="deltag.Name"
+                  :key="deltag.id"
                   class="workcheck"
                 >
                   <label class="container">
@@ -54,8 +54,9 @@
                       :id="deltag.Name + deltag.id"
                       class="deltagcheckbox"
                       type="checkbox"
-                      :value="deltag.id"
+                      :value="deltag"
                     />
+
                     <label :for="deltag.Name + deltag.id" class="checkmark"
                       ><img
                         class="icons"
@@ -113,7 +114,7 @@
                 this.deadline.length > 0 &&
                 this.timebudget > 0
               "
-              @click="createProject(), (show = !show)"
+              @click="createProject()"
             />
             <input
               v-else
@@ -481,13 +482,13 @@ export default {
       var selected = new Array();
 
       var chks = document.getElementsByClassName("deltagcheckbox");
-      console.log(chks);
+
       for (var i = 0; i < chks.length; i++) {
         if (chks[i].checked) {
-          selected.push(parseInt(chks[i].value));
+          selected.push(chks[i]._value);
         }
       }
-
+      console.log(selected);
       const postdata = {
         title: this.title.replace(/'/g, ``),
         author: this.$refs.author.value,

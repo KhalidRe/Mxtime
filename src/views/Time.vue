@@ -688,50 +688,48 @@ export default {
         this.loggedin = result[0];
         this.loggedstatus = this.loggedin.Status;
         console.log(this.loggedstatus);
-
-        fetch("https://flexn.se:3000/mytime", requestOptions)
-          .then((response) => response.json())
-          .then((result) => {
-            this.time = result;
-            console.log(this.time);
-            this.amountonhours = [];
-            this.amountonminutes = [];
-
-            this.picked = moment(
-              moment().add(this.incrementday, "d")._d
-            ).format("YYYY-MM-DD");
-            this.SunDate = moment(moment().day(this.Sun)._d).format("DD/MM");
-            this.MonDate = moment(moment().day(this.Mon)._d).format("DD/MM");
-            this.TueDate = moment(moment().day(this.Tue)._d).format("DD/MM");
-            this.WedDate = moment(moment().day(this.Wed)._d).format("DD/MM");
-            this.ThuDate = moment(moment().day(this.Thu)._d).format("DD/MM");
-            this.FriDate = moment(moment().day(this.Fri)._d).format("DD/MM");
-            this.SatDate = moment(moment().day(this.Sat)._d).format("DD/MM");
-            this.datetime = this.time.filter(
-              (result) =>
-                new Date(parseInt(result.Datum)).getFullYear() +
-                  "" +
-                  new Date(parseInt(result.Datum)).getMonth() +
-                  "" +
-                  new Date(parseInt(result.Datum)).getDate() ==
-                new Date(this.picked).getFullYear() +
-                  "" +
-                  new Date(this.picked).getMonth() +
-                  "" +
-                  new Date(this.picked).getDate()
-            );
-            for (this.i = 0; this.datetime.length > this.i; this.i++) {
-              this.amountonhours.push(this.datetime[this.i].Hours);
-
-              this.amountonminutes.push(this.datetime[this.i].Minutes);
-            }
-            this.amountonhours = this.amountonhours.reduce((a, b) => a + b, 0);
-            this.amountonminutes = Math.floor(
-              this.amountonminutes.reduce((a, b) => a + b, 0) / 60
-            );
-          });
-
         this.socketInstance = io("https://flexn.se:3000/");
+        this.socketInstance.emit("mytime", this.loggedin.Username);
+        this.socketInstance.on("mytimedata", (mytimedata) => {
+          this.time = mytimedata;
+          console.log(this.time);
+          this.amountonhours = [];
+          this.amountonminutes = [];
+
+          this.picked = moment(moment().add(this.incrementday, "d")._d).format(
+            "YYYY-MM-DD"
+          );
+          this.SunDate = moment(moment().day(this.Sun)._d).format("DD/MM");
+          this.MonDate = moment(moment().day(this.Mon)._d).format("DD/MM");
+          this.TueDate = moment(moment().day(this.Tue)._d).format("DD/MM");
+          this.WedDate = moment(moment().day(this.Wed)._d).format("DD/MM");
+          this.ThuDate = moment(moment().day(this.Thu)._d).format("DD/MM");
+          this.FriDate = moment(moment().day(this.Fri)._d).format("DD/MM");
+          this.SatDate = moment(moment().day(this.Sat)._d).format("DD/MM");
+          this.datetime = this.time.filter(
+            (result) =>
+              new Date(parseInt(result.Datum)).getFullYear() +
+                "" +
+                new Date(parseInt(result.Datum)).getMonth() +
+                "" +
+                new Date(parseInt(result.Datum)).getDate() ==
+              new Date(this.picked).getFullYear() +
+                "" +
+                new Date(this.picked).getMonth() +
+                "" +
+                new Date(this.picked).getDate()
+          );
+          for (this.i = 0; this.datetime.length > this.i; this.i++) {
+            this.amountonhours.push(this.datetime[this.i].Hours);
+
+            this.amountonminutes.push(this.datetime[this.i].Minutes);
+          }
+          this.amountonhours = this.amountonhours.reduce((a, b) => a + b, 0);
+          this.amountonminutes = Math.floor(
+            this.amountonminutes.reduce((a, b) => a + b, 0) / 60
+          );
+        });
+
         this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
         if (this.loggedin.nanoid == undefined) {
           window.location.reload();
@@ -900,92 +898,7 @@ export default {
       };
       console.log(addtimedata);
       this.socketInstance.emit("time", addtimedata);
-      window.location.reload();
-      const requestOptions = {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({ user: this.logged }),
-      };
-      fetch("https://flexn.se:3000/loggedin", requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-          if (result.length == 0) {
-            location.replace("https://flexnet.se/#/");
-          }
-        });
-      fetch("https://flexn.se:3000/workernav", requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-          this.loggedin = result[0];
-          this.loggedstatus = this.loggedin.Status;
-
-          fetch("https://flexn.se:3000/mytime", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-              this.time = result;
-              console.log(this.time);
-              this.amountonhours = [];
-              this.amountonminutes = [];
-
-              this.picked = moment(
-                moment().add(this.incrementday, "d")._d
-              ).format("YYYY-MM-DD");
-              this.SunDate = moment(moment().day(this.Sun)._d).format("DD/MM");
-              this.MonDate = moment(moment().day(this.Mon)._d).format("DD/MM");
-              this.TueDate = moment(moment().day(this.Tue)._d).format("DD/MM");
-              this.WedDate = moment(moment().day(this.Wed)._d).format("DD/MM");
-              this.ThuDate = moment(moment().day(this.Thu)._d).format("DD/MM");
-              this.FriDate = moment(moment().day(this.Fri)._d).format("DD/MM");
-              this.SatDate = moment(moment().day(this.Sat)._d).format("DD/MM");
-              this.datetime = this.time.filter(
-                (result) =>
-                  new Date(parseInt(result.Datum)).getFullYear() +
-                    "" +
-                    new Date(parseInt(result.Datum)).getMonth() +
-                    "" +
-                    new Date(parseInt(result.Datum)).getDate() ==
-                  new Date(this.picked).getFullYear() +
-                    "" +
-                    new Date(this.picked).getMonth() +
-                    "" +
-                    new Date(this.picked).getDate()
-              );
-              for (this.i = 0; this.datetime.length > this.i; this.i++) {
-                this.amountonhours.push(this.datetime[this.i].Hours);
-
-                this.amountonminutes.push(this.datetime[this.i].Minutes);
-              }
-              this.amountonhours = this.amountonhours.reduce(
-                (a, b) => a + b,
-                0
-              );
-              this.amountonminutes = Math.floor(
-                this.amountonminutes.reduce((a, b) => a + b, 0) / 60
-              );
-            });
-
-          this.socketInstance = io("https://flexn.se:3000/");
-
-          this.socketInstance.on("time:received", (timedata) => {
-            this.time = timedata;
-          });
-
-          this.socketInstance.on("data:received", (projectdata) => {
-            this.project = projectdata;
-            if (this.loggedstatus == "Admin") {
-              this.project = projectdata;
-            } else {
-              this.project = projectdata.filter(
-                (result) => result.Authorstatus == this.loggedstatus
-              );
-            }
-          });
-        });
+      // window.location.reload();
     },
     ledig() {
       if (this.Ledig == true) {
@@ -1004,88 +917,11 @@ export default {
         minuter: minuter,
         hours: hours,
         fatherid: fatherid,
+        user: this.loggedin.Username,
       };
 
       this.socketInstance.emit("delet:time", dtimedata);
-      window.location.reload();
-      const requestOptions = {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({ user: this.logged }),
-      };
-      fetch("https://flexn.se:3000/workernav", requestOptions)
-        .then((response) => response.json())
-        .then((result) => {
-          this.loggedin = result[0];
-          this.loggedstatus = this.loggedin.Status;
-
-          fetch("https://flexn.se:3000/mytime", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-              this.time = result;
-              console.log(this.time);
-              this.amountonhours = [];
-              this.amountonminutes = [];
-
-              this.picked = moment(
-                moment().add(this.incrementday, "d")._d
-              ).format("YYYY-MM-DD");
-              this.SunDate = moment(moment().day(this.Sun)._d).format("DD/MM");
-              this.MonDate = moment(moment().day(this.Mon)._d).format("DD/MM");
-              this.TueDate = moment(moment().day(this.Tue)._d).format("DD/MM");
-              this.WedDate = moment(moment().day(this.Wed)._d).format("DD/MM");
-              this.ThuDate = moment(moment().day(this.Thu)._d).format("DD/MM");
-              this.FriDate = moment(moment().day(this.Fri)._d).format("DD/MM");
-              this.SatDate = moment(moment().day(this.Sat)._d).format("DD/MM");
-              this.datetime = this.time.filter(
-                (result) =>
-                  new Date(parseInt(result.Datum)).getFullYear() +
-                    "" +
-                    new Date(parseInt(result.Datum)).getMonth() +
-                    "" +
-                    new Date(parseInt(result.Datum)).getDate() ==
-                  new Date(this.picked).getFullYear() +
-                    "" +
-                    new Date(this.picked).getMonth() +
-                    "" +
-                    new Date(this.picked).getDate()
-              );
-              for (this.i = 0; this.datetime.length > this.i; this.i++) {
-                this.amountonhours.push(this.datetime[this.i].Hours);
-
-                this.amountonminutes.push(this.datetime[this.i].Minutes);
-              }
-              this.amountonhours = this.amountonhours.reduce(
-                (a, b) => a + b,
-                0
-              );
-              this.amountonminutes = Math.floor(
-                this.amountonminutes.reduce((a, b) => a + b, 0) / 60
-              );
-            });
-
-          this.socketInstance = io("https://flexn.se:3000/");
-
-          this.socketInstance.on("time:received", (timedata) => {
-            this.time = timedata;
-          });
-
-          this.socketInstance.on("data:received", (projectdata) => {
-            this.project = projectdata;
-            if (this.loggedstatus == "Admin") {
-              this.project = projectdata;
-            } else {
-              this.project = projectdata.filter(
-                (result) => result.Authorstatus == this.loggedstatus
-              );
-            }
-          });
-        });
+      //window.location.reload();
     },
   },
   mounted() {

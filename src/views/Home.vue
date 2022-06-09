@@ -304,7 +304,7 @@
             v-for="sparrs in sparr[index]"
             :key="sparrs.index"
             class="deltagare va"
-            :src="require(`@/assets/${sparrs.Name}.jpg`)"
+            :src="require(`@/assets/${sparrs.Profile}`)"
             alt=""
           />
         </div>
@@ -1852,6 +1852,7 @@ export default {
                 )
               );
             }
+            console.log(this.sparr[0][0].Profile);
           });
         }
       });
