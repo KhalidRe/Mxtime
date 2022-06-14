@@ -6,7 +6,7 @@
           ><img width="25vw" src="@/assets/projecticon2.png" alt=""
         /></router-link>
         <router-link class="links" to="/Time">
-          <img width="25vw" src="@/assets/Timeicon.png" alt="" />
+          <img width="25vw" src="@/assets/Addtimeicon.png" alt="" />
         </router-link>
         <router-link class="links" to="/Charts"
           ><img width="25vw" src="@/assets/charticon2.png" alt=""

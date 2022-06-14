@@ -1656,7 +1656,6 @@ export default {
             this.deltagare = this.user;
           });
 
-        console.log(this.loggedin);
         this.socketInstance = io("https://flexn.se:3000/");
         this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
         if (this.loggedin.nanoid == undefined) {

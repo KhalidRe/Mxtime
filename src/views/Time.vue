@@ -88,7 +88,6 @@
               </div>
             </div>
             <div class="projectcaps">
-              <div>PROJEKT:</div>
               <dropdown-menu
                 :overlay="false"
                 :withDropdownCloser="true"
@@ -687,11 +686,28 @@ export default {
       .then((result) => {
         this.loggedin = result[0];
         this.loggedstatus = this.loggedin.Status;
-        console.log(this.loggedstatus);
+
         this.socketInstance = io("https://flexn.se:3000/");
+        this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
+        if (this.loggedin.nanoid == undefined) {
+          window.location.reload();
+        }
         this.socketInstance.emit("mytime", this.loggedin.Username);
+
         this.socketInstance.on("mytimedata", (mytimedata) => {
           this.time = mytimedata;
+
+          this.socketInstance.on("data:received", (projectdata) => {
+            this.project = projectdata;
+            console.log(this.project);
+            if (this.loggedstatus == "Admin") {
+              this.project = projectdata;
+            } else {
+              this.project = projectdata.filter(
+                (result) => result.Authorstatus == this.loggedstatus
+              );
+            }
+          });
           console.log(this.time);
           this.amountonhours = [];
           this.amountonminutes = [];
@@ -728,25 +744,6 @@ export default {
           this.amountonminutes = Math.floor(
             this.amountonminutes.reduce((a, b) => a + b, 0) / 60
           );
-        });
-
-        this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
-        if (this.loggedin.nanoid == undefined) {
-          window.location.reload();
-        }
-        this.socketInstance.on("time:received", (timedata) => {
-          this.time = timedata;
-        });
-
-        this.socketInstance.on("data:received", (projectdata) => {
-          this.project = projectdata;
-          if (this.loggedstatus == "Admin") {
-            this.project = projectdata;
-          } else {
-            this.project = projectdata.filter(
-              (result) => result.Authorstatus == this.loggedstatus
-            );
-          }
         });
       });
   },

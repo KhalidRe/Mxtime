@@ -101,6 +101,7 @@ export default {
       Pausad: "",
       icon: "",
       loggedstatus: "",
+      project: "",
     };
   },
   created() {
@@ -122,37 +123,29 @@ export default {
 
         this.icon =
           this.loggedin.Profile && require(`@/assets/${this.loggedin.Profile}`);
+
+        this.socketInstance = io("https://flexn.se:3000");
+        this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
+        this.socketInstance.on("data:received", (projectdata) => {
+          if (this.loggedstatus == "Admin") {
+            this.project = projectdata;
+          } else {
+            this.project = projectdata.filter(
+              (result) => result.Authorstatus == this.loggedin.Status
+            );
+          }
+
+          this.Aktiv = this.project.filter((results) => {
+            return results.Statu.includes("A");
+          });
+          this.Waiting = this.project.filter((results) => {
+            return results.Statu.includes("B");
+          });
+          this.Pausad = this.project.filter((results) => {
+            return results.Statu.includes("C");
+          });
+        });
       });
-
-    this.socketInstance = io("https://flexn.se:3000");
-    this.socketInstance.on("data:received", (projectdata) => {
-      if (this.loggedin.Status == "Admin") {
-        this.project = projectdata;
-
-        this.Aktiv = this.project.filter((results) => {
-          return results.Statu.includes("A");
-        });
-        this.Waiting = this.project.filter((results) => {
-          return results.Statu.includes("B");
-        });
-        this.Pausad = this.project.filter((results) => {
-          return results.Statu.includes("C");
-        });
-      } else {
-        this.project = projectdata.filter(
-          (result) => result.Authorstatus == this.loggedin.Status
-        );
-        this.Aktiv = this.project.filter((results) => {
-          return results.Statu.includes("A");
-        });
-        this.Waiting = this.project.filter((results) => {
-          return results.Statu.includes("B");
-        });
-        this.Pausad = this.project.filter((results) => {
-          return results.Statu.includes("C");
-        });
-      }
-    });
   },
 };
 </script>

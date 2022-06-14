@@ -1,6 +1,7 @@
 <template>
   <div id="Home">
     <Workernav />
+    <Timer />
     <div class="filterbtncont">
       <div
         class="filterbtn"
@@ -297,7 +298,7 @@
 
           <img
             class="deltagare"
-            :src="require(`@/assets/${projects.Author}.jpg`)"
+            :src="require(`@/assets/${projects.Authorprofile}`)"
             alt=""
           />
           <img
@@ -1240,7 +1241,7 @@ input[type="radio"]:after {
 .Grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  width: 80vw;
+  width: 95%;
 
   margin: 30px;
   margin-top: 0px;
@@ -1641,8 +1642,9 @@ import water from "../assets/soundeffect/water.mp3";
 import cash from "../assets/soundeffect/cash.mp3";
 import ding from "../assets/soundeffect/ding.mp3";
 import pop from "../assets/soundeffect/pop.mp3";
+import Timer from "@/components/Timer.vue";
 export default {
-  components: { Postit, Workernav, RadialProgressBar, Minitrello },
+  components: { Postit, Workernav, RadialProgressBar, Minitrello, Timer },
   //
   data() {
     return {
@@ -1852,7 +1854,6 @@ export default {
                 )
               );
             }
-            console.log(this.sparr[0][0].Profile);
           });
         }
       });
@@ -2004,7 +2005,6 @@ export default {
     },
 
     Remove(id) {
-      console.log(id);
       this.z = id - 1;
       this.x = id;
       this.rproject = this.project.find((result) => result.id == this.x);
@@ -2017,7 +2017,7 @@ export default {
     },
     viewtrello(id) {
       this.trelloprojectid = id;
-      console.log();
+
       this.vtrello = [];
       if (
         this.trellodata.filter(
@@ -2028,8 +2028,6 @@ export default {
           (result) => result.fatherid == id
         );
       } else this.atrello = [];
-
-      console.log(this.atrello);
     },
     refreshtrello() {},
     addtrello(id) {
@@ -2050,7 +2048,6 @@ export default {
       this.watersound.play();
     },
     trellodelete(id) {
-      console.log(id);
       const deletetrello = {
         id: id,
       };

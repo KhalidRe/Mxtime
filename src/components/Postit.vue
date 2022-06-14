@@ -114,7 +114,7 @@
                 this.deadline.length > 0 &&
                 this.timebudget > 0
               "
-              @click="createProject()"
+              @click="createProject(), (show = !show)"
             />
             <input
               v-else
@@ -472,9 +472,13 @@ export default {
               (e) => !e.Name.includes(this.loggedin.Name)
             );
           });
-      });
+        this.socketInstance = io("https://flexn.se:3000/");
 
-    this.socketInstance = io("https://flexn.se:3000/");
+        this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
+        if (this.loggedin.nanoid == undefined) {
+          window.location.reload();
+        }
+      });
   },
   methods: {
     GetSelected() {},
@@ -488,7 +492,7 @@ export default {
           selected.push(chks[i]._value);
         }
       }
-      console.log(selected);
+
       const postdata = {
         title: this.title.replace(/'/g, ``),
         author: this.$refs.author.value,
@@ -503,6 +507,7 @@ export default {
         deltag: selected,
         Authorid: this.loggedin.id,
         authornanoid: this.loggedin.nanoid,
+        authorprofile: this.loggedin.Profile,
       };
 
       this.socketInstance.emit("post", postdata);
