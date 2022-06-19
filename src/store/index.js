@@ -10,10 +10,14 @@ export default new Vuex.Store({
 
   state: {
     someValue: "",
+    playdata: true,
   },
   mutations: {
     setSomeValue(state, someValue) {
       state.someValue = someValue;
+    },
+    setplay(state) {
+      state.playdata = !state.playdata;
     },
   },
   actions: {},

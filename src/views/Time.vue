@@ -699,7 +699,7 @@ export default {
 
           this.socketInstance.on("data:received", (projectdata) => {
             this.project = projectdata;
-            console.log(this.project);
+
             if (this.loggedstatus == "Admin") {
               this.project = projectdata;
             } else {
@@ -708,7 +708,7 @@ export default {
               );
             }
           });
-          console.log(this.time);
+
           this.amountonhours = [];
           this.amountonminutes = [];
 
@@ -876,9 +876,7 @@ export default {
       this.chosenproject = title;
       this.chosenid = id;
     },
-    test() {
-      console.log(this.debit);
-    },
+    test() {},
     addTime() {
       let addtimedata = {
         projectid: this.chosenid,
@@ -893,7 +891,7 @@ export default {
         debit: this.debit,
         nanoid: this.loggedin.nanoid,
       };
-      console.log(addtimedata);
+
       this.socketInstance.emit("time", addtimedata);
       // window.location.reload();
     },

@@ -30,7 +30,12 @@
                 </div>
 
                 <div class="dropper" slot="body">
-                  <input type="text" v-model="search" placeholder="Search" />
+                  <input
+                    class="searchbar"
+                    type="text"
+                    v-model="search"
+                    placeholder="Search"
+                  />
                   <div
                     class="drop-item"
                     v-for="project in filterFunction"
@@ -45,12 +50,46 @@
             </div>
 
             <div class="buttons">
-              <button id="pauseTimer">Pause</button>
-              <button id="startTimer">Start</button>
-              <button id="resetTimer">Reset</button>
-              <button @click="primedata()" id="report">console</button>
+             <a id="start">Start</a>
+    <a id="stop">Stop</a>
+    <a id="reset">Reset</a>
+              <!--
+
+ <div
+                v-show="this.$store.state.playdata == false"
+                @click="setvalue()"
+                id="pauseTimer"
+              >
+                <img src="@/assets/pause.png" alt="" />
+              </div>
+              <div
+                v-show="this.$store.state.playdata == true"
+                @click="setvalue()"
+                id="startTimer"
+              >
+                <img src="@/assets/play.png" alt="" />
+              </div>
+              <div @click="play = false" id="resetTimer">
+                <img src="@/assets/reset.png" alt="" />
+              </div>
+              <div @click="checker()" id="report">console</div>
             </div>
-            <div class="timecont">00 : 00 : 00 : 000</div>
+            <div class="timecont">
+              <span class="Hours" ref="Hours" timeset="0" value="0">00</span> :
+              <span class="Minutes" ref="Minutes" timeset="0" value="0"
+                >00</span
+              >
+              :
+              <span class="Seconds" ref="Seconds" timeset="0" value="0"
+                >00</span
+              >
+              :
+              <span class="Miliseconds" ref="Miliseconds" timeset="0" value="0"
+                >000</span
+              >
+            </div>
+              -->
+             
           </div>
         </div>
       </transition>
@@ -64,15 +103,141 @@
       <div v-if="show" class="Icon" @click="(shows = !shows), (show = !show)">
         <img src="@/assets/Timeicon.png" alt="" />
       </div>
-
-      <div class="newfeature">
-        <img class="newfetureimg" src="@/assets/Newfeture.png" alt="" />
-      </div>
     </div>
+    <div class="MobileIcon" @click="openoverlay = !openoverlay">
+      <img src="@/assets/Timeicon.png" alt="" />
+    </div>
+    <transition name="slide-in">
+      <div v-show="openoverlay" class="overlay">
+        <div @click="openoverlay = !openoverlay" class="close">
+          <img width="50px" src="@/assets/timercloser.png" alt="" />
+        </div>
+        <div class="container">
+          <div class="dropdown">
+            <dropdown-menu
+              :overlay="false"
+              :withDropdownCloser="true"
+              :closeOnClickOutside="true"
+              class="dropfag"
+            >
+              <div
+                v-show="chosenproject.length == 0"
+                dropdown-closer
+                class="chooseproject"
+                slot="trigger"
+              >
+                Välj project
+              </div>
+              <div
+                v-show="chosenproject.length > 0"
+                dropdown-closer
+                class="chooseproject"
+                slot="trigger"
+              >
+                {{ chosenproject }}
+              </div>
+
+              <div class="dropper" slot="body">
+                <input
+                  class="searchbar"
+                  type="text"
+                  v-model="search"
+                  placeholder="Search"
+                />
+                <div
+                  class="drop-item"
+                  v-for="project in filterFunction"
+                  :key="project.id"
+                  @click="dataPrimer(project.id, project.Title)"
+                  dropdown-closer
+                >
+                  {{ project.Title }}
+                </div>
+              </div>
+            </dropdown-menu>
+          </div>
+          <div class="timecontMobile">
+            <span class="Hours" ref="Hours" timeset="0" value="0">00</span> :
+            <span class="Minutes" ref="Minutes" timeset="0" value="0">00</span>
+            :
+            <span class="Seconds" ref="Seconds" timeset="0" value="0">00</span>
+            :
+            <span class="Miliseconds" ref="Miliseconds" timeset="0" value="0"
+              >000</span
+            >
+          </div>
+
+          <div class="buttons">
+            <!--
+<button id="pauseTimerMobile">Pause</button>
+           -->
+
+            <button id="startTimerMobile">Start</button>
+            <button @click="checker()">logger</button>
+            <!--
+<button id="resetTimerMobile">Reset</button>
+            -->
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 <style scoped>
-.newfeature {
+.dropper {
+  height: 250px !important;
+  overflow-y: scroll;
+}
+.slide-in-enter-active {
+  transition: all 0.5s;
+}
+.slide-in-leave-active {
+  transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-in-enter, .slide-in-leave-to
+/* .slide-fade-leave-active below version 2.1.8  :startColor="'#6EF56D'"
+                :stopColor="'#2A9EBE'"*/ {
+  transform: translateX(-100%);
+}
+
+.close {
+  float: right;
+  padding: 20px;
+}
+.close > img {
+  filter: drop-shadow(0px 0px 4px #7c7c7c);
+}
+.chooseproject {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  background: rgb(238, 244, 249);
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.185);
+}
+.chooseproject:hover {
+  background: rgb(225, 238, 249);
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.32);
+}
+.searchbar {
+  margin: 5px;
+  width: 80%;
+}
+.overlay {
+  display: none;
+}
+
+.drop-item {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: white;
+  cursor: pointer;
+}
+.drop-item:hover {
+  background: rgb(226, 226, 226);
+}
+.MobileIcon {
+  display: none;
 }
 .coolline {
   background: linear-gradient(
@@ -92,23 +257,25 @@
 .buttons {
   display: flex;
   width: 30%;
-  justify-content: space-between;
+
+  margin: 5px;
 }
 .strecher {
   display: flex;
   width: 100%;
   margin-top: -1px;
 }
-.buttons button {
-  background-color: #1988c9;
-  box-shadow: 0px 0px 5px 3px #1a71a38e;
-  color: #ffffff;
-  border: none;
-  font-family: "Poppins", sans-serif;
-  font-size: 18px;
-  border-radius: 5px;
+.buttons div {
   cursor: pointer;
-  outline: none;
+  padding: 10px;
+  border-radius: 5px;
+  background: rgb(238, 244, 249);
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.185);
+  margin: 5px;
+}
+.buttons div:hover {
+  background: rgb(225, 238, 249);
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.32);
 }
 .timecont {
   color: #ffffff;
@@ -148,28 +315,7 @@
     background-position: 1000%;
   }
 }
-@keyframes newfeture {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.6);
-  }
-  60% {
-    transform: scale(1.6);
-    transform: rotate(170deg);
-  }
 
-  100% {
-    transform: scale(1.6);
-    transform: rotate(170deg);
-    transform: skew(50deg);
-  }
-}
-.newfetureimg {
-  animation: newfeture;
-  animation: newfeture 1s infinite;
-}
 .timecaps {
   display: flex;
   width: 100%;
@@ -301,6 +447,123 @@
 .show {
   display: block;
 }
+@media only screen and (max-width: 1433px) {
+  .overlay {
+    display: block;
+    position: absolute;
+    z-index: 99;
+    top: 0%;
+    left: 0%;
+    width: 100vw;
+    height: 100vh;
+    background: #448aff;
+  }
+  .strecher {
+    display: none !important;
+  }
+  .coolline {
+    display: none;
+  }
+  .MobileIcon {
+    display: block !important;
+    width: 51px;
+    height: 51px;
+    border-radius: 0px 0px 50px 0px;
+    box-shadow: 0px 2px 3px 1px rgba(0, 0, 0, 0.233);
+    background: linear-gradient(-45deg, #206dc5, #437ea0, #5574ca, #3297be);
+    background-size: 20px 20px;
+
+    animation: gradients 7s infinite linear;
+    cursor: pointer;
+  }
+  .MobileIcon > img {
+    margin-top: 5px;
+    margin-right: 5px;
+  }
+  .container {
+    background-color: #ffffff;
+    width: 50%;
+    min-width: 300px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    padding: 20px 0;
+    padding-bottom: 50px;
+    border-radius: 10px;
+  }
+  .timecontMobile {
+    position: relative !important;
+    width: 92% !important;
+    background: #ffffff !important;
+    left: 4% !important;
+    padding: 40px 0 !important;
+    font-family: "Roboto mono", monospace !important;
+    color: #0381bb !important;
+    font-size: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    border-radius: 5px !important;
+    box-shadow: 0 0 20px rgba(0, 139, 253, 0.25) !important;
+  }
+  .buttons {
+    margin: 60px auto 0 auto !important;
+    display: flex;
+    justify-content: space-around !important;
+  }
+  .buttons button {
+    width: 120px !important;
+    height: 45px !important;
+    background-color: #205e94 !important;
+    color: #ffffff !important;
+    border: none !important;
+    font-family: "Poppins", sans-serif !important;
+    font-size: 18px !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    outline: none !important;
+  }
+  .buttons button:nth-last-child(2) {
+    background-color: #d23332 !important;
+  }
+  .buttons button:nth-last-child(1) {
+    background-color: #20b380 !important;
+  }
+  .dropdown {
+    margin-top: -5px;
+    margin-bottom: 10px;
+  }
+}
+@media only screen and (max-width: 933px) {
+  .container {
+    background-color: #ffffff;
+    width: 90%;
+    min-width: 200px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    padding: 20px 0;
+    padding-bottom: 50px;
+    border-radius: 10px;
+  }
+  .timecontMobile {
+    position: relative !important;
+    width: 92% !important;
+    background: #ffffff !important;
+    left: 4% !important;
+    padding: 40px 0 !important;
+    font-family: "Roboto mono", monospace !important;
+    color: #0381bb !important;
+    font-size: 7vw !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    border-radius: 5px !important;
+    box-shadow: 0 0 20px rgba(0, 139, 253, 0.25) !important;
+  }
+}
 </style>
 <script>
 import { ref } from "vue";
@@ -344,19 +607,33 @@ export default {
       project: [],
       chosenproject: "",
       chosenid: 0,
-      Hours: 0,
+      Hours: "",
       Minutes: 0,
+      Seconds: 0,
       Notes: "",
       debit: 1,
       toltip: false,
       shows: true,
       project: [],
+      openoverlay: true,
+      play: this.$store.state.playdata,
+      ok: true,
+      playdata: this.$store.state.playdata,
     };
   },
   methods: {
     dataPrimer(id, title) {
       this.chosenproject = title;
       this.chosenid = id;
+    },
+    setvalue() {
+      this.$store.commit("setplay");
+      console.log(this.$store.state.playdata);
+    },
+    checker() {
+      this.Hours = this.$refs.Hours.attributes[1].value;
+      this.Minutes = this.$refs.Minutes.attributes[1].value;
+      this.Seconds = this.$refs.Seconds.attributes[1].value;
     },
   },
   created() {
@@ -388,7 +665,7 @@ export default {
 
           this.socketInstance.on("data:received", (projectdata) => {
             this.project = projectdata;
-            console.log(this.project);
+
             if (this.loggedstatus == "Admin") {
               this.project = projectdata;
             } else {
@@ -397,7 +674,7 @@ export default {
               );
             }
           });
-          console.log(this.time);
+
           this.amountonhours = [];
           this.amountonminutes = [];
 
@@ -431,8 +708,73 @@ export default {
       });
   },
   mounted() {
-    let [milliseconds, seconds, minutes, hours] = [0, 0, 0, 0];
+    var timeBegan = null
+, timeStopped = null
+, stoppedDuration = 0
+, started = null
+, running = false;
+
+document.getElementById("start").addEventListener("click", start);
+document.getElementById("stop").addEventListener("click", stop);
+document.getElementById("reset").addEventListener("click", reset);
+
+function start() {
+  if(running) return;
+  
+  if (timeBegan === null) {
+    reset();
+    timeBegan = new Date();
+  }
+
+  if (timeStopped !== null) {
+    stoppedDuration += (new Date() - timeStopped);
+  }
+
+  started = setInterval(clockRunning, 10);	
+  running = true;
+}
+
+function stop() {
+  running = false;
+  timeStopped = new Date();
+  clearInterval(started);
+}
+
+function reset() {
+  running = false;
+  clearInterval(started);
+  stoppedDuration = 0;
+  timeBegan = null;
+  timeStopped = null;
+  clock.time = "00:00:00.000";
+}
+
+function clockRunning(){
+  var currentTime = new Date()
+  , timeElapsed = new Date(currentTime - timeBegan - stoppedDuration)
+  , hour = timeElapsed.getUTCHours()
+  , min = timeElapsed.getUTCMinutes()
+  , sec = timeElapsed.getUTCSeconds()
+  , ms = timeElapsed.getUTCMilliseconds();
+
+  clock.time = 
+    zeroPrefix(hour, 2) + ":" + 
+    zeroPrefix(min, 2) + ":" + 
+    zeroPrefix(sec, 2) + "." + 
+    zeroPrefix(ms, 3);
+};
+
+function zeroPrefix(num, digit) {
+  var zero = '';
+  for(var i = 0; i < digit; i++) {
+    zero += '0';
+  }
+  return (zero + num).slice(-digit);
+}
+   /*
+   let [milliseconds, seconds, minutes, hours] = [0, 0, 0, 0];
     let timerRef = document.querySelector(".timecont");
+    let timerRefMobile = document.querySelector(".timecontMobile");
     let int = null;
 
     document.getElementById("startTimer").addEventListener("click", () => {
@@ -449,8 +791,71 @@ export default {
     document.getElementById("resetTimer").addEventListener("click", () => {
       clearInterval(int);
       [milliseconds, seconds, minutes, hours] = [0, 0, 0, 0];
-      timerRef.innerHTML = "00 : 00 : 00 : 000 ";
+      //  timerRef.innerHTML = "00 : 00 : 00 : 000 ";
+      document.getElementsByClassName("Hours")[0].textContent = "00";
+      document.getElementsByClassName("Minutes")[0].textContent = "00";
+      document.getElementsByClassName("Seconds")[0].textContent = "00";
+      document.getElementsByClassName("Miliseconds")[0].textContent = "000";
+      document.getElementsByClassName("Hours")[1].textContent = "00";
+      document.getElementsByClassName("Minutes")[1].textContent = "00";
+      document.getElementsByClassName("Seconds")[1].textContent = "00";
+      document.getElementsByClassName("Miliseconds")[1].textContent = "000";
     });
+    document
+      .getElementById("startTimerMobile")
+      .addEventListener("click", () => {
+        if (int !== null) {
+          clearInterval(int);
+        }
+        int = setInterval(displayTimer, 10);
+      });
+
+    document
+      .getElementById("pauseTimerMobile")
+      .addEventListener("click", () => {
+        clearInterval(int);
+      });
+
+    document
+      .getElementById("resetTimerMobile")
+      .addEventListener("click", () => {
+        clearInterval(int);
+        [milliseconds, seconds, minutes, hours] = [0, 0, 0, 0];
+        // timerRef.textContent = "00 : 00 : 00 : 000 ";
+        // timerRefMobile.textContent = "00 : 00 : 00 : 000 ";
+        document.getElementsByClassName("Hours")[0].textContent = "00";
+        document.getElementsByClassName("Minutes")[0].textContent = "00";
+        document.getElementsByClassName("Seconds")[0].textContent = "00";
+        document.getElementsByClassName("Miliseconds")[0].textContent = "000";
+        document.getElementsByClassName("Hours")[1].textContent = "00";
+        document.getElementsByClassName("Minutes")[1].textContent = "00";
+        document.getElementsByClassName("Seconds")[1].textContent = "00";
+        document.getElementsByClassName("Miliseconds")[1].textContent = "000";
+        document.getElementsByClassName(
+          "Hours"
+        )[0].attributes[1].value = `${hours}`;
+
+        document.getElementsByClassName(
+          "Minutes"
+        )[0].attributes[1].value = `${minutes}`;
+
+        document.getElementsByClassName(
+          "Seconds"
+        )[0].attributes[1].value = `${seconds}`;
+
+        //---------------------------------------------
+        document.getElementsByClassName(
+          "Hours"
+        )[1].attributes[1].value = `${hours}`;
+
+        document.getElementsByClassName(
+          "Minutes"
+        )[1].attributes[1].value = `${minutes}`;
+
+        document.getElementsByClassName(
+          "Seconds"
+        )[1].attributes[1].value = `${seconds}`;
+      });
 
     function displayTimer() {
       milliseconds += 10;
@@ -476,14 +881,59 @@ export default {
           : milliseconds < 100
           ? "0" + milliseconds
           : milliseconds;
+      
+      document.getElementsByClassName(
+        "Hours"
+      )[0].attributes[1].value = `${hours}`;
 
-      timerRef.innerHTML = ` ${h} : ${m} : ${s} : ${ms}`;
+      document.getElementsByClassName(
+        "Minutes"
+      )[0].attributes[1].value = `${minutes}`;
+
+      document.getElementsByClassName(
+        "Seconds"
+      )[0].attributes[1].value = `${seconds}`;
+
+      //---------------------------------------------
+      document.getElementsByClassName(
+        "Hours"
+      )[1].attributes[1].value = `${hours}`;
+
+      document.getElementsByClassName(
+        "Minutes"
+      )[1].attributes[1].value = `${minutes}`;
+
+      document.getElementsByClassName(
+        "Seconds"
+      )[1].attributes[1].value = `${seconds}`;
+
+      //  timerRef.innerHTML = ` ${h} : ${m} : ${s} : ${ms}`;
+      // timerRefMobile.innerHTML = ` ${h} : ${m} : ${s} : ${ms}`;
+      document.getElementsByClassName("Hours")[0].innerHTML = `${h}`;
+      document.getElementsByClassName("Minutes")[0].innerHTML = `${m}`;
+      document.getElementsByClassName("Seconds")[0].innerHTML = `${s}`;
+      document.getElementsByClassName("Miliseconds")[0].innerHTML = `${ms}`;
+      document.getElementsByClassName("Hours")[1].innerHTML = `${h}`;
+      document.getElementsByClassName("Minutes")[1].innerHTML = `${m}`;
+      document.getElementsByClassName("Seconds")[1].innerHTML = `${s}`;
+      document.getElementsByClassName("Miliseconds")[1].innerHTML = `${ms}`;
     }
+   
+   */ 
+  
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.onResize);
   },
   computed: {
+    playdata: {
+      get() {
+        return this.$store.state.playdata;
+      },
+      set(play) {
+        this.$store.commit("setplay", playdata);
+      },
+    },
     filterFunction() {
       return this.project.filter((p) => {
         // return true if the product should be visible

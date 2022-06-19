@@ -3,28 +3,28 @@
     <transition name="normal">
       <div v-if="show" id="Navbar">
         <router-link class="links" to="/Home"
-          ><img width="25vw" src="@/assets/projecticon2.png" alt=""
+          ><img class="icons" src="@/assets/projecticon2.png" alt=""
         /></router-link>
         <router-link class="links" to="/Time">
-          <img width="25vw" src="@/assets/Addtimeicon.png" alt="" />
+          <img class="icons" src="@/assets/Addtimeicon.png" alt="" />
         </router-link>
         <router-link class="links" to="/Charts"
-          ><img width="25vw" src="@/assets/charticon2.png" alt=""
+          ><img class="icons" src="@/assets/charticon2.png" alt=""
         /></router-link>
 
         <router-link class="links" to="/UsersV2"
-          ><img width="25vw" src="@/assets/usericon2.png" alt=""
+          ><img class="icons" src="@/assets/usericon2.png" alt=""
         /></router-link>
         <router-link class="links" to="/Histor"
-          ><img width="25vw" src="@/assets/historyicon2.png" alt=""
+          ><img class="icons" src="@/assets/historyicon2.png" alt=""
         /></router-link>
         <router-link class="links" to="/Planner"
-          ><img width="25vw" src="@/assets/dateicon.png" alt=""
+          ><img class="icons" src="@/assets/dateicon.png" alt=""
         /></router-link>
 
         <!--
 <router-link class="links" to="/Chat"
-          ><img width="25vw" src="@/assets/Chat2.png" alt=""
+          ><img  src="@/assets/Chat2.png" alt=""
         /></router-link>
         -->
       </div>
@@ -100,21 +100,42 @@ export default {
 }
 .links {
   width: 30px;
+  height: 25px;
   padding: 10px;
   padding-top: 15px;
   padding-bottom: 15px;
-  box-shadow: 0px 0px 10px 3px rgba(2, 6, 46, 0.226);
 
   border-radius: 5px;
-  transition: 1s;
+
   background: #1988c9;
-}
-.links:active {
+
+  border-radius: 3px;
+  background: #1988c9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: -7px -7px 20px 0px #1d9be4, -4px -4px 5px 0px #1988c9,
+    7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001;
+  font-size: 26px;
+  color: #666;
+  text-decoration: none;
   transition: 1s;
-  box-shadow: inset 0px 2px 5px 1px rgba(0, 0, 0, 0.603);
+}
+router-links .links {
+  box-shadow: 4px 4px 6px 0 #1d91d4, -4px -4px 6px 0 #126291,
+    inset -4px -4px 6px 0 #1c95db, inset 4px 4px 6px 0 #126291;
+  transition: 1s;
+}
+.icons {
+  width: 25px;
+}
+.links:active .icons {
+  width: 24px;
 }
 .links.router-link-active {
-  transition: 1s;
 }
 .normal-enter-active {
   animation: normal-in 0.5s;
