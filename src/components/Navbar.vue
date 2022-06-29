@@ -124,7 +124,7 @@ export default {
   text-decoration: none;
   transition: 1s;
 }
-router-links .links {
+.links:active {
   box-shadow: 4px 4px 6px 0 #1d91d4, -4px -4px 6px 0 #126291,
     inset -4px -4px 6px 0 #1c95db, inset 4px 4px 6px 0 #126291;
   transition: 1s;

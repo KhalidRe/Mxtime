@@ -1629,6 +1629,11 @@ input[type="date"] {
   transition: 1s;
   transition-delay: 0.75s;
 }
+@media only screen and (max-width: 786px) {
+  .filterbtncont {
+    margin-top: 0px;
+  }
+}
 </style>
 <script>
 import $ from "jquery";

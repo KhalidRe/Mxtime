@@ -106,7 +106,7 @@ export default {
       };
       fetch("https://flexn.se:3000/test", auth)
         .then((response) => response.json())
-        .then((result) => {});
+        .then((result) => console.log(result));
     },
     setvalue() {
       this.someValue = this.$refs.Username.value;
