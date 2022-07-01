@@ -9,7 +9,7 @@ import Chat from "../views/Chat.vue";
 import Time from "../views/Time.vue";
 import Planner from "../views/Planner.vue";
 import UsersV2 from "../views/UsersV2";
-
+import Mytime from "../views/Mytime.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -57,6 +57,11 @@ const routes = [
     path: "/UsersV2",
     name: "UsersV2",
     component: UsersV2,
+  },
+  {
+    path: "/Mytime",
+    name: "Mytime",
+    component: Mytime,
   },
 ];
 

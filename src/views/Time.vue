@@ -19,7 +19,7 @@
             <div class="singDate">{{ this.TueDate }}</div>
           </div>
           <div class="daybtn" @click="selectday(Wed)">
-            <a href="/#/Time/#Wed" class="daypick">W</a>
+            <a href="/#/Time/#Wed" class="daypick">O</a>
             <div class="singDate">{{ this.WedDate }}</div>
           </div>
           <div class="daybtn" @click="selectday(Thu)">
@@ -110,15 +110,23 @@
                 >
                   {{ chosenproject }}
                 </div>
-                <div class="dropper" slot="body" dropdown-closer>
-                  <div
-                    dropdown-closer
-                    class="drop-item"
-                    v-for="projects in project"
-                    :key="projects.id"
-                    @click="dataPrimer(projects.id, projects.Title)"
-                  >
-                    {{ projects.Title }}
+                <div class="dropper" slot="body">
+                  <input
+                    class="searchbar"
+                    type="text"
+                    v-model="search"
+                    placeholder="Search"
+                  />
+                  <div class="dropper" slot="body" dropdown-closer>
+                    <div
+                      dropdown-closer
+                      class="drop-item"
+                      v-for="projects in filterFunction"
+                      :key="projects.id"
+                      @click="dataPrimer(projects.id, projects.Title)"
+                    >
+                      {{ projects.Title }}
+                    </div>
                   </div>
                 </div>
               </dropdown-menu>
@@ -638,6 +646,7 @@ export default {
       Wed: 3,
       logged: this.$store.state.someValue,
       time: "",
+      search: "",
       datetime: "s",
       amountonhours: [],
       amountonminutes: [],
@@ -891,6 +900,7 @@ export default {
         debit: this.debit,
         nanoid: this.loggedin.nanoid,
       };
+      console.log(addtimedata);
 
       this.socketInstance.emit("time", addtimedata);
       // window.location.reload();
@@ -930,6 +940,17 @@ export default {
         $box.prop("checked", false);
       }
     });
+  },
+  computed: {
+    filterFunction() {
+      return this.project.filter((p) => {
+        // return true if the product should be visible
+
+        // in this example we just check if the search string
+        // is a substring of the product name (case insensitive)
+        return p.Title.toLowerCase().indexOf(this.search.toLowerCase()) != -1;
+      });
+    },
   },
 };
 </script>

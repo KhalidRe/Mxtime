@@ -55,15 +55,23 @@
     <div>
       <div class="usnc">
         <h2>Users</h2>
-        <div
-          class="createuserbtn"
-          v-if="loggedin.Status == 'Admin'"
-          @click="createuser = !createuser"
-        >
-          Skapa Användare
+        <div class="adminopt">
+          <div
+            class="createuserbtn"
+            v-if="loggedin.Status == 'Admin'"
+            @click="createtag = !createtag"
+          >
+            Skapa Roller
+          </div>
+          <div
+            class="createuserbtn"
+            v-if="loggedin.Status == 'Admin'"
+            @click="createuser = !createuser"
+          >
+            Skapa Användare
+          </div>
         </div>
       </div>
-
       <table cellpadding="0" cellspacing="0" border="0">
         <thead>
           <tr class="trhead">
@@ -143,8 +151,7 @@
         </tbody>
       </table>
     </div>
-    <ViewtimeV2 />
-    <Viewtime />
+
     <transition name="slide-fade">
       <div v-if="createuser" class="createusernoclick">
         <div class="createusercaps">
@@ -168,10 +175,15 @@
               <input v-model="newpassword" type="text" />
             </div>
             <div>
-              <div>Typ av Användare</div>
+              <div>Roll för Användare</div>
               <select v-model="newtype" name="" id="acctype">
-                <option value="Finanse">Finanse</option>
-                <option value="Dev">Developer</option>
+                <option
+                  :value="rolls.Usertags"
+                  v-for="rolls in tags"
+                  :key="rolls.index"
+                >
+                  {{ rolls.Usertags }}
+                </option>
               </select>
             </div>
             <div class="confirmation">
@@ -367,9 +379,144 @@
         </div>
       </div>
     </transition>
+    <!--TAG CREATION IS BELOW HERE-->
+    <!--TAG CREATION IS BELOW HERE-->
+    <!--TAG CREATION IS BELOW HERE-->
+    <!--TAG CREATION IS BELOW HERE-->
+    <transition name="slide-fade">
+      <div v-if="createtag" class="createusernoclick">
+        <div class="createusercaps">
+          <div class="createusertitle">Lägg till roller</div>
+
+          <div class="createuserinputs">
+            <div class="tagsbox">
+              <div
+                class="tags"
+                v-for="rolls in tags"
+                :key="rolls.id"
+                v-bind:style="{
+                  backgroundColor: '#' + rolls.color,
+                }"
+              >
+                <div class="tagtext">{{ rolls.Usertags }}</div>
+
+                <div class="remove" @click="deletetag(rolls.Id)">x</div>
+              </div>
+            </div>
+
+            <div>
+              <div>Roll namn</div>
+              <input v-model="tagname" maxlength="8" type="text" />
+            </div>
+            <div class="confirmation">
+              <div class="userconf" v-if="tagname.length > 1">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 10 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5.00011 0.554688C4.12108 0.554688 3.26179 0.81535 2.53091 1.30371C1.80002 1.79207 1.23037 2.4862 0.893979 3.29832C0.55759 4.11043 0.469575 5.00406 0.641065 5.8662C0.812555 6.72834 1.23585 7.52026 1.85741 8.14183C2.47898 8.7634 3.2709 9.18669 4.13304 9.35818C4.99518 9.52967 5.88881 9.44165 6.70093 9.10526C7.51304 8.76887 8.20717 8.19922 8.69553 7.46833C9.18389 6.73745 9.44456 5.87816 9.44456 4.99913C9.44456 3.82039 8.9763 2.68993 8.14281 1.85644C7.30931 1.02294 6.17885 0.554688 5.00011 0.554688V0.554688ZM7.90289 3.50747L4.25289 7.15469L2.09733 4.99913C2.02366 4.92546 1.98227 4.82554 1.98227 4.72135C1.98227 4.61717 2.02366 4.51725 2.09733 4.44358C2.171 4.36991 2.27092 4.32852 2.37511 4.32852C2.4793 4.32852 2.57922 4.36991 2.65289 4.44358L4.25844 6.04913L7.35289 2.95747C7.38937 2.92099 7.43267 2.89205 7.48033 2.87231C7.528 2.85257 7.57908 2.84241 7.63067 2.84241C7.68225 2.84241 7.73334 2.85257 7.781 2.87231C7.82866 2.89205 7.87197 2.92099 7.90844 2.95747C7.94492 2.99394 7.97386 3.03725 7.9936 3.08491C8.01334 3.13257 8.0235 3.18365 8.0235 3.23524C8.0235 3.28683 8.01334 3.33791 7.9936 3.38558C7.97386 3.43324 7.94492 3.47654 7.90844 3.51302L7.90289 3.50747Z"
+                    fill="#5CAB2B"
+                  />
+                </svg>
+
+                Tagname longer than 1 characters
+              </div>
+
+              <div class="userconf" v-if="tagname.length < 2">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 10 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M5.00008 0.416016C2.46883 0.416016 0.416748 2.4681 0.416748 4.99935C0.416748 7.5306 2.46883 9.58268 5.00008 9.58268C7.53133 9.58268 9.58342 7.5306 9.58342 4.99935C9.58342 2.4681 7.53133 0.416016 5.00008 0.416016ZM6.54466 4.04393C6.62056 3.96535 6.66256 3.8601 6.66161 3.75085C6.66066 3.6416 6.61684 3.53709 6.53959 3.45984C6.46234 3.38259 6.35783 3.33877 6.24858 3.33782C6.13933 3.33687 6.03408 3.37887 5.9555 3.45477L5.00008 4.41018L4.04466 3.45477C4.00623 3.41497 3.96025 3.38323 3.90942 3.36139C3.85858 3.33955 3.80391 3.32806 3.74858 3.32758C3.69326 3.3271 3.63839 3.33764 3.58718 3.35859C3.53598 3.37954 3.48946 3.41048 3.45033 3.4496C3.41121 3.48872 3.38027 3.53524 3.35932 3.58645C3.33837 3.63766 3.32783 3.69252 3.32831 3.74785C3.32879 3.80317 3.34029 3.85785 3.36212 3.90868C3.38396 3.95952 3.4157 4.0055 3.4555 4.04393L4.41092 4.99935L3.4555 5.95477C3.4157 5.9932 3.38396 6.03918 3.36212 6.09001C3.34029 6.14085 3.32879 6.19552 3.32831 6.25085C3.32783 6.30617 3.33837 6.36104 3.35932 6.41225C3.38027 6.46345 3.41121 6.50998 3.45033 6.5491C3.48946 6.58822 3.53598 6.61916 3.58718 6.64011C3.63839 6.66106 3.69326 6.6716 3.74858 6.67112C3.80391 6.67064 3.85858 6.65915 3.90942 6.63731C3.96025 6.61547 4.00623 6.58373 4.04466 6.54393L5.00008 5.58852L5.9555 6.54393C6.03408 6.61983 6.13933 6.66183 6.24858 6.66088C6.35783 6.65993 6.46234 6.61611 6.53959 6.53886C6.61684 6.4616 6.66066 6.3571 6.66161 6.24785C6.66256 6.1386 6.62056 6.03335 6.54466 5.95477L5.58925 4.99935L6.54466 4.04393Z"
+                    fill="#F06363"
+                  />
+                </svg>
+                Username longer than 2 characters
+              </div>
+            </div>
+            <div
+              type="submit"
+              v-if="tagname.length > 1"
+              class="skapaanv"
+              @click="addtag()"
+            >
+              Lägg till
+            </div>
+
+            <div v-if="tagname.length < 2" class="skapaanvf">Lägg till</div>
+            <div class="avbrtanv" @click="createtag = !createtag">Avbryt</div>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 <style scoped>
+.tagsbox {
+  background: #f0f0f0;
+
+  height: 200px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  word-break: break-all;
+  padding: 10px;
+  grid-gap: 5px;
+  grid-template-rows: repeat(3, 1fr);
+  width: 250px;
+  overflow-y: scroll;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+.tags {
+  height: 10px;
+  border: 1px solid rgba(63, 63, 63, 0.377);
+  padding: 10px;
+  display: flex;
+  align-content: center;
+  text-align: center;
+  align-items: center;
+  border-radius: 20px;
+  justify-content: space-between;
+  box-shadow: inset 0px 0px 5px 1px rgb(255, 255, 255);
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+.tagtext {
+  text-shadow: 0px 0px 2px #ffffff;
+
+  color: rgb(46, 46, 46);
+}
+.remove {
+  padding: 2px;
+  background: #a5a5a557;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  align-items: center;
+  width: 30px;
+
+  height: 30px;
+  margin-right: -10px;
+}
+.adminopt {
+  display: flex;
+}
 .kogwheel {
   cursor: pointer;
 
@@ -484,6 +631,11 @@
   cursor: pointer;
   transition: 0.5s;
 }
+.remove:hover {
+  cursor: pointer;
+  background-color: #8888882f;
+  color: rgb(131, 131, 131);
+}
 .createuserbtn:hover {
   transition: 0.5s;
   background: #006aae;
@@ -499,7 +651,9 @@
 }
 .img {
   width: 30px;
+  height: 30px;
   border-radius: 20px;
+  object-fit: cover !important;
 }
 .shadow {
   height: 3px;
@@ -718,10 +872,12 @@ video {
 }
 .imgin {
   width: 100px;
+  height: 100px;
   border-radius: 50px;
   border: solid #38abe0;
   box-shadow: 0px 5px 10px 2px rgba(114, 114, 114, 0.507);
   margin-top: 5px;
+  object-fit: cover !important;
 }
 .card {
   width: 300px;
@@ -811,8 +967,7 @@ import Linechart from "../components/Linechart.vue";
 import $ from "jquery";
 import Usermetrics from "../components/Usermetrics.vue";
 import Addtime from "../components/Addtime.vue";
-import ViewtimeV2 from "../components/ViewtimeV2.vue";
-import Viewtime from "../components/Viewtime.vue";
+
 import VueFormulate from "@braid/vue-formulate";
 import io from "socket.io-client";
 import Vue from "vue";
@@ -822,8 +977,7 @@ export default {
     Addtime,
     Usermetrics,
     Linechart,
-    ViewtimeV2,
-    Viewtime,
+
     VueFormulate,
   },
   data() {
@@ -856,6 +1010,10 @@ export default {
       newname: "",
       confirmu: true,
       confirme: true,
+      createtag: false,
+      tagname: "",
+      tagid: 0,
+      tags: [],
     };
   },
   created() {
@@ -891,6 +1049,10 @@ export default {
             .then((response) => response.json())
             .then((result) => {
               this.loggedin = result[0];
+              this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
+              if (this.loggedin.nanoid == undefined) {
+                window.location.reload();
+              }
               const searchnano = {
                 method: "POST",
 
@@ -922,6 +1084,11 @@ export default {
         }
       });
     this.socketInstance = io("https://flexn.se:3000/");
+
+    this.socketInstance.on("tags", (tags) => {
+      this.tags = tags;
+      console.log(this.tags);
+    });
     this.socketInstance.on("confirmationU", (confirmationuser) => {
       console.log(confirmationuser);
       if (confirmationuser !== "") {
@@ -984,6 +1151,23 @@ export default {
         nanoid: this.loggedin.nanoid,
       };
       this.socketInstance.emit("accountinfo", accountinfo);
+    },
+    addtag() {
+      const taginfo = {
+        tagname: this.tagname,
+        nanoid: this.loggedin.nanoid,
+        color: Math.floor(Math.random() * 16777215).toString(16),
+      };
+      console.log(taginfo);
+      this.socketInstance.emit("addtag", taginfo);
+    },
+    deletetag(id) {
+      const deletetaginfo = {
+        tagid: id,
+        nanoid: this.loggedin.nanoid,
+      };
+      this.socketInstance.emit("deletetag", deletetaginfo);
+      console.log(deletetaginfo);
     },
   },
 };

@@ -8,6 +8,9 @@
         <router-link class="links" to="/Time">
           <img class="icons" src="@/assets/Addtimeicon.png" alt="" />
         </router-link>
+        <router-link class="links" to="/Mytime"
+          ><img class="icons" src="@/assets/historyicon2.png" alt=""
+        /></router-link>
         <router-link class="links" to="/Charts"
           ><img class="icons" src="@/assets/charticon2.png" alt=""
         /></router-link>
@@ -16,7 +19,7 @@
           ><img class="icons" src="@/assets/usericon2.png" alt=""
         /></router-link>
         <router-link class="links" to="/Histor"
-          ><img class="icons" src="@/assets/historyicon2.png" alt=""
+          ><img class="icons" src="@/assets/Arkiv.png" alt=""
         /></router-link>
         <router-link class="links" to="/Planner"
           ><img class="icons" src="@/assets/dateicon.png" alt=""

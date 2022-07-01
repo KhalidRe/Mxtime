@@ -8,6 +8,21 @@
         <h2>Admin view</h2>
         <div class="inputsflex">
           <select
+            name="project"
+            id="debited"
+            ref="project"
+            v-model="projectfilter"
+          >
+            <option value="alla" selected>Alla projekt</option>
+            <option
+              v-for="projects in uniqueproject"
+              :key="projects.index"
+              :value="projects"
+            >
+              {{ projects }}
+            </option>
+          </select>
+          <select
             name="debited"
             id="debited"
             ref="debited"
@@ -125,6 +140,7 @@
 }
 #debited {
   width: 100px;
+  font-size: 10px;
 }
 @media only screen and (max-width: 650px) {
   .topcont {
@@ -132,6 +148,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 0px;
+    padding: 0px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
   }
   .inputsflex {
     width: 30%;
@@ -312,7 +332,7 @@ table {
 }
 
 .tbl-content {
-  height: 300px;
+  height: 75vh;
   overflow-x: auto;
   margin-top: 0px;
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -345,6 +365,7 @@ td {
   color: rgb(85, 85, 85);
   border-bottom: solid 1px rgba(255, 255, 255, 0.1);
 }
+
 select {
   border: solid 1px #5151517c;
   background: #ececec;
@@ -430,9 +451,11 @@ export default {
       startholder: "",
       endholder: "getTime(this.end),",
       debitfilter: "alla",
+      projectfilter: "alla",
       sum: 0,
       i: 0,
       subar: [],
+      uniqueproject: [],
     };
   },
 
@@ -473,6 +496,9 @@ export default {
                 .then((result) => {
                   this.time = result;
                   this.subar = [];
+                  this.uniqueproject = [
+                    ...new Set(this.time.map((item) => item.Title)),
+                  ];
                   for (this.i = 0; this.time.length > 0; this.i++) {
                     this.subar.push(
                       this.time[this.i].Hours +
@@ -525,7 +551,11 @@ export default {
               );
             });
           }
-
+          if (this.projectfilter !== "alla") {
+            this.time = this.time.filter((results) => {
+              return results.Title == this.projectfilter;
+            });
+          }
           if (this.selectedfilter !== "alla") {
             this.time = this.time.filter((results) => {
               return results.Name.includes(this.selectedfilter);

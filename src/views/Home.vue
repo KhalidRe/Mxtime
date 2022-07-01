@@ -188,7 +188,7 @@
                       new Date(projects.Deadline) - new Date(projects.Date)
                     )) *
                     100
-                ) > 100
+                ) >= 100
               "
               :diameter="150"
               :completed-steps="0"

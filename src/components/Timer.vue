@@ -24,7 +24,7 @@
     <div v-if="sureoverlaytime" class="sureoverlay">
       <div class="overcaps overcapsm">
         <h2>Logga Tid</h2>
-        <div v-if="suretext" class="contentflex">
+        <div v-if="suretext == 0" class="contentflex">
           Projekt: {{ chosenproject }} <br />
           <div class="suretext">
             Vill du Spara tiden? <br />
@@ -39,7 +39,7 @@
             </div>
           </div>
 
-          <div v-if="suretext" class="janejbtn">
+          <div v-if="suretext == 0" class="janejbtn">
             <button
               class="nejbtn"
               @click="
@@ -48,17 +48,14 @@
             >
               NEJ
             </button>
-            <Button
-              class="jabtn"
-              @click="(itson = false), (suretext = !suretext)"
-            >
+            <Button class="jabtn" @click="(itson = false), (suretext = 1)">
               JA
             </Button>
           </div>
         </div>
-        <div v-if="!suretext" class="contentflexa">
+        <div v-if="suretext == 1" class="contentflexa">
           Projekt: {{ chosenproject }} <br />
-          <div v-if="!suretext" class="suretexta">
+          <div v-if="suretext == 1" class="suretexta">
             Notis: <br />
             <div class="wannasavea">
               <textarea
@@ -72,16 +69,57 @@
             </div>
           </div>
 
-          <div v-if="!suretext" class="janejbtn">
-            <button class="nejbtn" @click="suretext = !suretext">Avbryt</button>
+          <div v-if="suretext == 1" class="janejbtn">
+            <button class="nejbtn" @click="suretext = 0">Avbryt</button>
+            <Button class="jabtn" @click="(itson = false), (suretext = 2)">
+              Nästa
+            </Button>
+          </div>
+        </div>
+        <div v-if="suretext == 2" class="contentflexa">
+          Projekt: {{ chosenproject }} <br />
+          <div v-if="suretext == 2" class="suretexta">
+            Notis: <br />
+            <div class="dbcaps">
+              <div class="db">
+                <label class="container">
+                  <input
+                    v-model="debit"
+                    id="debitja"
+                    class="deltagcheckbox"
+                    type="radio"
+                    value="1"
+                  />
+                  <label for="debitja" class="checkmark">
+                    <div>DEBIT</div>
+                  </label>
+                </label>
+                <label class="container">
+                  <input
+                    v-model="debit"
+                    id="debitnej"
+                    class="deltagcheckbox"
+                    type="radio"
+                    value="0"
+                  />
+                  <label for="debitnej" class="checkmark">
+                    <div>EJ DEBIT</div>
+                  </label>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="suretext == 2" class="janejbtn">
+            <button class="nejbtn" @click="suretext = 1">Avbryt</button>
             <Button
               class="jabtn"
               @click="
                 checker(),
                   reset(),
                   (itson = false),
-                  (sureoverlaytime = !sureoverlaytime),
-                  (suretext = !suretext)
+                  (suretext = 0),
+                  (sureoverlaytime = !sureoverlaytime)
               "
             >
               Skicka
@@ -586,7 +624,70 @@
 .dropdown a:hover {
   background-color: #ddd;
 }
+.deltagcheckbox {
+  appearance: none;
+}
+.debitstuff {
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+  border-radius: 20px;
+  color: white;
+  background: #1988c9;
+}
+.debitcheck {
+  appearance: none;
+}
+.dbcaps {
+  margin-top: 15px;
+}
+.db {
+  display: flex;
+  justify-content: center;
+  grid-gap: 20px;
+  height: 50px;
+}
+.checkmark {
+  position: absolute;
+  width: 50px;
+  padding: 10px;
+  background-color: #e0eeff;
 
+  border: solid white 2px;
+}
+.container:hover input ~ .checkmark {
+  background-color: #e0eeff;
+}
+.container input:checked ~ .checkmark {
+  background-color: #1988c9;
+  color: white;
+  border: 2px rgb(32, 102, 151) solid;
+}
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  display: none;
+}
+.container {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  margin-right: 70px;
+  font-size: 12px;
+}
 .show {
   display: block;
 }
@@ -708,7 +809,7 @@ export default {
     return {
       message: "Menu Test",
       navVisible: true,
-      show: true,
+      show: false,
       products: [
         { id: 1, name: "Foo" },
         { id: 2, name: "Bar" },
@@ -744,8 +845,8 @@ export default {
       Seconds: 0,
       Notes: "",
       debit: 1,
-      toltip: false,
-      shows: true,
+      toltip: true,
+      shows: false,
       project: [],
       openoverlay: true,
       play: this.$store.state.playdata,
@@ -760,7 +861,7 @@ export default {
       primed: false,
       sureoverlay: false,
       sureoverlaytime: false,
-      suretext: true,
+      suretext: 0,
       picked: moment(moment().add(0, "d")._d).format("YYYY-MM-DD"),
     };
   },
@@ -777,7 +878,7 @@ export default {
       console.log(this.$store.state.playdata);
     },
     checker() {
-      const datapacket = {
+      const addtimedata = {
         projectid: this.chosenid,
         title: this.chosenproject,
         name: this.loggedin.Name,
@@ -790,7 +891,11 @@ export default {
         debit: this.debit,
         nanoid: this.loggedin.nanoid,
       };
-      console.log(datapacket);
+
+      this.socketInstance.emit("time", addtimedata);
+      this.chosenproject = "";
+      this.chosenid = 0;
+      this.Notes = "";
     },
     toggle: function () {
       this.$refs.timer.toggle();

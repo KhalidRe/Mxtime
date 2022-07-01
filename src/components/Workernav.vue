@@ -1,5 +1,43 @@
 <template>
   <div id="Workernav">
+    <div v-if="!openoverlay" class="changeprofileoverlay">
+      <div class="overlay">
+        <h2 class="header">Byt profilbild</h2>
+        <div>
+          <img class="Cprofile" ref="profilepreview" :src="icon" alt="" />
+          <div class="pwup">
+            <div class="inputWrapper">
+              <label for="siofu_input">Välj fil</label>
+              <input
+                class="previewbtn"
+                id="siofu_input"
+                type="file"
+                ref="files"
+                accept="image/png, image/gif, image/jpeg"
+                min="1"
+                max="1"
+                max-file-size="10240000"
+                @change="preview()"
+              />
+            </div>
+
+            <button
+              class="uploadbtn"
+              @click="upload()"
+              v-if="previewprimed.length > 0"
+            >
+              Spara
+            </button>
+            <button class="uploadbtn faker" v-if="previewprimed.length == 0">
+              Spara
+            </button>
+          </div>
+          <button class="close" @click="openoverlay = !openoverlay">
+            Stäng
+          </button>
+        </div>
+      </div>
+    </div>
     <div class="e aktiv">
       <span>Aktiv</span>
       <span class="st A">{{ Aktiv.length }}</span>
@@ -14,11 +52,80 @@
     </div>
     <div class="profname">
       <span>{{ loggedin.Name }}</span>
-      <img class="profile" :src="icon" alt="" />
+      <img
+        @click="openoverlay = !openoverlay"
+        class="profile"
+        :src="icon"
+        alt=""
+      />
     </div>
   </div>
 </template>
 <style scoped>
+.inputWrapper {
+  cursor: pointer;
+  padding: 10px;
+  height: 20px;
+  width: 50px;
+  overflow: hidden;
+
+  cursor: pointer;
+  /*Using a background color, but you can use a background image to represent a button*/
+  background-color: #ddf;
+  color: black;
+}
+.previewbtn {
+  cursor: pointer;
+
+  /*This makes the button huge. If you want a bigger button, increase the font size*/
+  font-size: 50px;
+  /*Opacity settings for all browsers*/
+  opacity: 0;
+  -moz-opacity: 0;
+  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+}
+
+.pwup {
+  display: flex;
+  justify-content: space-around;
+}
+.Cprofile {
+  margin: 20px;
+  width: 100px;
+
+  height: 100px !important;
+  object-fit: cover !important;
+  border-radius: 100px;
+}
+.header {
+  margin: 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 20px 20px 0px 0px;
+  background: #1988c9;
+}
+.changeprofileoverlay {
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  left: 0%;
+  top: 0%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.overlay {
+  position: absolute;
+  top: 10%;
+  background: white;
+  width: 300px;
+  height: 500px;
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.623);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+}
 .st {
   box-shadow: inset 0px 0px 5px 5px rgba(255, 255, 255, 0.212);
   border-radius: 25px;
@@ -66,7 +173,9 @@
 }
 .profile {
   width: 50px;
+  height: 50px;
   border-radius: 25px;
+  object-fit: cover !important;
 }
 .profname {
   display: flex;
@@ -86,10 +195,16 @@
     width: normal;
     box-shadow: 0px 0px 4px 1px rgb(145, 145, 145);
   }
+  @media only screen and (max-width: 444px) {
+    * {
+      font-size: 10px;
+    }
+  }
 }
 </style>
 <script>
 import io from "socket.io-client";
+import SocketIOFileUpload from "socketio-file-upload";
 export default {
   data() {
     return {
@@ -102,6 +217,8 @@ export default {
       icon: "",
       loggedstatus: "",
       project: "",
+      openoverlay: false,
+      previewprimed: "",
     };
   },
   created() {
@@ -125,6 +242,8 @@ export default {
           this.loggedin.Profile && require(`@/assets/${this.loggedin.Profile}`);
 
         this.socketInstance = io("https://flexn.se:3000");
+        this.uploader = new SocketIOFileUpload(this.socketInstance);
+
         this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
         this.socketInstance.on("data:received", (projectdata) => {
           if (this.loggedstatus == "Admin") {
@@ -146,6 +265,27 @@ export default {
           });
         });
       });
+  },
+  methods: {
+    preview() {
+      this.$refs.files.files[0].name = "kuuuksug.jpg";
+      console.log(this.$refs.files.files);
+      let preview = URL.createObjectURL(this.$refs.files.files[0]);
+      console.log(preview);
+      this.$refs.profilepreview.src = preview;
+      this.previewprimed = preview;
+
+      //   this.uploader.listenOnInput(document.getElementById("siofu_input"));
+    },
+    upload() {
+      /*this.socketInstance.emit(
+        "upload",
+        this.$refs.files.files[0],
+        (status) => {
+          console.log(status);
+        }
+      );*/
+    },
   },
 };
 </script>

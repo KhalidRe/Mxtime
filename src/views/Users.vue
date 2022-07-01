@@ -235,10 +235,12 @@ video {
 }
 .img {
   width: 100px;
+  height: 100px;
   border-radius: 50px;
   border: solid #38abe0;
   box-shadow: 0px 5px 10px 2px rgba(114, 114, 114, 0.507);
   margin-top: 5px;
+  object-fit: cover !important;
 }
 .card {
   width: 300px;
