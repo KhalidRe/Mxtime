@@ -60,41 +60,52 @@
           <input type="submit" value="Filtrera" @click="filtertime()" />
         </div>
       </div>
+      <table id="testTable">
+        <div class="tbl-header">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <thead>
+              <tr>
+                <th>Projekt</th>
+                <th>Skapare</th>
+                <th>Timmar</th>
+                <th>Minuter</th>
+                <th>Beskrivning</th>
+                <th>Datum</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="tbl-content">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+              <tr class="row" v-for="times in time" :key="times.id">
+                <td>
+                  {{ times.Title }}
+                  <span class="debinf" v-if="times.debit == 1">(debit)</span>
+                  <span class="debinf" v-if="times.debit == 0">(Ejdebit)</span>
+                </td>
+                <td>{{ times.Name }}</td>
+                <td>{{ times.Hours }}</td>
+                <td>{{ times.Minutes }}</td>
+                <td>{{ times.Description }}</td>
 
-      <div class="tbl-header">
-        <table cellpadding="0" cellspacing="0" border="0">
-          <thead>
-            <tr>
-              <th>Projekt</th>
-              <th>Skapare</th>
-              <th>Timmar</th>
-              <th>Minuter</th>
-              <th>Beskrivning</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-      <div class="tbl-content">
-        <table cellpadding="0" cellspacing="0" border="0">
-          <tbody>
-            <tr class="row" v-for="times in time" :key="times.id">
-              <td>
-                {{ times.Title }}
-                <span class="debinf" v-if="times.debit == 1">(debit)</span>
-                <span class="debinf" v-if="times.debit == 0">(Ejdebit)</span>
-              </td>
-              <td>{{ times.Name }}</td>
-              <td>{{ times.Hours }}</td>
-              <td>{{ times.Minutes }}</td>
-              <td>{{ times.Description }}</td>
-            </tr>
-            <tr class="totalsum">
-              <td>Totala Tid: {{ sum }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                <td>{{ parseInt(times.Datum) | moment }}</td>
+              </tr>
+              <tr class="totalsum">
+                <td>Totala Tid: {{ sum }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </table>
     </section>
+    <input
+      type="button"
+      class="excbtn"
+      @click="exportReportToExcel(this)"
+      value="Exportera till Excel"
+    />
+
     <transition name="slide-fade">
       <div v-if="!R" class="noclick">
         <div id="Deleteform">
@@ -134,6 +145,20 @@
   </div>
 </template>
 <style scoped>
+.excbtn {
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  background: #1988c9;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.excbtn:hover {
+  background: #4dacc1;
+}
 .totalsum > td {
   font-size: 18px;
   font-weight: 800;
@@ -430,8 +455,12 @@ section {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 </style>
+
 <script>
 import Addtimeform from "@/components/Addtimeform.vue";
+import * as XLSX from "xlsx";
+import TableToExcel from "@linways/table-to-excel";
+import moment from "moment";
 export default {
   components: {
     Addtimeform,
@@ -495,6 +524,7 @@ export default {
                 .then((response) => response.json())
                 .then((result) => {
                   this.time = result;
+
                   this.subar = [];
                   this.uniqueproject = [
                     ...new Set(this.time.map((item) => item.Title)),
@@ -518,7 +548,32 @@ export default {
           });
       });
   },
+  filters: {
+    moment: function (date) {
+      return moment(date).format("L");
+    },
+  },
   methods: {
+    moment: function () {
+      return moment();
+    },
+    exportReportToExcel() {
+      let table = document.getElementsByTagName("table");
+      TableToExcel.convert(table[0], {
+        name: `${
+          "MX-TIDRAPPORT - " +
+          this.projectfilter +
+          `-` +
+          this.selectedfilter +
+          `-` +
+          this.debitfilter
+        }.xlsx`,
+        sheet: {
+          name: "Sheet 1",
+        },
+      });
+    },
+
     Remove(id) {
       this.z = id - 1;
       this.x = id;
@@ -555,6 +610,7 @@ export default {
             this.time = this.time.filter((results) => {
               return results.Title == this.projectfilter;
             });
+            this.projectschosen = this.projectfilter;
           }
           if (this.selectedfilter !== "alla") {
             this.time = this.time.filter((results) => {

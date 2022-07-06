@@ -596,6 +596,15 @@ a:focus {
   border-radius: 20px;
 }
 @media only screen and (max-width: 800px) {
+  .daypick {
+    font-size: 10px;
+  }
+  .singDate {
+    font-size: 10px;
+  }
+  .nextW {
+    font-size: 10px;
+  }
   .MnW {
     width: 100%;
     justify-content: space-around;
@@ -622,6 +631,27 @@ a:focus {
   .nextW {
     padding-left: 5px;
     padding-right: 5px;
+  }
+}
+@media only screen and (max-width: 800px) {
+  .Forminnershown {
+    width: 100%;
+    padding: 0;
+  }
+  .formCont {
+    width: 100%;
+  }
+  .db {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+
+    height: 100px;
+  }
+  .dropper {
+  }
+  .chooseproject {
+    width: 200px;
   }
 }
 </style>
@@ -680,6 +710,24 @@ export default {
     };
   },
   created() {
+    const auth = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+
+      body: JSON.stringify({ user: this.logged }),
+    };
+    fetch("https://flexn.se:3000/loggedin", auth)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.length == 0) {
+          location.replace("https://flexnet.se/#/");
+        }
+      });
+
     const requestOptions = {
       method: "POST",
       mode: "cors",
@@ -697,7 +745,7 @@ export default {
         this.loggedstatus = this.loggedin.Status;
 
         this.socketInstance = io("https://flexn.se:3000/");
-        this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
+        this.socketInstance.emit("loggedinfo", this.loggedin);
         if (this.loggedin.nanoid == undefined) {
           window.location.reload();
         }

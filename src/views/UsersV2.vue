@@ -18,7 +18,7 @@
             <div class="gotit">
               <img
                 class="imgin"
-                :src="require(`@/assets/${this.eprofile}`)"
+                :src="`https://flexn.se/mxprofile/${this.eprofile}.jpg`"
                 alt=""
               />
               <h1>{{ this.ename }}</h1>
@@ -91,7 +91,7 @@
             <td class="firsttd">
               <img
                 class="img"
-                :src="require(`@/assets/${users.Profile}`)"
+                :src="`https://flexn.se/mxprofile/${users.Profile}.jpg`"
                 alt=""
               />{{ users.Name }}
             </td>
@@ -106,7 +106,8 @@
                 View
               </button>
             </td>
-            <td>
+            <!--
+<td>
               <svg
                 class="kogwheel"
                 width="50"
@@ -147,6 +148,7 @@
                 </defs>
               </svg>
             </td>
+            -->
           </tr>
         </tbody>
       </table>
@@ -621,6 +623,7 @@
   border-radius: 20px;
   box-shadow: 0px 5px 5px 1px rgba(88, 88, 88, 0.178);
 }
+
 .createuserbtn {
   margin: 20px;
   padding: 10px;
@@ -639,6 +642,17 @@
 .createuserbtn:hover {
   transition: 0.5s;
   background: #006aae;
+}
+@media only screen and (max-width: 786px) {
+  .createuserbtn {
+    font-size: 12px;
+
+    text-align: center;
+
+    margin: 0px !important;
+    margin-top: 20px !important;
+    margin-left: 5px !important;
+  }
 }
 .usnc {
   display: flex;
@@ -1049,7 +1063,7 @@ export default {
             .then((response) => response.json())
             .then((result) => {
               this.loggedin = result[0];
-              this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
+              this.socketInstance.emit("loggedinfo", this.loggedin);
               if (this.loggedin.nanoid == undefined) {
                 window.location.reload();
               }

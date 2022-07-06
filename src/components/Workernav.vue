@@ -1,13 +1,20 @@
 <template>
   <div id="Workernav">
-    <div v-if="!openoverlay" class="changeprofileoverlay">
+    <div v-show="openoverlay" class="changeprofileoverlay">
       <div class="overlay">
         <h2 class="header">Byt profilbild</h2>
-        <div>
-          <img class="Cprofile" ref="profilepreview" :src="icon" alt="" />
+        <div class="flexit">
+          <label class="lab" for="siofu_input">
+            <img
+              class="Cprofile"
+              ref="profilepreview"
+              :src="`https://flexn.se/mxprofile/${profileimage}.jpg`"
+              alt=""
+            />
+          </label>
           <div class="pwup">
             <div class="inputWrapper">
-              <label for="siofu_input">Välj fil</label>
+              <label class="lab" for="siofu_input">Välj fil</label>
               <input
                 class="previewbtn"
                 id="siofu_input"
@@ -55,13 +62,41 @@
       <img
         @click="openoverlay = !openoverlay"
         class="profile"
-        :src="icon"
+        ref="profile"
+        :src="`https://flexn.se/mxprofile/${profileimage}.jpg`"
         alt=""
       />
     </div>
   </div>
 </template>
 <style scoped>
+.profile {
+  cursor: pointer;
+}
+.lab {
+  cursor: pointer;
+}
+.close {
+  border: none;
+  width: 50%;
+  align-self: center;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 20px;
+  background: #2b91cc;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+.close:hover {
+  background: #1988c9;
+}
+.flexit {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 80%;
+}
 .inputWrapper {
   cursor: pointer;
   padding: 10px;
@@ -86,6 +121,7 @@
 }
 
 .pwup {
+  visibility: hidden;
   display: flex;
   justify-content: space-around;
 }
@@ -120,7 +156,7 @@
   top: 10%;
   background: white;
   width: 300px;
-  height: 500px;
+  height: 400px;
   box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.623);
   border-radius: 20px;
   display: flex;
@@ -140,6 +176,12 @@
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 20px;
+}
+* {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
 }
 /*
 
@@ -205,6 +247,7 @@
 <script>
 import io from "socket.io-client";
 import SocketIOFileUpload from "socketio-file-upload";
+
 export default {
   data() {
     return {
@@ -219,6 +262,8 @@ export default {
       project: "",
       openoverlay: false,
       previewprimed: "",
+      imagefile: "",
+      profileimage: "",
     };
   },
   created() {
@@ -237,14 +282,13 @@ export default {
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
-
-        this.icon =
-          this.loggedin.Profile && require(`@/assets/${this.loggedin.Profile}`);
+        this.profileimage = result[0].Profile;
+        console.log(this.loggedin);
 
         this.socketInstance = io("https://flexn.se:3000");
         this.uploader = new SocketIOFileUpload(this.socketInstance);
 
-        this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
+        this.socketInstance.emit("loggedinfo", this.loggedin);
         this.socketInstance.on("data:received", (projectdata) => {
           if (this.loggedstatus == "Admin") {
             this.project = projectdata;
@@ -264,28 +308,34 @@ export default {
             return results.Statu.includes("C");
           });
         });
+        this.uploader.listenOnInput(document.getElementById("siofu_input"));
+        this.uploader.addEventListener("complete", function (event) {
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
+        });
       });
   },
   methods: {
     preview() {
-      this.$refs.files.files[0].name = "kuuuksug.jpg";
-      console.log(this.$refs.files.files);
+      let filer = new File(
+        [this.$refs.files.files],
+        this.loggedin.id +
+          this.loggedin.nanoid.toLowerCase() +
+          this.loggedin.Username.toLowerCase() +
+          "." +
+          this.$refs.files.files[0].name
+            .substring(this.$refs.files.files[0].name.indexOf(".") + 1)
+            .toLowerCase()
+      );
+
+      console.log(filer);
       let preview = URL.createObjectURL(this.$refs.files.files[0]);
       console.log(preview);
       this.$refs.profilepreview.src = preview;
       this.previewprimed = preview;
-
-      //   this.uploader.listenOnInput(document.getElementById("siofu_input"));
     },
-    upload() {
-      /*this.socketInstance.emit(
-        "upload",
-        this.$refs.files.files[0],
-        (status) => {
-          console.log(status);
-        }
-      );*/
-    },
+    upload() {},
   },
 };
 </script>

@@ -12,7 +12,7 @@
           <div class="profile">
             <img
               class="img"
-              :src="require(`@/assets/${users.Profile}`)"
+              :src="`https://flexn.se/mxprofile/${users.Profile}.jpg`"
               alt=""
             />
           </div>
@@ -51,7 +51,7 @@
             <div class="gotit">
               <img
                 class="img"
-                :src="require(`@/assets/${this.eprofile}`)"
+                :src="`https://flexn.se/mxprofile/${this.eprofile}.jpg`"
                 alt=""
               />
               <h1>{{ this.ename }}</h1>

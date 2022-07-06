@@ -1,7 +1,7 @@
 <template>
   <div id="Home">
     <Workernav />
-    <Timer />
+    <Timer id="Timepos" />
     <div class="filterbtncont">
       <div
         class="filterbtn"
@@ -297,15 +297,17 @@
           <span class="fontgradient">Deltagare: </span>
 
           <img
+            :title="projects.Author"
             class="deltagare"
-            :src="require(`@/assets/${projects.Authorprofile}`)"
+            :src="`https://flexn.se/mxprofile/${projects.Authorprofile}.jpg`"
             alt=""
           />
           <img
+            :title="sparrs.Name"
             v-for="sparrs in sparr[index]"
             :key="sparrs.index"
             class="deltagare va"
-            :src="require(`@/assets/${sparrs.Profile}`)"
+            :src="`https://flexn.se/mxprofile/${sparrs.Profile}.jpg`"
             alt=""
           />
         </div>
@@ -1402,9 +1404,11 @@ epic-form .esd {
 }
 .deltagare {
   width: 30px;
+  height: 30px;
   border-radius: 25px;
   box-shadow: 0px 2px 5px 1px rgba(100, 100, 100, 0.5);
   transition: 1;
+  object-fit: cover !important;
 }
 .deltagare:hover {
   margin-top: -10px;
@@ -1634,6 +1638,21 @@ input[type="date"] {
     margin-top: 0px;
   }
 }
+@media only screen and (max-width: 786px) {
+  #Timepos {
+    position: fixed;
+    bottom: 0%;
+
+    display: flex;
+    z-index: 2;
+  }
+}
+* {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
 </style>
 <script>
 import $ from "jquery";
@@ -1737,45 +1756,53 @@ export default {
       body: JSON.stringify({ user: this.logged }),
     };
 
-    fetch("https://flexn.se:3000/workernav", auth)
+    fetch("https://flexn.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        this.loggedin = result[0];
+        console.log("hej");
+        if (result.length == 0) {
+          location.replace("https://flexnet.se/#/");
+        }
 
-        fetch("https://flexn.se:3000/loggedin", auth)
+        fetch("https://flexn.se:3000/workernav", auth)
           .then((response) => response.json())
           .then((result) => {
-            this.loggedstatus = result[0].Status;
-            if (result.length == 0) {
-              location.replace("https://flexnet.se/#/");
-            }
-            if (result.length > 0) {
-              const searchnano = {
-                method: "POST",
+            this.loggedin = result[0];
 
-                headers: {
-                  "Content-Type": "application/json",
-                  Accept: "application/json",
-                },
+            fetch("https://flexn.se:3000/loggedin", auth)
+              .then((response) => response.json())
+              .then((result) => {
+                this.loggedstatus = result[0].Status;
+                if (result.length == 0) {
+                  location.replace("https://flexnet.se/#/");
+                }
+                if (result.length > 0) {
+                  const searchnano = {
+                    method: "POST",
 
-                body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
-              };
-              fetch("https://flexn.se:3000/getusers", searchnano)
-                .then((response) => response.json())
-                .then((result) => {
-                  this.user = result;
-                });
+                    headers: {
+                      "Content-Type": "application/json",
+                      Accept: "application/json",
+                    },
 
-              const requestOptionsget = {
-                method: "GET",
-                mode: "cors",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  "Access-Control-Allow-Origin": "*",
-                },
-              };
-              /* fetch("http://192.168.1.191:3000/viewprojects", requestOptionsget)
+                    body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
+                  };
+                  fetch("https://flexn.se:3000/getusers", searchnano)
+                    .then((response) => response.json())
+                    .then((result) => {
+                      this.user = result;
+                    });
+
+                  const requestOptionsget = {
+                    method: "GET",
+                    mode: "cors",
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                      "Access-Control-Allow-Origin": "*",
+                    },
+                  };
+                  /* fetch("http://192.168.1.191:3000/viewprojects", requestOptionsget)
             .then((response) => response.json())
             .then((result) => {
               this.project = result;
@@ -1794,72 +1821,75 @@ export default {
               }
 
             }); */
-              this.socketInstance = io("https://flexn.se:3000/");
-              this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
-              this.socketInstance.on("data:received", (projectdata) => {
-                if (this.loggedstatus == "Admin") {
-                  this.project = projectdata;
-                  this.projectplaceholder = projectdata;
-                } else {
-                  this.project = projectdata.filter(
-                    (result) => result.Authorstatus == this.loggedstatus
-                  );
-                  this.projectplaceholder = projectdata.filter(
-                    (result) => result.Authorstatus == this.loggedstatus
-                  );
-                }
-
-                this.timearray = [];
-                this.array = [];
-                for (this.i = 0; this.i < this.project.length; this.i++) {
-                  this.tu = this.project[this.i].Timeused;
-                  this.tb = this.project[this.i].Timebudget;
-                  this.timep = Math.round((this.tu / this.tb) * 100);
-
-                  this.start = new Date(this.project[this.i].Date);
-                  this.end = new Date(this.project[this.i].Deadline);
-                  this.today = new Date();
-                  this.q = Math.abs(this.today - this.start);
-                  this.d = Math.abs(this.end - this.start);
-
-                  this.optimal = Math.round((this.q / this.d) * 100);
-
-                  if (this.project[this.i].Deadline.length < 1) {
-                    this.optimal = 0;
-                  }
-                  if (this.optimal > 100 || this.end < this.today) {
-                    this.optimal = 100;
-                  }
-                  this.timearray.push(this.timep);
-                  this.array.push(this.optimal);
-                }
-              });
-              this.socketInstance.on("trello:received", (trellodata) => {
-                this.trellodata = trellodata;
-                this.atrello = this.trellodata.filter(
-                  (result) => result.fatherid == this.trelloprojectid
-                );
-              });
-              this.socketInstance.on(
-                "workerdeltag:received",
-                (workerdeltag) => {
-                  this.workersassignd = workerdeltag;
-                  this.sparr = [];
-                  for (
-                    this.forinpw = 0;
-                    this.project.length > this.forinpw;
-                    this.forinpw++
-                  ) {
-                    this.sparr.push(
-                      this.workersassignd.filter(
+                  this.socketInstance = io("https://flexn.se:3000/");
+                  this.socketInstance.emit("loggedinfo", this.loggedin);
+                  this.socketInstance.on("data:received", (projectdata) => {
+                    if (this.loggedstatus == "Admin") {
+                      this.project = projectdata;
+                      this.projectplaceholder = projectdata;
+                    } else {
+                      this.project = projectdata.filter(
                         (result) =>
-                          result.projectid == this.project[this.forinpw].id
-                      )
+                          result.Authorstatus == this.loggedstatus || "Admin"
+                      );
+                      this.projectplaceholder = projectdata.filter(
+                        (result) =>
+                          result.Authorstatus == this.loggedstatus || "Admin"
+                      );
+                    }
+
+                    this.timearray = [];
+                    this.array = [];
+                    for (this.i = 0; this.i < this.project.length; this.i++) {
+                      this.tu = this.project[this.i].Timeused;
+                      this.tb = this.project[this.i].Timebudget;
+                      this.timep = Math.round((this.tu / this.tb) * 100);
+
+                      this.start = new Date(this.project[this.i].Date);
+                      this.end = new Date(this.project[this.i].Deadline);
+                      this.today = new Date();
+                      this.q = Math.abs(this.today - this.start);
+                      this.d = Math.abs(this.end - this.start);
+
+                      this.optimal = Math.round((this.q / this.d) * 100);
+
+                      if (this.project[this.i].Deadline.length < 1) {
+                        this.optimal = 0;
+                      }
+                      if (this.optimal > 100 || this.end < this.today) {
+                        this.optimal = 100;
+                      }
+                      this.timearray.push(this.timep);
+                      this.array.push(this.optimal);
+                    }
+                  });
+                  this.socketInstance.on("trello:received", (trellodata) => {
+                    this.trellodata = trellodata;
+                    this.atrello = this.trellodata.filter(
+                      (result) => result.fatherid == this.trelloprojectid
                     );
-                  }
+                  });
+                  this.socketInstance.on(
+                    "workerdeltag:received",
+                    (workerdeltag) => {
+                      this.workersassignd = workerdeltag;
+                      this.sparr = [];
+                      for (
+                        this.forinpw = 0;
+                        this.project.length > this.forinpw;
+                        this.forinpw++
+                      ) {
+                        this.sparr.push(
+                          this.workersassignd.filter(
+                            (result) =>
+                              result.projectid == this.project[this.forinpw].id
+                          )
+                        );
+                      }
+                    }
+                  );
                 }
-              );
-            }
+              });
           });
       });
   },

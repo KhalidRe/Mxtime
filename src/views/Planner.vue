@@ -96,7 +96,7 @@
                       <div class="imgandtxt">
                         <img
                           class="deltagare va"
-                          :src="require(`@/assets/${deltag.Profile}`)"
+                          :src="`https://flexn.se/mxprofile/${deltag.Profile}.jpg`"
                           alt=""
                         />
                         {{ deltag.Name }}
@@ -117,7 +117,7 @@
                       <div class="imgandtxt">
                         <img
                           class="deltagare va"
-                          :src="require(`@/assets/${deltag.Profile}`)"
+                          :src="`https://flexn.se/mxprofile/${deltag.Profile}.jpg`"
                           alt=""
                         />
                         {{ deltag.Name }}
@@ -422,7 +422,7 @@
                         <label :for="deltag.Name + deltag.id" class="checkmark"
                           ><img
                             class="icons"
-                            :src="require(`@/assets/${deltag.Profile}`)"
+                            :src="`https://flexn.se/mxprofile/${deltag.Profile}.jpg`"
                           />
                           <div>{{ deltag.Name }}</div>
                         </label>
@@ -603,7 +603,7 @@
                         v-for="sparrs in sparr[index]"
                         :key="sparrs.index"
                         class="deltagare va"
-                        :src="require(`@/assets/${sparrs.profile}`)"
+                        :src="`https://flexn.se/mxprofile/${sparrs.profile}.jpg`"
                         alt=""
                       />
                     </div>
@@ -713,7 +713,7 @@
                           v-for="sparrs in sparr[index]"
                           :key="sparrs.index"
                           class="deltagare va"
-                          :src="require(`@/assets/${sparrs.profile}`)"
+                          :src="`https://flexn.se/mxprofile/${sparrs.profile}.jpg`"
                           alt=""
                         />
                       </div>
@@ -1657,7 +1657,7 @@ export default {
           });
 
         this.socketInstance = io("https://flexn.se:3000/");
-        this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
+        this.socketInstance.emit("loggedinfo", this.loggedin);
         if (this.loggedin.nanoid == undefined) {
           window.location.reload();
         }

@@ -60,9 +60,9 @@
                     <label :for="deltag.Name + deltag.id" class="checkmark"
                       ><img
                         class="icons"
-                        :src="require(`@/assets/${deltag.Profile}`)"
+                        :src="`https://flexn.se/mxprofile/${deltag.Profile}.jpg`"
                       />
-                      <div>{{ deltag.Name }}</div>
+                      <div class="deltagname">{{ deltag.Name }}</div>
                     </label>
                   </label>
                 </div>
@@ -147,6 +147,9 @@
 .icons {
   width: 50px;
   border-radius: 100%;
+}
+.deltagname {
+  font-size: 13px;
 }
 .container {
   display: block;
@@ -328,6 +331,12 @@
   opacity: 0;
 }
 #Postit {
+}
+.icons {
+  width: 50px;
+  height: 50px;
+  border-radius: 100px;
+  object-fit: cover !important;
 }
 #Formen {
   position: absolute;

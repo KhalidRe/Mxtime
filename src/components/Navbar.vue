@@ -21,7 +21,7 @@
         <router-link class="links" to="/Histor"
           ><img class="icons" src="@/assets/Arkiv.png" alt=""
         /></router-link>
-        <router-link class="links" to="/Planner"
+        <router-link class="links planner" to="/Planner"
           ><img class="icons" src="@/assets/dateicon.png" alt=""
         /></router-link>
 
@@ -55,6 +55,11 @@ export default {
 </script>
 
 <style scoped>
+@media only screen and (max-width: 786px) {
+  .planner {
+    display: none !important;
+  }
+}
 .text {
   transform: rotate(90deg);
   font-size: 16px;
@@ -76,8 +81,17 @@ export default {
   border-radius: 0% 25px 25px 0px;
   background: #6aec87;
   cursor: pointer;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
 }
-
+* {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
 #father {
   display: flex;
   height: 100vh;

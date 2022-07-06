@@ -415,16 +415,25 @@
   background-size: 1000px;
 
   animation: gradient 1.5s infinite linear;
-  width: 51%;
+  width: 49%;
+  margin-bottom: -3px;
+  position: fixed;
   height: 1px;
+
   float: left;
-  z-index: 0;
+  z-index: 90;
 }
 .buttons {
   display: flex;
   width: 30%;
 
   margin: 5px;
+}
+* {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
 }
 .strecher {
   display: flex;
@@ -510,6 +519,7 @@
   border-radius: 0px 0px 50px 0px;
   box-shadow: 0px 2px 3px 1px rgba(0, 0, 0, 0.233);
   cursor: pointer;
+  margin-top: -1px;
   background: linear-gradient(
     270.01deg,
     #e5fd7b 1.25%,
@@ -707,15 +717,10 @@ textarea {
 }
 @media only screen and (max-width: 786px) {
   #Timer {
-    position: absolute;
-    bottom: -7.6%;
-
-    display: flex;
-    z-index: 2;
-    width: 80%;
+    width: 100% !important;
   }
   .strecher {
-    width: 100%;
+    width: 100% !important;
   }
   .Iconclosed {
     border-radius: 0px 50px 0px 0px;
@@ -731,7 +736,7 @@ textarea {
     margin-top: 13px;
   }
   .Timewid {
-    width: 100%;
+    width: 65vw;
     flex: 2;
     height: 300px;
     margin-top: 0px;
@@ -779,14 +784,15 @@ textarea {
 
   @keyframes normal-in {
     0% {
-      width: 0%;
+      width: 0vw;
       opacity: 0;
     }
     100% {
-      width: 50%;
+      width: 65vw;
     }
   }
 }
+
 @media only screen and (max-width: 786px) {
   .container {
   }
@@ -952,7 +958,7 @@ export default {
         this.loggedstatus = this.loggedin.Status;
 
         this.socketInstance = io("https://flexn.se:3000/");
-        this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
+        this.socketInstance.emit("loggedinfo", this.loggedin);
         if (this.loggedin.nanoid == undefined) {
           window.location.reload();
         }
