@@ -250,14 +250,14 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://flexn.se:3000/loggedin", auth)
+    fetch("https://mxtime.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         if (result.length == 0) {
-          location.replace("https://flexnet.se/#/");
+          location.replace("https://app.mxtime.se/#/");
         }
         if (result.length > 0) {
-          fetch("https://flexn.se:3000/viewprojects")
+          fetch("https://mxtime.se:3000/viewprojects")
             .then((response) => response.json())
             .then((result) => {
               this.project = result;
@@ -286,7 +286,7 @@ export default {
                 this.array.push(this.optimal);
               }
             });
-          fetch("https://flexn.se:3000/getusers")
+          fetch("https://mxtime.se:3000/getusers")
             .then((response) => response.json())
             .then((result) => {
               this.user = result;

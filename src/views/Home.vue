@@ -27,7 +27,7 @@
             style="color: blue; float: left"
             v-bind:id="projects.id"
             class="edit"
-            @click="Edit(projects.id), (T = !T)"
+            @click="Edit(projects.id), (T = !T), modProject(index, projects.id)"
           >
             <img width="20px" height="25px" src="@/assets/edit.png" alt="" />
             <div class="satuscont">
@@ -259,7 +259,10 @@
                           class="now"
                           @click="
                             Edit(projects.id, index),
-                              (arkiveraoverlay = !arkiveraoverlay)
+                              modProject(
+                                index,
+                                projects.id
+                              )((arkiveraoverlay = !arkiveraoverlay))
                           "
                         >
                           Klart
@@ -299,7 +302,7 @@
           <img
             :title="projects.Author"
             class="deltagare"
-            :src="`https://flexn.se/mxprofile/${projects.Authorprofile}.jpg`"
+            :src="`https://mxtime.se/mxprofile/${projects.Authorprofile}.jpg`"
             alt=""
           />
           <img
@@ -307,7 +310,7 @@
             v-for="sparrs in sparr[index]"
             :key="sparrs.index"
             class="deltagare va"
-            :src="`https://flexn.se/mxprofile/${sparrs.Profile}.jpg`"
+            :src="`https://mxtime.se/mxprofile/${sparrs.Profile}.jpg`"
             alt=""
           />
         </div>
@@ -457,6 +460,68 @@
                 />
               </span>
 
+              <div
+                @click="addworkoverlay = !addworkoverlay"
+                class="addtasksetworker"
+              >
+                <img class="datepickerimg" src="@/assets/addusers.png" alt="" />
+                <div>Bjud in</div>
+              </div>
+              <transition name="open-fade">
+                <div class="workerlistmod" v-show="addworkoverlay">
+                  <div class="excluded">
+                    <h3>Inbjuden</h3>
+                    <div
+                      id="Fruits"
+                      v-for="deltag in workerson"
+                      :key="deltag.index"
+                      class="excludedro workchecks"
+                      v-if="
+                        usersid.includes(deltag.id) && deltag.id !== eauthorid
+                      "
+                    >
+                      <div @click="removeUser(deltag)" class="itemcont">
+                        <div class="imgandtxt">
+                          <img
+                            class="deltagares va"
+                            :src="`https://mxtime.se/mxprofile/${deltag.Profile}.jpg`"
+                            alt=""
+                          />
+                          <div>
+                            {{ deltag.Name }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="included">
+                    <h3>Bjud in</h3>
+                    <div
+                      id="Fruits"
+                      v-for="deltag in workerson"
+                      :key="deltag.index"
+                      class="workchecks includedro"
+                      v-if="
+                        !usersid.includes(deltag.id) && deltag.id !== eauthorid
+                      "
+                      @click="addUser(deltag)"
+                    >
+                      <div class="itemcont">
+                        <div class="imgandtxt">
+                          <img
+                            class="deltagares va"
+                            :src="`https://mxtime.se/mxprofile/${deltag.Profile}.jpg`"
+                            alt=""
+                          />
+                          <div>
+                            {{ deltag.Name }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </transition>
               <input type="hidden" name="id" id="id" :value="this.z" />
               <span class="e">
                 <input
@@ -663,6 +728,28 @@
   </div>
 </template>
 <style scoped>
+.included {
+  background: rgb(252, 219, 219);
+}
+.excluded {
+  background: rgb(215, 252, 214);
+}
+.excludedro:hover {
+  background: rgb(206, 247, 205);
+}
+.includedro:hover {
+  background: rgb(180, 135, 135);
+}
+.workerlistmod {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 50% 50%;
+
+  overflow-y: scroll;
+  background: rgb(255, 255, 255);
+  height: 150px;
+  border-top: #049c4b solid 1px;
+}
 .filterbtncont {
   display: flex;
   width: 100%;
@@ -1011,7 +1098,19 @@ input[type="radio"]:after {
   justify-content: space-between;
   width: 55%;
   align-items: center;
+
   justify-content: center;
+}
+.imgandtxt {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  font-size: 15px;
+}
+.imgandtxt > div {
+  margin-left: -10px;
 }
 .noclick {
   position: absolute;
@@ -1382,6 +1481,7 @@ epic-form .esd {
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.377);
   border-radius: 10px;
   padding-bottom: 20px;
+  transition: 1s;
 }
 @media only screen and (max-width: 1000px) {
   #ArkivForm {
@@ -1389,6 +1489,7 @@ epic-form .esd {
   }
   #Editform {
     left: 10%;
+    transition: 1s;
   }
   #Deleteform {
     left: 0%;
@@ -1410,6 +1511,15 @@ epic-form .esd {
   transition: 1;
   object-fit: cover !important;
 }
+.deltagares {
+  width: 40px;
+  height: 40px;
+  border-radius: 25px;
+  box-shadow: 0px 2px 5px 1px rgba(100, 100, 100, 0.5);
+  transition: 1;
+  object-fit: cover !important;
+  align-self: center;
+}
 .deltagare:hover {
   margin-top: -10px;
 }
@@ -1429,6 +1539,13 @@ epic-form .esd {
   background: linear-gradient(180deg, #0089d0 0%, #024d72 100%);
   filter: drop-shadow(0px -1px 5px rgba(0, 0, 0, 0.25));
 }
+.icons {
+  width: 50px;
+  border-radius: 100%;
+}
+.deltagname {
+  font-size: 13px;
+}
 .arkivtitle {
   font-family: Scada;
   font-style: normal;
@@ -1441,6 +1558,24 @@ epic-form .esd {
 }
 .edit {
   display: flex;
+}
+.workerscaps {
+  justify-content: center;
+  overflow-y: scroll;
+  background: rgb(255, 255, 255);
+  width: 100%;
+  height: 150px;
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: auto auto;
+}
+#tblFruits {
+  height: 50px;
+  width: 50px;
+  margin-top: 10px;
+  margin: 10px;
+  box-shadow: 0px 5px 10px rgb(0, 0, 0);
+  border-radius: 100%;
 }
 .edit:hover {
   cursor: pointer;
@@ -1510,6 +1645,60 @@ input[type="date"] {
   color: #01537c;
   margin-top: 20px;
   cursor: pointer;
+}
+.container {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  height: 32px;
+  width: 45px;
+  border-radius: 100%;
+}
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+
+  border-radius: 100%;
+}
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  background-color: #e0eeff;
+
+  border: solid white 2px;
+  border-radius: 100%;
+}
+.container:hover input ~ .checkmark {
+  background-color: #e0eeff;
+}
+.container input:checked ~ .checkmark {
+  background-color: #44f321;
+  border: 2px rgb(103, 218, 103) solid;
+  border-radius: 100%;
+}
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  display: none;
 }
 .avbryt {
   font-style: normal;
@@ -1653,6 +1842,17 @@ input[type="date"] {
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
 }
+.open-fade-enter-active {
+  transition: all 0.6s ease;
+}
+.open-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.open-fade-enter, .open-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  height: 0px;
+  opacity: 0;
+}
 </style>
 <script>
 import $ from "jquery";
@@ -1669,8 +1869,17 @@ import cash from "../assets/soundeffect/cash.mp3";
 import ding from "../assets/soundeffect/ding.mp3";
 import pop from "../assets/soundeffect/pop.mp3";
 import Timer from "@/components/Timer.vue";
+import DropdownMenu from "v-dropdown-menu";
+import "v-dropdown-menu/dist/v-dropdown-menu.css";
 export default {
-  components: { Postit, Workernav, RadialProgressBar, Minitrello, Timer },
+  components: {
+    Postit,
+    Workernav,
+    RadialProgressBar,
+    Minitrello,
+    Timer,
+    DropdownMenu,
+  },
   //
   data() {
     return {
@@ -1691,6 +1900,7 @@ export default {
       ecompleted: "",
       eprecentage: 0,
       precentage: 0,
+      eauthorid: 0,
       projects: "",
       logged: this.$store.state.someValue,
       estatus: "",
@@ -1741,6 +1951,14 @@ export default {
       filterwhereiam: false,
       projectplaceholder: [],
       enanoid: "",
+      deltagare: "",
+      usersid: [],
+      anit: 0,
+      selectedusers: [],
+      anits: 0,
+      selectedtaskid: null,
+      selectedtaskindex: null,
+      addworkoverlay: false,
     };
   },
 
@@ -1756,25 +1974,25 @@ export default {
       body: JSON.stringify({ user: this.logged }),
     };
 
-    fetch("https://flexn.se:3000/loggedin", auth)
+    fetch("https://mxtime.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         console.log("hej");
         if (result.length == 0) {
-          location.replace("https://flexnet.se/#/");
+          location.replace("https://app.mxtime.se/#/");
         }
 
-        fetch("https://flexn.se:3000/workernav", auth)
+        fetch("https://mxtime.se:3000/workernav", auth)
           .then((response) => response.json())
           .then((result) => {
             this.loggedin = result[0];
 
-            fetch("https://flexn.se:3000/loggedin", auth)
+            fetch("https://mxtime.se:3000/loggedin", auth)
               .then((response) => response.json())
               .then((result) => {
                 this.loggedstatus = result[0].Status;
                 if (result.length == 0) {
-                  location.replace("https://flexnet.se/#/");
+                  location.replace("https://app.mxtime.se/#/");
                 }
                 if (result.length > 0) {
                   const searchnano = {
@@ -1787,10 +2005,14 @@ export default {
 
                     body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
                   };
-                  fetch("https://flexn.se:3000/getusers", searchnano)
+                  fetch("https://mxtime.se:3000/getusers", searchnano)
                     .then((response) => response.json())
                     .then((result) => {
                       this.user = result;
+                      this.deltagare = this.user.filter(
+                        (e) => !e.Name.includes(this.loggedin.Name)
+                      );
+                      this.workerson = this.user;
                     });
 
                   const requestOptionsget = {
@@ -1821,7 +2043,11 @@ export default {
               }
 
             }); */
-                  this.socketInstance = io("https://flexn.se:3000/");
+                  this.socketInstance = io("https://mxtime.se:3000/", {
+                    transports: ["websocket"],
+                    pingInterval: 1000 * 60 * 10,
+                    pingTimeout: 1000 * 60 * 5,
+                  });
                   this.socketInstance.emit("loggedinfo", this.loggedin);
                   this.socketInstance.on("data:received", (projectdata) => {
                     if (this.loggedstatus == "Admin") {
@@ -1829,12 +2055,10 @@ export default {
                       this.projectplaceholder = projectdata;
                     } else {
                       this.project = projectdata.filter(
-                        (result) =>
-                          result.Authorstatus == this.loggedstatus || "Admin"
+                        (result) => result.Authorstatus == this.loggedstatus
                       );
                       this.projectplaceholder = projectdata.filter(
-                        (result) =>
-                          result.Authorstatus == this.loggedstatus || "Admin"
+                        (result) => result.Authorstatus == this.loggedstatus
                       );
                     }
 
@@ -1873,6 +2097,7 @@ export default {
                     "workerdeltag:received",
                     (workerdeltag) => {
                       this.workersassignd = workerdeltag;
+                      this.workerson = this.user;
                       this.sparr = [];
                       for (
                         this.forinpw = 0;
@@ -1978,8 +2203,60 @@ export default {
       });
       this.cashsound.play();
     },
-
+    removeUser(x) {
+      const removeworkerdata = {
+        id: x.id,
+        taskid: this.selectedtaskid,
+      };
+      this.socketInstance.emit("removeuserP", removeworkerdata);
+      setTimeout(() => {
+        this.modProject(this.selectedtaskindex, this.selectedtaskid);
+      }, 100);
+    },
+    addUser(x) {
+      console.log(x);
+      const addworkerdata = {
+        user: x,
+        taskid: this.selectedtaskid,
+      };
+      this.socketInstance.emit("adduserP", addworkerdata);
+      setTimeout(() => {
+        this.modProject(this.selectedtaskindex, this.selectedtaskid);
+      }, 100);
+    },
+    modProject(x, y) {
+      console.log(x, y);
+      this.selectedtaskid = y;
+      this.selectedtaskindex = x;
+      this.selectedusers = [];
+      this.usersid = [];
+      this.anit = 0;
+      for (this.anit = 0; this.sparr[x].length > this.anit; this.anit++) {
+        this.selectedusers.push(
+          this.workerson.filter(
+            (result) => result.id == this.sparr[x][this.anit].workerid
+          )
+        );
+      }
+      this.anits = 0;
+      for (
+        this.anits = 0;
+        this.selectedusers.length > this.anits;
+        this.anits++
+      ) {
+        this.usersid.push(this.selectedusers[this.anits][0].id);
+      }
+      console.log(this.usersid);
+    },
     sendEdit() {
+      var selected = new Array();
+
+      var chks = document.getElementsByClassName("deltagcheckbox");
+      for (var i = 0; i < chks.length; i++) {
+        if (chks[i].checked) {
+          selected.push(chks[i]._value);
+        }
+      }
       const editdata = {
         id: this.z,
         title: this.etitle,
@@ -1987,6 +2264,7 @@ export default {
         completed: this.ecompleted,
         precentage: 0,
         status: this.estatus,
+        deltag: selected,
       };
 
       this.socketInstance.emit("edit", editdata);
@@ -2023,10 +2301,12 @@ export default {
       this.edeadline = this.eproject.Deadline;
       this.ecompleted = this.eproject.Completed;
       this.eauthor = this.eproject.Author;
+      this.eauthorid = this.eproject.Authorid;
       this.eprecentage = this.eproject.precentage;
       this.edate = this.eproject.Date;
       this.eworker = this.eproject.Workers;
       this.enanoid = this.eproject.nanoid;
+      console.log(this.eauthorid);
 
       if (index) {
         if (this.sparr[index].length > 0) {

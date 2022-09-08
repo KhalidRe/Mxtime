@@ -1,5 +1,76 @@
 <template>
   <div id="Time">
+    <div class="noclickzone" v-if="!vieweditwindow">
+      <div class="overlayzone">
+        <div class="editcontent">
+          <h2>Ändra tid</h2>
+          <div class="pad">
+            <input type="date" v-model="edate" />
+            <div class="mh">
+              <div>
+                <div>Timmar</div>
+                <input v-model="etime.Hours" type="number" min="0" max="15" />
+              </div>
+              <div>
+                <div>Minuter</div>
+                <input v-model="etime.Minutes" type="number" min="0" max="60" />
+              </div>
+            </div>
+            <div class="dbcaps">
+              <div class="db">
+                <label class="container">
+                  <input
+                    v-model="etime.debit"
+                    id="debitja"
+                    class="deltagcheckbox"
+                    type="radio"
+                    value="1"
+                  />
+                  <label for="debitja" class="checkmark">
+                    <div>DEBIT</div>
+                  </label>
+                </label>
+                <label class="container">
+                  <input
+                    v-model="etime.debit"
+                    id="debitnej"
+                    class="deltagcheckbox"
+                    type="radio"
+                    value="0"
+                  />
+                  <label for="debitnej" class="checkmark">
+                    <div>EJ DEBIT</div>
+                  </label>
+                </label>
+              </div>
+            </div>
+            <div class="e">
+              <div>Notes</div>
+              <textarea
+                v-model="etime.Description"
+                name=""
+                id=""
+                cols="30"
+                rows="10"
+              ></textarea>
+            </div>
+            <br />
+            <div
+              class="submittimes"
+              @click="editTime(), (vieweditwindow = !vieweditwindow)"
+            >
+              Lägg till
+            </div>
+            <div
+              class="avbryt"
+              @click="(vieweditwindow = !vieweditwindow), avbrytedit()"
+            >
+              Avbryt
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="Topcont">
       <div class="datecaps">
         <div class="MnW">
@@ -184,7 +255,16 @@
               ></textarea>
             </div>
             <br />
-            <div class="submittime" @click="addTime()">Lägg till</div>
+            <div
+              v-if="chosenproject.length > 0"
+              class="submittime"
+              @click="addTime()"
+            >
+              Lägg till
+            </div>
+            <div v-if="chosenproject.length == 0" class="submittime fakerbtn">
+              Lägg till
+            </div>
             <br />
           </div>
         </div>
@@ -225,6 +305,17 @@
               v-for="biden in datetime"
               :key="biden.index"
             >
+              <div class="editimg">
+                <img
+                  @click="
+                    Edit(biden.id, biden.Datum),
+                      (vieweditwindow = !vieweditwindow)
+                  "
+                  src="@/assets/edit.png"
+                  width="20px"
+                  alt=""
+                />
+              </div>
               <div class="urntimetitle">
                 {{ biden.Title }}
                 <span class="debinf" v-if="biden.debit == 1">(debit)</span>
@@ -232,7 +323,7 @@
               </div>
 
               <div class="urntimetime">
-                {{ biden.Hours + parseFloat((biden.Minutes / 60).toFixed(1)) }}h
+                {{ biden.Hours }}h {{ biden.Minutes }}m
               </div>
               <span
                 @click="
@@ -256,6 +347,76 @@
   </div>
 </template>
 <style scoped>
+.submittimes {
+  background: #1988c9;
+  width: 80%;
+  cursor: pointer;
+  padding: 10px;
+  color: white;
+  border-radius: 20px;
+}
+.avbryt {
+  margin-top: 10px;
+  background: rgb(218, 81, 81);
+  border-radius: 20px;
+  width: 100px;
+  height: 20px;
+  text-align: center;
+  color: white;
+  font-size: 15px;
+  padding: 5px;
+  cursor: pointer;
+}
+.editimg {
+  margin-right: 5px;
+}
+.editimg > img {
+  width: 20px;
+  transition: 0.5s;
+}
+.editimg > img:hover {
+  width: 25px;
+  cursor: pointer;
+}
+.editcontent > h2 {
+  background: #1988c9;
+  border-radius: 20px 20px 0px 0px;
+  padding: 10px;
+  color: white;
+  margin-top: 0;
+}
+.pad {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.noclickzone {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0%;
+  left: 0%;
+  background: #00000036;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+
+  align-items: center;
+}
+.overlayzone {
+  width: 300px;
+  height: 500px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.356);
+}
+.editcontent {
+}
+.fakerbtn {
+  background: #7c7c7c !important;
+  cursor: not-allowed !important;
+}
 .dropper {
   height: 250px !important;
   overflow-y: scroll;
@@ -273,6 +434,7 @@
   cursor: pointer;
   align-self: center;
   margin: 2px;
+  margin-left: 10px;
 }
 .deletetime:hover {
   transition: 0.2s;
@@ -353,20 +515,30 @@
 }
 .spacer {
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  width: 100%;
 }
 .urntimecaps {
   padding: 20px;
   display: flex;
+  width: 90%;
   justify-content: space-between;
-  align-items: left;
-  text-align: left;
+  align-items: center;
+  text-align: center;
 }
+
 .urntimecaps:nth-child(odd) {
   background: #d8d8d8;
 }
 .urntimecaps:nth-child(even) {
   background: #f0f0f0;
   border-top: solid 1px rgba(0, 0, 0, 0.247);
+}
+.urntimecaps:hover {
+  background: rgb(176, 189, 190);
 }
 .urntimetitle {
   display: flex;
@@ -408,6 +580,7 @@
   align-items: center;
   grid-gap: 20px;
 }
+
 .submittime {
   background: #1988c9;
   cursor: pointer;
@@ -448,12 +621,12 @@ textarea {
   box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.32);
 }
 .dayinfo {
-  margin-left: 15px;
   color: rgb(105, 105, 105);
   text-align: left;
   height: 100%;
   overflow-y: scroll;
   width: 100%;
+  padding: 10px;
 }
 .s {
   align-self: center;
@@ -684,6 +857,7 @@ export default {
       Sjuk: false,
       VAB: false,
       Semester: false,
+      vieweditwindow: true,
       Thu: 4,
       Fri: 5,
       Sat: 6,
@@ -707,6 +881,8 @@ export default {
       Notes: "",
       debit: 1,
       toltip: false,
+      etime: "",
+      edate: "",
     };
   },
   created() {
@@ -720,11 +896,11 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://flexn.se:3000/loggedin", auth)
+    fetch("https://mxtime.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         if (result.length == 0) {
-          location.replace("https://flexnet.se/#/");
+          location.replace("https://app.mxtime.se/#/");
         }
       });
 
@@ -738,13 +914,13 @@ export default {
       },
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://flexn.se:3000/workernav", requestOptions)
+    fetch("https://mxtime.se:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
         this.loggedstatus = this.loggedin.Status;
 
-        this.socketInstance = io("https://flexn.se:3000/");
+        this.socketInstance = io("https://mxtime.se:3000/");
         this.socketInstance.emit("loggedinfo", this.loggedin);
         if (this.loggedin.nanoid == undefined) {
           window.location.reload();
@@ -761,7 +937,7 @@ export default {
               this.project = projectdata;
             } else {
               this.project = projectdata.filter(
-                (result) => result.Authorstatus == this.loggedstatus
+                (result) => result.Authorstatus == this.loggedstatus || "Admin"
               );
             }
           });
@@ -934,6 +1110,11 @@ export default {
       this.chosenid = id;
     },
     test() {},
+    avbrytedit() {
+      console.log(this.edate);
+      console.log(this.etime);
+      this.socketInstance.emit("mytime", this.loggedin.Username);
+    },
     addTime() {
       let addtimedata = {
         projectid: this.chosenid,
@@ -952,6 +1133,11 @@ export default {
 
       this.socketInstance.emit("time", addtimedata);
       // window.location.reload();
+      this.chosenid = "";
+      this.chosenproject = "";
+      this.Notes = "";
+      this.Hours = 0;
+      this.Minutes = 0;
     },
     ledig() {
       if (this.Ledig == true) {
@@ -975,6 +1161,16 @@ export default {
 
       this.socketInstance.emit("delet:time", dtimedata);
       //window.location.reload();
+    },
+    editTime() {
+      this.etime.Datum = new Date(this.edate).getTime();
+      this.socketInstance.emit("edittime", this.etime);
+    },
+    Edit(id, datum) {
+      this.z = id;
+      this.x = id - 1;
+      this.etime = this.time.find((result) => result.id == this.z);
+      this.edate = this.picked;
     },
   },
   mounted() {

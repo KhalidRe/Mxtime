@@ -29,7 +29,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://flexn.se:3000/workernav", requestOptions)
+    fetch("https://mxtime.se:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
@@ -43,7 +43,7 @@ export default {
 
           body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
         };
-        fetch("https://flexn.se:3000/getusers", searchnano)
+        fetch("https://mxtime.se:3000/getusers", searchnano)
           .then((response) => response.json())
           .then((result) => {
             this.user = result;
@@ -68,7 +68,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://flexn.se:3000/workernav", requestOptions)
+    fetch("https://mxtime.se:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
@@ -82,7 +82,7 @@ export default {
 
           body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
         };
-        fetch("https://flexn.se:3000/getusers", searchnano)
+        fetch("https://mxtime.se:3000/getusers", searchnano)
           .then((response) => response.json())
           .then((result) => {
             let user = result;

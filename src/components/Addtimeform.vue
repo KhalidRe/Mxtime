@@ -360,13 +360,13 @@ export default {
       body: JSON.stringify({ user: this.logged }),
     };
 
-    fetch("https://flexn.se:3000/workernav", requestOptions)
+    fetch("https://mxtime.se:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
         this.loggedstatus = this.loggedin.Status;
         console.log(this.loggedstatus == "Admin");
-        fetch("https://flexn.se:3000/viewprojects")
+        fetch("https://mxtime.se:3000/viewprojects")
           .then((response) => response.json())
           .then((result) => {
             if (this.loggedstatus == "Admin") {
@@ -379,7 +379,7 @@ export default {
           });
       });
 
-    this.socketInstance = io("https://flexn.se:3000/");
+    this.socketInstance = io("https://mxtime.se:3000/");
   },
 
   methods: {

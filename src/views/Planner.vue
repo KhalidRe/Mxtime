@@ -96,7 +96,7 @@
                       <div class="imgandtxt">
                         <img
                           class="deltagare va"
-                          :src="`https://flexn.se/mxprofile/${deltag.Profile}.jpg`"
+                          :src="`https://mxtime.se/mxprofile/${deltag.Profile}.jpg`"
                           alt=""
                         />
                         {{ deltag.Name }}
@@ -117,7 +117,7 @@
                       <div class="imgandtxt">
                         <img
                           class="deltagare va"
-                          :src="`https://flexn.se/mxprofile/${deltag.Profile}.jpg`"
+                          :src="`https://mxtime.se/mxprofile/${deltag.Profile}.jpg`"
                           alt=""
                         />
                         {{ deltag.Name }}
@@ -422,7 +422,7 @@
                         <label :for="deltag.Name + deltag.id" class="checkmark"
                           ><img
                             class="icons"
-                            :src="`https://flexn.se/mxprofile/${deltag.Profile}.jpg`"
+                            :src="`https://mxtime.se/mxprofile/${deltag.Profile}.jpg`"
                           />
                           <div>{{ deltag.Name }}</div>
                         </label>
@@ -603,7 +603,7 @@
                         v-for="sparrs in sparr[index]"
                         :key="sparrs.index"
                         class="deltagare va"
-                        :src="`https://flexn.se/mxprofile/${sparrs.profile}.jpg`"
+                        :src="`https://mxtime.se/mxprofile/${sparrs.profile}.jpg`"
                         alt=""
                       />
                     </div>
@@ -713,7 +713,7 @@
                           v-for="sparrs in sparr[index]"
                           :key="sparrs.index"
                           class="deltagare va"
-                          :src="`https://flexn.se/mxprofile/${sparrs.profile}.jpg`"
+                          :src="`https://mxtime.se/mxprofile/${sparrs.profile}.jpg`"
                           alt=""
                         />
                       </div>
@@ -1626,15 +1626,15 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://flexn.se:3000/loggedin", auth)
+    fetch("https://mxtime.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         if (result.length == 0) {
-          location.replace("https://flexnet.se/#/");
+          location.replace("https://app.mxtime.se/#/");
         }
       });
 
-    fetch("https://flexn.se:3000/workernav", requestOptions)
+    fetch("https://mxtime.se:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
@@ -1649,14 +1649,14 @@ export default {
           body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
         };
 
-        fetch("https://flexn.se:3000/getusers", searchnano)
+        fetch("https://mxtime.se:3000/getusers", searchnano)
           .then((response) => response.json())
           .then((result) => {
             this.user = result;
             this.deltagare = this.user;
           });
 
-        this.socketInstance = io("https://flexn.se:3000/");
+        this.socketInstance = io("https://mxtime.se:3000/");
         this.socketInstance.emit("loggedinfo", this.loggedin);
         if (this.loggedin.nanoid == undefined) {
           window.location.reload();

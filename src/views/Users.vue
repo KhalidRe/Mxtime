@@ -12,7 +12,7 @@
           <div class="profile">
             <img
               class="img"
-              :src="`https://flexn.se/mxprofile/${users.Profile}.jpg`"
+              :src="`https://mxtime.se/mxprofile/${users.Profile}.jpg`"
               alt=""
             />
           </div>
@@ -51,7 +51,7 @@
             <div class="gotit">
               <img
                 class="img"
-                :src="`https://flexn.se/mxprofile/${this.eprofile}.jpg`"
+                :src="`https://mxtime.se/mxprofile/${this.eprofile}.jpg`"
                 alt=""
               />
               <h1>{{ this.ename }}</h1>
@@ -386,26 +386,26 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://flexn.se:3000/loggedin", auth)
+    fetch("https://mxtime.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         if (result.length == 0) {
-          location.replace("https//flexnet.se/#/");
+          location.replace("https//app.mxtime.se/#/");
         }
         if (result.length > 0) {
-          fetch("https://flexn.se:3000/getusers")
+          fetch("https://mxtime.se:3000/getusers")
             .then((response) => response.json())
             .then((result) => {
               this.user = result;
             });
 
-          fetch("https://flexn.se:3000/myprojects", requestOptions)
+          fetch("https://mxtime.se:3000/myprojects", requestOptions)
             .then((response) => response.json())
             .then((result) => {
               this.myprojects = result;
             });
 
-          fetch("https://flexn.se:3000/getarkiv")
+          fetch("https://mxtime.se:3000/getarkiv")
             .then((response) => response.json())
             .then((result) => {
               this.arkivs = result;

@@ -112,11 +112,11 @@ export default {
       body: JSON.stringify({ user: this.logged }),
     };
 
-    fetch("https://flexn.se:3000/loggedin", auth)
+    fetch("https://mxtime.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
         if (result.length == 0) {
-          location.replace("https://flexnet.se/#/");
+          location.replace("https://app.mxtime.se/#/");
         }
         const requestOptions = {
           method: "POST",
@@ -128,7 +128,7 @@ export default {
 
           body: JSON.stringify({ user: this.logged }),
         };
-        fetch("https://flexn.se:3000/workernav", requestOptions)
+        fetch("https://mxtime.se:3000/workernav", requestOptions)
           .then((response) => response.json())
           .then((result) => {
             this.loggedin = result[0];
@@ -143,7 +143,7 @@ export default {
               body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
             };
             if (result.length > 0) {
-              fetch("https://flexn.se:3000/getarkiv", searchnano)
+              fetch("https://mxtime.se:3000/getarkiv", searchnano)
                 .then((response) => response.json())
                 .then((result) => {
                   this.arkiv = result;

@@ -8,7 +8,7 @@
             <img
               class="Cprofile"
               ref="profilepreview"
-              :src="`https://flexn.se/mxprofile/${profileimage}.jpg`"
+              :src="`https://mxtime.se/mxprofile/${profileimage}.jpg`"
               alt=""
             />
           </label>
@@ -63,7 +63,7 @@
         @click="openoverlay = !openoverlay"
         class="profile"
         ref="profile"
-        :src="`https://flexn.se/mxprofile/${profileimage}.jpg`"
+        :src="`https://mxtime.se/mxprofile/${profileimage}.jpg`"
         alt=""
       />
     </div>
@@ -278,14 +278,14 @@ export default {
       body: JSON.stringify({ user: this.logged }),
     };
 
-    fetch("https://flexn.se:3000/workernav", requestOptions)
+    fetch("https://mxtime.se:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
         this.profileimage = result[0].Profile;
         console.log(this.loggedin);
 
-        this.socketInstance = io("https://flexn.se:3000");
+        this.socketInstance = io("https://mxtime.se:3000");
         this.uploader = new SocketIOFileUpload(this.socketInstance);
 
         this.socketInstance.emit("loggedinfo", this.loggedin);

@@ -5,7 +5,7 @@
         <img src="@/assets/mxklogg2.png" alt="" />
       </div>
       <div class="itemsnav">
-        <a href="https://flexn.se"><div class="getit">Get MX-Time</div></a>
+        <a href="https://mxtime.se"><div class="getit">Get MX-Time</div></a>
       </div>
     </div>
     <div class="logincaps">
@@ -54,7 +54,7 @@
           </div>
           <div class="errormessage">{{ errormessage.text }}</div>
           <p class="senti">
-            har du inget konto? <br /><a href="https://flexnet.se"
+            har du inget konto? <br /><a href="https://app.mxtime.se"
               >skapa ett här</a
             >
           </p>
@@ -283,7 +283,7 @@ export default {
         }),
       };
 
-      fetch("https://flexn.se:3000/authenticate", auth)
+      fetch("https://mxtime.se:3000/authenticate", auth)
         .then((response) => response.json())
         .then((result) => {
           this.errormessage = result;
@@ -294,7 +294,7 @@ export default {
       if (this.errormessage.itswrong !== true) {
         this.someValue = this.$refs.Username.value;
         console.log(this.someValue);
-        window.location.href = "https://flexnet.se/#/Home";
+        window.location.href = "https://app.mxtime.se/#/Home";
       }
     },
   },

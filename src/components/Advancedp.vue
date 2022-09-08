@@ -1,6 +1,6 @@
 <template>
   <div id="Advancedp">
-    <div class="infocaps"></div>
+    <div class="infocaps">hej</div>
   </div>
 </template>
 <style scoped></style>

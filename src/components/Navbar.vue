@@ -39,7 +39,9 @@
   </div>
 </template>
 <script>
+import Timernav from "@/components/Timernav.vue";
 export default {
+  components: { Timernav },
   data() {
     return {
       show: true,

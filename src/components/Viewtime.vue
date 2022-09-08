@@ -97,7 +97,7 @@
             style="display: none"
           ></iframe>
           <form
-            action="https://flexn.se:3000/deletetime"
+            action="https://mxtime.se:3000/deletetime"
             target="dummyframe"
             method="POST"
           >
@@ -462,7 +462,7 @@ export default {
       },
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://flexn.se:3000/workernav", requestOptions)
+    fetch("https://mxtime.se:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
@@ -477,12 +477,12 @@ export default {
           body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
         };
 
-        fetch("https://flexn.se:3000/loggedin", requestOptions)
+        fetch("https://mxtime.se:3000/loggedin", requestOptions)
           .then((response) => response.json())
           .then((result) => {
             this.userstatus = result[0].Status;
 
-            fetch("https://flexn.se:3000/mytime", requestOptions)
+            fetch("https://mxtime.se:3000/mytime", requestOptions)
               .then((response) => response.json())
               .then((result) => {
                 this.time = result;
@@ -501,7 +501,7 @@ export default {
                   ).toFixed(1);
                 }
               });
-            fetch("https://flexn.se:3000/getusers", searchnano)
+            fetch("https://mxtime.se:3000/getusers", searchnano)
               .then((response) => response.json())
               .then((result) => {
                 this.users = result;
@@ -530,7 +530,7 @@ export default {
         },
         body: JSON.stringify({ user: this.logged }),
       };
-      fetch("https://flexn.se:3000/mytime", requestOptions)
+      fetch("https://mxtime.se:3000/mytime", requestOptions)
         .then((response) => response.json())
         .then((result) => {
           this.time = result;

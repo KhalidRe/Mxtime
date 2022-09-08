@@ -145,76 +145,8 @@
                   dropdown-closer
                   class="chooseproject"
                   slot="trigger"
-                  title="Välj projekt"
                 >
-                  <div class="selectdrop">
-                    <span>Välj project</span>
-                    <div>
-                      <svg
-                        width="25"
-                        height="25"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g clip-path="url(#clip0_101_2)">
-                          <path
-                            d="M8.33331 6.66675H13.3333V7.77786H8.33331V6.66675Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M8.33331 8.88892H13.3333V10H8.33331V8.88892Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M8.33331 11.1111H13.3333V12.2222H8.33331V11.1111Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M8.33331 13.3333H13.3333V14.4444H8.33331V13.3333Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M6.11108 4.44434H7.2222V5.55545H6.11108V4.44434Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M6.11108 6.66675H7.2222V7.77786H6.11108V6.66675Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M6.11108 8.88892H7.2222V10H6.11108V8.88892Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M6.11108 11.1111H7.2222V12.2222H6.11108V11.1111Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M6.11108 13.3333H7.2222V14.4444H6.11108V13.3333Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M8.33331 4.44434V5.55545H13.1444C12.9258 5.21144 12.7592 4.83703 12.65 4.44434H8.33331Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M15.5555 7.34442V17.7777H4.44442V2.2222H12.6555C12.763 1.82981 12.9277 1.45541 13.1444 1.11108H4.44442C4.14974 1.11108 3.86712 1.22815 3.65875 1.43652C3.45038 1.64489 3.33331 1.92751 3.33331 2.2222V17.7777C3.33331 18.0724 3.45038 18.3551 3.65875 18.5634C3.86712 18.7718 4.14974 18.8889 4.44442 18.8889H15.5555C15.8502 18.8889 16.1328 18.7718 16.3412 18.5634C16.5496 18.3551 16.6666 18.0724 16.6666 17.7777V7.49997C16.291 7.49852 15.9172 7.44619 15.5555 7.34442V7.34442Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M16.6667 6.11122C18.2008 6.11122 19.4445 4.86757 19.4445 3.33344C19.4445 1.79932 18.2008 0.555664 16.6667 0.555664C15.1326 0.555664 13.8889 1.79932 13.8889 3.33344C13.8889 4.86757 15.1326 6.11122 16.6667 6.11122Z"
-                            fill="white"
-                          />
-                        </g>
-                        <defs>
-                          <clipPath id="clip0_101_2">
-                            <rect width="20" height="20" fill="white" />
-                          </clipPath>
-                        </defs>
-                      </svg>
-                    </div>
-                  </div>
+                  Välj project
                 </div>
 
                 <div
@@ -222,76 +154,8 @@
                   dropdown-closer
                   class="chooseproject"
                   slot="trigger"
-                  title="Välj projekt"
                 >
-                  <div class="selectdrop">
-                    <span>{{ chosenproject }}</span>
-                    <div>
-                      <svg
-                        width="25"
-                        height="25"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g clip-path="url(#clip0_101_2)">
-                          <path
-                            d="M8.33331 6.66675H13.3333V7.77786H8.33331V6.66675Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M8.33331 8.88892H13.3333V10H8.33331V8.88892Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M8.33331 11.1111H13.3333V12.2222H8.33331V11.1111Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M8.33331 13.3333H13.3333V14.4444H8.33331V13.3333Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M6.11108 4.44434H7.2222V5.55545H6.11108V4.44434Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M6.11108 6.66675H7.2222V7.77786H6.11108V6.66675Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M6.11108 8.88892H7.2222V10H6.11108V8.88892Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M6.11108 11.1111H7.2222V12.2222H6.11108V11.1111Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M6.11108 13.3333H7.2222V14.4444H6.11108V13.3333Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M8.33331 4.44434V5.55545H13.1444C12.9258 5.21144 12.7592 4.83703 12.65 4.44434H8.33331Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M15.5555 7.34442V17.7777H4.44442V2.2222H12.6555C12.763 1.82981 12.9277 1.45541 13.1444 1.11108H4.44442C4.14974 1.11108 3.86712 1.22815 3.65875 1.43652C3.45038 1.64489 3.33331 1.92751 3.33331 2.2222V17.7777C3.33331 18.0724 3.45038 18.3551 3.65875 18.5634C3.86712 18.7718 4.14974 18.8889 4.44442 18.8889H15.5555C15.8502 18.8889 16.1328 18.7718 16.3412 18.5634C16.5496 18.3551 16.6666 18.0724 16.6666 17.7777V7.49997C16.291 7.49852 15.9172 7.44619 15.5555 7.34442V7.34442Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M16.6667 6.11122C18.2008 6.11122 19.4445 4.86757 19.4445 3.33344C19.4445 1.79932 18.2008 0.555664 16.6667 0.555664C15.1326 0.555664 13.8889 1.79932 13.8889 3.33344C13.8889 4.86757 15.1326 6.11122 16.6667 6.11122Z"
-                            fill="white"
-                          />
-                        </g>
-                        <defs>
-                          <clipPath id="clip0_101_2">
-                            <rect width="20" height="20" fill="white" />
-                          </clipPath>
-                        </defs>
-                      </svg>
-                    </div>
-                  </div>
+                  {{ chosenproject }}
                 </div>
 
                 <div class="dropper" slot="body">
@@ -322,7 +186,6 @@
                 v-show="!itson && primed"
                 color="primary"
                 class="mr-1"
-                title="Starta"
               >
                 <img src="@/assets/play.png" alt="" />
               </Button>
@@ -331,11 +194,10 @@
                 v-show="itson && primed"
                 color="primary"
                 class="mr-1"
-                title="Pausa"
               >
                 <img src="@/assets/pause.png" alt="" />
               </Button>
-              <button @click="sureoverlay = !sureoverlay" title="Återställ">
+              <button @click="sureoverlay = !sureoverlay">
                 <img src="@/assets/reset.png" alt="" />
               </button>
               <!--
@@ -343,7 +205,7 @@
                 <img src="@/assets/reset.png" alt=""
               /></Button>
          -->
-              <button v-if="!itson" title="Logga tid">
+              <button v-if="!itson">
                 <img src="@/assets/sendstopwatch.png" alt="" />
               </button>
               <button
@@ -353,7 +215,6 @@
                     (itson = !itson),
                     (sureoverlaytime = !sureoverlaytime)
                 "
-                title="Logga tid"
               >
                 <img src="@/assets/sendstopwatch.png" alt="" />
               </button>
@@ -392,25 +253,6 @@
   </div>
 </template>
 <style scoped>
-.selectdrop {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  align-content: center;
-  width: 100%;
-}
-.selectdrop > div {
-}
-.arrow {
-  border: solid black;
-  border-width: 0 3px 3px 0;
-  padding: 3px;
-  display: inline-block;
-}
-.down {
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
-}
 .wannasave {
   color: rgb(102, 102, 102);
   font-size: 18px;
@@ -521,7 +363,6 @@
   padding-left: 7px;
   padding-right: 7px;
   border-radius: 3px;
-  width: 200px;
   background: #1988c9;
   display: flex;
   flex-direction: column;

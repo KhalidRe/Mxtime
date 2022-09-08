@@ -375,12 +375,12 @@ export default {
       },
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://flexn.se:3000/mytime", requestOptions)
+    fetch("https://mxtime.se:3000/mytime", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.time = result;
       });
-    this.socketInstance = io("https://flexn.se:3000/");
+    this.socketInstance = io("https://mxtime.se:3000/");
     this.socketInstance.on("time:received", (timedata) => {
       this.time = timedata;
     });

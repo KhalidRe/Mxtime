@@ -52,7 +52,6 @@
               v-for="usersindex in users"
               :key="usersindex.id"
               :value="usersindex.Name"
-              @
             >
               {{ usersindex.Name }}
             </option>

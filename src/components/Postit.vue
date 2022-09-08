@@ -60,7 +60,7 @@
                     <label :for="deltag.Name + deltag.id" class="checkmark"
                       ><img
                         class="icons"
-                        :src="`https://flexn.se/mxprofile/${deltag.Profile}.jpg`"
+                        :src="`https://mxtime.se/mxprofile/${deltag.Profile}.jpg`"
                       />
                       <div class="deltagname">{{ deltag.Name }}</div>
                     </label>
@@ -108,6 +108,7 @@
             <input
               type="submit"
               class="skapaknapp"
+              value="Skapa"
               v-if="
                 this.title.replace(/\s/g, '').length > 0 &&
                 this.date.length > 0 &&
@@ -122,6 +123,7 @@
               class="fakerskapaknapp"
               title="Fyll i alla fält"
               disabled
+              value="Skapa"
             />
             <button class="avbryt" type="button" @click="show = !show">
               Avbryt
@@ -459,7 +461,7 @@ export default {
 
       body: JSON.stringify({ user: this.logged }),
     };
-    fetch("https://flexn.se:3000/workernav", requestOptions)
+    fetch("https://mxtime.se:3000/workernav", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
@@ -473,7 +475,7 @@ export default {
 
           body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
         };
-        fetch("https://flexn.se:3000/getusers", searchnano)
+        fetch("https://mxtime.se:3000/getusers", searchnano)
           .then((response) => response.json())
           .then((result) => {
             this.user = result;
@@ -481,7 +483,7 @@ export default {
               (e) => !e.Name.includes(this.loggedin.Name)
             );
           });
-        this.socketInstance = io("https://flexn.se:3000/");
+        this.socketInstance = io("https://mxtime.se:3000/");
 
         this.socketInstance.emit("loggedinfo", this.loggedin.nanoid);
         if (this.loggedin.nanoid == undefined) {
