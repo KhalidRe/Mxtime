@@ -1163,13 +1163,20 @@ export default {
       //window.location.reload();
     },
     editTime() {
+      const sender = {
+        etime: this.etime,
+        oldhours: this.oldhours,
+        oldminutes: this.oldminutes,
+      };
       this.etime.Datum = new Date(this.edate).getTime();
-      this.socketInstance.emit("edittime", this.etime);
+      this.socketInstance.emit("edittime", sender);
     },
     Edit(id, datum) {
       this.z = id;
       this.x = id - 1;
       this.etime = this.time.find((result) => result.id == this.z);
+      this.oldhours = this.etime.Hours;
+      this.oldminutes = this.etime.Minutes;
       this.edate = this.picked;
     },
   },

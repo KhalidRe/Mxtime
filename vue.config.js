@@ -1,6 +1,6 @@
 module.exports = {
   devServer: {
-    proxy: "https://flexnet.se/",
+    proxy: "https://app.mxtime.se/",
   },
   pwa: {
     name: "MX-Time",

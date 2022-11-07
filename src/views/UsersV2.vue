@@ -54,7 +54,11 @@
     </transition>
     <div>
       <div class="usnc">
-        <h2>Users</h2>
+        <div class="headercaps">
+          <h2>Users</h2>
+          <span>{{ loggedin.Used }}/{{ loggedin.Size }}</span>
+        </div>
+
         <div class="adminopt">
           <div
             class="createuserbtn"
@@ -63,10 +67,18 @@
           >
             Skapa Roller
           </div>
+
           <div
             class="createuserbtn"
-            v-if="loggedin.Status == 'Admin'"
+            v-if="loggedin.Status == 'Admin' && loggedin.Used < loggedin.Size"
             @click="createuser = !createuser"
+          >
+            Skapa Användare
+          </div>
+          <div
+            class="createuserbtn faker"
+            title="Du har inga fler platser"
+            v-if="loggedin.Status == 'Admin' && loggedin.Used == loggedin.Size"
           >
             Skapa Användare
           </div>
@@ -467,6 +479,16 @@
   </div>
 </template>
 <style scoped>
+.headercaps {
+  display: flex;
+  align-items: center;
+  grid-gap: 20px;
+}
+.faker {
+  background: rgb(148, 148, 148) !important;
+  cursor: not-allowed !important;
+  user-select: none;
+}
 .tagsbox {
   background: #f0f0f0;
 
@@ -1058,6 +1080,7 @@ export default {
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
+
         if (result.length == 0) {
           location.replace("https//app.mxtime.se/#/");
         }
@@ -1066,6 +1089,7 @@ export default {
             .then((response) => response.json())
             .then((result) => {
               this.loggedin = result[0];
+              console.log(this.loggedin);
               this.socketInstance.emit("loggedinfo", this.loggedin);
               if (this.loggedin.nanoid == undefined) {
                 window.location.reload();
@@ -1123,6 +1147,9 @@ export default {
         this.createuser = !this.createuser;
       }
     });
+    this.socketInstance.on("updateusers", (updateusers) => {
+      console.log(updateusers);
+    });
   },
   methods: {
     View(id) {
@@ -1160,6 +1187,7 @@ export default {
     },
     createnewuser() {
       const accountinfo = {
+        adminsID: this.loggedin.id,
         username: this.newusername,
         password: this.newpassword,
         name: this.newname,
@@ -1168,6 +1196,7 @@ export default {
         nanoid: this.loggedin.nanoid,
       };
       this.socketInstance.emit("accountinfo", accountinfo);
+      window.location.reload();
     },
     addtag() {
       const taginfo = {
@@ -1184,7 +1213,6 @@ export default {
         nanoid: this.loggedin.nanoid,
       };
       this.socketInstance.emit("deletetag", deletetaginfo);
-      console.log(deletetaginfo);
     },
   },
 };

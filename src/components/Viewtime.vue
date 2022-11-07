@@ -47,45 +47,52 @@
           <input type="submit" value="Filtrera" @click="filtertime()" />
         </div>
       </div>
-
-      <div class="tbl-header">
-        <table cellpadding="0" cellspacing="0" border="0">
-          <thead>
-            <tr>
-              <th>Projekt</th>
-              <th>Datum</th>
-              <th>Timmar</th>
-              <th>Minuter</th>
-              <th>Beskrivning</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-      <div class="tbl-content">
-        <table cellpadding="0" cellspacing="0" border="0">
-          <tbody>
-            <tr class="row" v-for="times in time" :key="times.id">
-              <td>
-                {{ times.Title }}
-                <span class="debinf" v-if="times.debit == 1">(debit)</span>
-                <span class="debinf" v-if="times.debit == 0">(Ejdebit)</span>
-              </td>
-              <td>
-                {{ new Date(parseInt(times.Datum)).getFullYear() }}/{{
-                  new Date(parseInt(times.Datum)).getMonth() + 1
-                }}/{{ new Date(parseInt(times.Datum)).getDate() }}
-              </td>
-              <td>{{ times.Hours }}</td>
-              <td>{{ times.Minutes }}</td>
-              <td>{{ times.Description }}</td>
-            </tr>
-            <tr class="totalsum">
-              <td>Totala Tid: {{ sum }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <table id="testTable">
+        <div class="tbl-header">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <thead>
+              <tr>
+                <th>Projekt</th>
+                <th>Datum</th>
+                <th>Timmar</th>
+                <th>Minuter</th>
+                <th>Beskrivning</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="tbl-content">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+              <tr class="row" v-for="times in time" :key="times.id">
+                <td>
+                  {{ times.Title }}
+                  <span class="debinf" v-if="times.debit == 1">(debit)</span>
+                  <span class="debinf" v-if="times.debit == 0">(Ejdebit)</span>
+                </td>
+                <td>
+                  {{ new Date(parseInt(times.Datum)).getFullYear() }}/{{
+                    new Date(parseInt(times.Datum)).getMonth() + 1
+                  }}/{{ new Date(parseInt(times.Datum)).getDate() }}
+                </td>
+                <td>{{ times.Hours }}</td>
+                <td>{{ times.Minutes }}</td>
+                <td>{{ times.Description }}</td>
+              </tr>
+              <tr class="totalsum">
+                <td>Totala Tid: {{ sum }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </table>
     </section>
+    <input
+      type="button"
+      class="excbtn"
+      @click="exportReportToExcel(this)"
+      value="Exportera till Excel"
+    />
     <transition name="slide-fade">
       <div v-if="!R" class="noclick">
         <div id="Deleteform">
@@ -125,6 +132,20 @@
   </div>
 </template>
 <style scoped>
+.excbtn {
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  background: #1988c9;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.excbtn:hover {
+  background: #4dacc1;
+}
 .totalsum > td {
   font-size: 18px;
   font-weight: 800;
@@ -448,6 +469,8 @@ export default {
       i: 0,
       subar: [],
       uniqueproject: [],
+      From: "F",
+      To: "T",
     };
   },
 
@@ -513,6 +536,29 @@ export default {
     Remove(id) {
       this.z = id - 1;
       this.x = id;
+    },
+    exportReportToExcel() {
+      if (this.start.length > 1 || this.end.length > 1) {
+        this.From = this.start;
+        this.To = this.end;
+      }
+      let table = document.getElementsByTagName("table");
+      TableToExcel.convert(table[0], {
+        name: `${
+          "MX-TIDRAPPORT - " +
+          this.projectfilter +
+          `-` +
+          this.From +
+          this.To +
+          `-` +
+          this.debitfilter
+        }.xlsx`,
+        sheet: {
+          name: "Sheet 1",
+        },
+      });
+
+      console.log(this.end);
     },
     reloadPage() {
       setTimeout(window.location.reload(), 2000);

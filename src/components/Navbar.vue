@@ -24,7 +24,7 @@
         <router-link class="links planner" to="/Planner"
           ><img class="icons" src="@/assets/dateicon.png" alt=""
         /></router-link>
-
+        <Timernav />
         <!--
 <router-link class="links" to="/Chat"
           ><img  src="@/assets/Chat2.png" alt=""

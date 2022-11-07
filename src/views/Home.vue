@@ -1,7 +1,6 @@
 <template>
   <div id="Home">
     <Workernav />
-    <Timer id="Timepos" />
     <div class="filterbtncont">
       <div
         class="filterbtn"
@@ -51,7 +50,11 @@
               />
             </div>
           </span>
-          <span class="title">{{ projects.Title }}</span>
+          <span
+            @click="(advancedview = !advancedview), getAdvanced(projects)"
+            class="title"
+            >{{ projects.Title }}</span
+          >
           <span
             v-bind:id="projects.id"
             @click="Remove(projects.id), (R = !R)"
@@ -725,9 +728,331 @@
       </div>
     </transition>
     <Postit />
+
+    <transition name="slide-fade">
+      <div v-if="!advancedview" class="noclick">
+        <div id="AdvanceForm">
+          <div class="headercont">
+            <div></div>
+            <h2>{{ advancedataholder.Title }}</h2>
+
+            <div @click="advancedview = !advancedview" class="close">x</div>
+          </div>
+
+          <div class="advancedcontent">
+            <div class="advancedleft"></div>
+            <div class="advancedmiddle">
+              <div class="advancedmiddletop"></div>
+              <div class="advancedmiddlebot">
+                <div class="gradecaps">
+                  <div
+                    class="grade"
+                    v-for="(info, x) in advarr"
+                    :key="info.index"
+                  >
+                    <div class="pointerholder">
+                      <svg
+                        width="88"
+                        height="108"
+                        viewBox="0 0 88 108"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g filter="url(#filter0_d_104_74)">
+                          <g filter="url(#filter1_i_104_74)">
+                            <rect
+                              x="12.9353"
+                              width="61.772"
+                              height="59.466"
+                              rx="20"
+                              fill="#FEFEFE"
+                            />
+                          </g>
+                          <g filter="url(#filter2_i_104_74)">
+                            <path
+                              d="M51.8833 92.1708C48.1971 97.1934 46.354 99.7047 43.8215 99.7047C41.289 99.7047 39.4459 97.1934 35.7597 92.1708L7.56989 53.7608C5.30643 50.6768 4.17471 49.1347 4.24503 47.3862C4.31533 45.6377 5.56721 44.1916 8.07098 41.2992L36.2608 8.73421C39.778 4.67112 41.5366 2.63958 43.8215 2.63958C46.1064 2.63958 47.865 4.67112 51.3822 8.7342L79.572 41.2992C82.0758 44.1916 83.3277 45.6377 83.398 47.3862C83.4683 49.1347 82.3366 50.6768 80.0731 53.7608L51.8833 92.1708Z"
+                              fill="#FEFEFE"
+                            />
+                          </g>
+                          <g filter="url(#filter3_i_104_74)">
+                            <rect
+                              x="16.7175"
+                              y="1.21362"
+                              width="55.4687"
+                              height="53.3981"
+                              rx="20"
+                              fill="#FEFEFE"
+                            />
+                          </g>
+                        </g>
+
+                        <defs>
+                          <filter
+                            id="filter0_d_104_74"
+                            x="0.241943"
+                            y="0"
+                            width="87.1592"
+                            height="107.705"
+                            filterUnits="userSpaceOnUse"
+                            color-interpolation-filters="sRGB"
+                          >
+                            <feFlood
+                              flood-opacity="0"
+                              result="BackgroundImageFix"
+                            />
+                            <feColorMatrix
+                              in="SourceAlpha"
+                              type="matrix"
+                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                              result="hardAlpha"
+                            />
+                            <feOffset dy="4" />
+                            <feGaussianBlur stdDeviation="2" />
+                            <feComposite in2="hardAlpha" operator="out" />
+                            <feColorMatrix
+                              type="matrix"
+                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                            />
+                            <feBlend
+                              mode="normal"
+                              in2="BackgroundImageFix"
+                              result="effect1_dropShadow_104_74"
+                            />
+                            <feBlend
+                              mode="normal"
+                              in="SourceGraphic"
+                              in2="effect1_dropShadow_104_74"
+                              result="shape"
+                            />
+                          </filter>
+                          <filter
+                            id="filter1_i_104_74"
+                            x="12.9353"
+                            y="0"
+                            width="61.772"
+                            height="59.4661"
+                            filterUnits="userSpaceOnUse"
+                            color-interpolation-filters="sRGB"
+                          >
+                            <feFlood
+                              flood-opacity="0"
+                              result="BackgroundImageFix"
+                            />
+                            <feBlend
+                              mode="normal"
+                              in="SourceGraphic"
+                              in2="BackgroundImageFix"
+                              result="shape"
+                            />
+                            <feColorMatrix
+                              in="SourceAlpha"
+                              type="matrix"
+                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                              result="hardAlpha"
+                            />
+                            <feOffset />
+                            <feGaussianBlur stdDeviation="1" />
+                            <feComposite
+                              in2="hardAlpha"
+                              operator="arithmetic"
+                              k2="-1"
+                              k3="1"
+                            />
+                            <feColorMatrix
+                              type="matrix"
+                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                            />
+                            <feBlend
+                              mode="normal"
+                              in2="shape"
+                              result="effect1_innerShadow_104_74"
+                            />
+                          </filter>
+                          <filter
+                            id="filter2_i_104_74"
+                            x="4.24194"
+                            y="1.63953"
+                            width="79.1592"
+                            height="98.0652"
+                            filterUnits="userSpaceOnUse"
+                            color-interpolation-filters="sRGB"
+                          >
+                            <feFlood
+                              flood-opacity="0"
+                              result="BackgroundImageFix"
+                            />
+                            <feBlend
+                              mode="normal"
+                              in="SourceGraphic"
+                              in2="BackgroundImageFix"
+                              result="shape"
+                            />
+                            <feColorMatrix
+                              in="SourceAlpha"
+                              type="matrix"
+                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                              result="hardAlpha"
+                            />
+                            <feOffset dy="-1" />
+                            <feGaussianBlur stdDeviation="1" />
+                            <feComposite
+                              in2="hardAlpha"
+                              operator="arithmetic"
+                              k2="-1"
+                              k3="1"
+                            />
+                            <feColorMatrix
+                              type="matrix"
+                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                            />
+                            <feBlend
+                              mode="normal"
+                              in2="shape"
+                              result="effect1_innerShadow_104_74"
+                            />
+                          </filter>
+                          <filter
+                            id="filter3_i_104_74"
+                            x="16.7175"
+                            y="1.21362"
+                            width="55.4688"
+                            height="53.3981"
+                            filterUnits="userSpaceOnUse"
+                            color-interpolation-filters="sRGB"
+                          >
+                            <feFlood
+                              flood-opacity="0"
+                              result="BackgroundImageFix"
+                            />
+                            <feBlend
+                              mode="normal"
+                              in="SourceGraphic"
+                              in2="BackgroundImageFix"
+                              result="shape"
+                            />
+                            <feColorMatrix
+                              in="SourceAlpha"
+                              type="matrix"
+                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                              result="hardAlpha"
+                            />
+                            <feOffset />
+                            <feGaussianBlur stdDeviation="1" />
+                            <feComposite
+                              in2="hardAlpha"
+                              operator="arithmetic"
+                              k2="-1"
+                              k3="1"
+                            />
+                            <feColorMatrix
+                              type="matrix"
+                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                            />
+                            <feBlend
+                              mode="normal"
+                              in2="shape"
+                              result="effect1_innerShadow_104_74"
+                            />
+                          </filter>
+                        </defs>
+                      </svg>
+                      <img
+                        class="profileadv"
+                        :src="`https://mxtime.se/mxprofile/${info[0].Profile}.jpg`"
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="advancedright"></div>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 <style scoped>
+@media only screen and (max-width: 1200px) {
+  .advancedcontent {
+    flex-direction: column;
+    height: 200% !important;
+  }
+}
+.pointholder {
+  width: 50px;
+}
+.profileadv {
+  margin-left: -69px;
+  margin-bottom: 55px !important;
+  border-radius: 20px;
+  width: 51px;
+  height: 51px;
+  object-fit: cover;
+  image-resolution: 10dpi;
+}
+.gradecaps {
+  background: #223e57;
+}
+.advancedcontent {
+  display: flex;
+  width: 100%;
+  height: 90%;
+  grid-gap: 1vw;
+  overflow-y: scroll;
+}
+.advancedleft {
+  background-color: rgb(210, 210, 210);
+  margin: 5px;
+  flex: 2;
+  overflow-y: scroll;
+}
+.advancedmiddletop {
+  background: #b9b9b9;
+  height: 65%;
+  overflow-y: scroll;
+}
+.advancedmiddlebot {
+  background: #fffefe;
+  height: 35%;
+}
+.advancedmiddle {
+  background-color: rgb(225, 222, 222);
+  margin: 5px;
+  flex: 5;
+
+  display: flex;
+  grid-gap: 20px;
+  flex-direction: column;
+
+  justify-content: space-between;
+}
+.advancedright {
+  background-color: rgb(230, 225, 225);
+  margin: 5px;
+  flex: 2;
+  overflow-y: scroll;
+}
+.close {
+  padding-right: 20px;
+  padding-top: 10px;
+}
+.headercont {
+  display: flex;
+  justify-content: space-between;
+}
+#AdvanceForm {
+  position: absolute;
+  padding-bottom: 15px;
+  z-index: 1;
+  width: 80%;
+  height: 80%;
+  background: white;
+  overflow-y: scroll;
+  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.377);
+  border-radius: 10px;
+}
 .included {
   background: rgb(252, 219, 219);
 }
@@ -756,7 +1081,7 @@
   height: 50px;
   justify-content: flex-end;
   align-items: center;
-  margin-top: -50px;
+
   margin-bottom: 10px;
 }
 .filterbtn {
@@ -840,6 +1165,10 @@
   font-weight: 600;
   text-align: left;
   white-space: pre-wrap;
+  -webkit-user-select: text; /* Safari */
+  -moz-user-select: text; /* Firefox */
+  -ms-user-select: text; /* IE10+/Edge */
+  user-select: text;
 }
 .trellodelete {
   display: flex;
@@ -1117,6 +1446,9 @@ input[type="radio"]:after {
   left: 0%;
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   top: 0%;
   z-index: 2;
 }
@@ -1231,6 +1563,7 @@ input[type="radio"]:after {
   flex-direction: column;
   grid-gap: 6px;
 }
+
 .fontgradient {
   background: black;
   -webkit-background-clip: text;
@@ -1286,6 +1619,10 @@ input[type="radio"]:after {
   color: rgb(255, 255, 255);
   overflow: hidden;
   height: 100%;
+}
+.title:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
 .desc {
   display: flex;
@@ -1483,6 +1820,7 @@ epic-form .esd {
   padding-bottom: 20px;
   transition: 1s;
 }
+
 @media only screen and (max-width: 1000px) {
   #ArkivForm {
     left: 10%;
@@ -1854,6 +2192,7 @@ input[type="date"] {
   opacity: 0;
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/underscore@1.13.6/underscore-umd-min.js"></script>
 <script>
 import $ from "jquery";
 import RadialProgressBar from "vue-radial-progress";
@@ -1959,6 +2298,11 @@ export default {
       selectedtaskid: null,
       selectedtaskindex: null,
       addworkoverlay: false,
+      advancedview: true,
+      advancedataholder: [],
+      advancetimeholder: [],
+      advarr: [],
+      advpr: [],
     };
   },
 
@@ -1977,7 +2321,6 @@ export default {
     fetch("https://mxtime.se:3000/loggedin", auth)
       .then((response) => response.json())
       .then((result) => {
-        console.log("hej");
         if (result.length == 0) {
           location.replace("https://app.mxtime.se/#/");
         }
@@ -2122,6 +2465,58 @@ export default {
     see: function () {},
   },
   methods: {
+    getAdvanced(advancedata) {
+      this.advancedataholder = advancedata;
+      this.socketInstance.emit("getadvancedata", advancedata);
+
+      this.socketInstance.on("advancedatarecived", (advancedatarecived) => {
+        this.advancetimeholder = advancedatarecived;
+        var grouped = {};
+        var sumtotal = {};
+
+        for (var i = 0; i < advancedatarecived.length; i++) {
+          var p = advancedatarecived[i].Name;
+          var s = advancedatarecived[i].Name;
+          if (!sumtotal[p]) {
+            sumtotal[p] = [];
+          }
+          if (!grouped[p]) {
+            grouped[p] = [];
+          }
+          grouped[p].push(advancedatarecived[i]);
+        }
+        let kt = [];
+        console.log("CHECKIT G", grouped);
+        Object.keys(grouped).forEach(function (key, index) {
+          let unique = [
+            grouped[key].map((item) => item.Hours + item.Minutes / 60),
+          ];
+          console.log(unique[0]);
+          unique = unique[0].reduce((a, b) => a + b, 0);
+          kt.push(Math.round((100 * unique) / advancedata.Timeused));
+        });
+
+        console.log(kt);
+        this.advpr = kt;
+        console.log(this.advpr);
+        let ov = [];
+        Object.keys(grouped).forEach(function (key, index) {
+          if (!ov[index]) {
+            ov[index] = [];
+          }
+          ov[index].push(grouped[key]);
+        });
+        let pt = [];
+        for (var i = 0; i < ov.length; i++) {
+          if (!undefined) {
+            pt.push(ov[i][0]);
+          }
+        }
+
+        this.advarr = pt;
+        console.log("shitgotcrazy", this.advarr);
+      });
+    },
     testfilter() {
       this.testarr = [];
       this.filtredproject = [];

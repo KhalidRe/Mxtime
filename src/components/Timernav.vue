@@ -79,7 +79,7 @@
         <div v-if="suretext == 2" class="contentflexa">
           Projekt: {{ chosenproject }} <br />
           <div v-if="suretext == 2" class="suretexta">
-            Notis: <br />
+            Debit: <br />
             <div class="dbcaps">
               <div class="db">
                 <label class="container">
@@ -128,11 +128,17 @@
         </div>
       </div>
     </div>
-    <div v-show="show" class="coolline"></div>
-    <div class="strecher">
+    <div class="specialdome" v-show="show">
       <transition name="normal">
         <div v-show="show" class="Timewid">
-          <div v-show="shows" class="timecaps">
+          <div class="navigation">
+            <h2 class="stopwatchhead">Timer</h2>
+            <div class="windowoptions" title="Minimera" @click="show = !show">
+              <div class="kryss">_</div>
+            </div>
+          </div>
+
+          <div v-show="!shows" class="timecaps">
             <div class="dropdown">
               <dropdown-menu
                 :overlay="false"
@@ -145,8 +151,76 @@
                   dropdown-closer
                   class="chooseproject"
                   slot="trigger"
+                  title="Välj projekt"
                 >
-                  Välj project
+                  <div class="selectdrop">
+                    <span>Välj project</span>
+                    <div>
+                      <svg
+                        width="25"
+                        height="25"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g clip-path="url(#clip0_101_2)">
+                          <path
+                            d="M8.33331 6.66675H13.3333V7.77786H8.33331V6.66675Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M8.33331 8.88892H13.3333V10H8.33331V8.88892Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M8.33331 11.1111H13.3333V12.2222H8.33331V11.1111Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M8.33331 13.3333H13.3333V14.4444H8.33331V13.3333Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M6.11108 4.44434H7.2222V5.55545H6.11108V4.44434Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M6.11108 6.66675H7.2222V7.77786H6.11108V6.66675Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M6.11108 8.88892H7.2222V10H6.11108V8.88892Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M6.11108 11.1111H7.2222V12.2222H6.11108V11.1111Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M6.11108 13.3333H7.2222V14.4444H6.11108V13.3333Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M8.33331 4.44434V5.55545H13.1444C12.9258 5.21144 12.7592 4.83703 12.65 4.44434H8.33331Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M15.5555 7.34442V17.7777H4.44442V2.2222H12.6555C12.763 1.82981 12.9277 1.45541 13.1444 1.11108H4.44442C4.14974 1.11108 3.86712 1.22815 3.65875 1.43652C3.45038 1.64489 3.33331 1.92751 3.33331 2.2222V17.7777C3.33331 18.0724 3.45038 18.3551 3.65875 18.5634C3.86712 18.7718 4.14974 18.8889 4.44442 18.8889H15.5555C15.8502 18.8889 16.1328 18.7718 16.3412 18.5634C16.5496 18.3551 16.6666 18.0724 16.6666 17.7777V7.49997C16.291 7.49852 15.9172 7.44619 15.5555 7.34442V7.34442Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M16.6667 6.11122C18.2008 6.11122 19.4445 4.86757 19.4445 3.33344C19.4445 1.79932 18.2008 0.555664 16.6667 0.555664C15.1326 0.555664 13.8889 1.79932 13.8889 3.33344C13.8889 4.86757 15.1326 6.11122 16.6667 6.11122Z"
+                            fill="white"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_101_2">
+                            <rect width="20" height="20" fill="white" />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </div>
+                  </div>
                 </div>
 
                 <div
@@ -154,8 +228,76 @@
                   dropdown-closer
                   class="chooseproject"
                   slot="trigger"
+                  title="Välj projekt"
                 >
-                  {{ chosenproject }}
+                  <div class="selectdrop">
+                    <span>{{ chosenproject }}</span>
+                    <div>
+                      <svg
+                        width="25"
+                        height="25"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g clip-path="url(#clip0_101_2)">
+                          <path
+                            d="M8.33331 6.66675H13.3333V7.77786H8.33331V6.66675Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M8.33331 8.88892H13.3333V10H8.33331V8.88892Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M8.33331 11.1111H13.3333V12.2222H8.33331V11.1111Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M8.33331 13.3333H13.3333V14.4444H8.33331V13.3333Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M6.11108 4.44434H7.2222V5.55545H6.11108V4.44434Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M6.11108 6.66675H7.2222V7.77786H6.11108V6.66675Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M6.11108 8.88892H7.2222V10H6.11108V8.88892Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M6.11108 11.1111H7.2222V12.2222H6.11108V11.1111Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M6.11108 13.3333H7.2222V14.4444H6.11108V13.3333Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M8.33331 4.44434V5.55545H13.1444C12.9258 5.21144 12.7592 4.83703 12.65 4.44434H8.33331Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M15.5555 7.34442V17.7777H4.44442V2.2222H12.6555C12.763 1.82981 12.9277 1.45541 13.1444 1.11108H4.44442C4.14974 1.11108 3.86712 1.22815 3.65875 1.43652C3.45038 1.64489 3.33331 1.92751 3.33331 2.2222V17.7777C3.33331 18.0724 3.45038 18.3551 3.65875 18.5634C3.86712 18.7718 4.14974 18.8889 4.44442 18.8889H15.5555C15.8502 18.8889 16.1328 18.7718 16.3412 18.5634C16.5496 18.3551 16.6666 18.0724 16.6666 17.7777V7.49997C16.291 7.49852 15.9172 7.44619 15.5555 7.34442V7.34442Z"
+                            fill="white"
+                          />
+                          <path
+                            d="M16.6667 6.11122C18.2008 6.11122 19.4445 4.86757 19.4445 3.33344C19.4445 1.79932 18.2008 0.555664 16.6667 0.555664C15.1326 0.555664 13.8889 1.79932 13.8889 3.33344C13.8889 4.86757 15.1326 6.11122 16.6667 6.11122Z"
+                            fill="white"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_101_2">
+                            <rect width="20" height="20" fill="white" />
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="dropper" slot="body">
@@ -186,6 +328,7 @@
                 v-show="!itson && primed"
                 color="primary"
                 class="mr-1"
+                title="Starta"
               >
                 <img src="@/assets/play.png" alt="" />
               </Button>
@@ -194,10 +337,11 @@
                 v-show="itson && primed"
                 color="primary"
                 class="mr-1"
+                title="Pausa"
               >
                 <img src="@/assets/pause.png" alt="" />
               </Button>
-              <button @click="sureoverlay = !sureoverlay">
+              <button title="Starta om" @click="sureoverlay = !sureoverlay">
                 <img src="@/assets/reset.png" alt="" />
               </button>
               <!--
@@ -209,6 +353,7 @@
                 <img src="@/assets/sendstopwatch.png" alt="" />
               </button>
               <button
+                title="Logga tiden"
                 v-if="itson"
                 @click="
                   toggle(),
@@ -236,23 +381,55 @@
           </div>
         </div>
       </transition>
-      <div
-        v-if="!show"
-        class="Iconclosed"
-        @click="(shows = !shows), (show = !show)"
-      >
-        <img src="@/assets/Timeicon.png" alt="" />
-      </div>
-      <div v-if="show" class="Icon" @click="(shows = !shows), (show = !show)">
-        <img src="@/assets/Timeicon.png" alt="" />
-      </div>
     </div>
-    <div class="MobileIcon" @click="openoverlay = !openoverlay">
-      <img src="@/assets/Timeicon.png" alt="" />
+
+    <div class="strecher">
+      <div class="Iconclosed" @click="show = !show">
+        <img src="@/assets/Timeicon.png" alt="" />
+      </div>
     </div>
   </div>
 </template>
 <style scoped>
+.lined {
+  position: absolute;
+  left: 0.5%;
+}
+.stopwatchhead {
+  color: white;
+  margin: 0;
+  padding-left: 10px;
+}
+.windowoptions {
+  display: flex;
+  padding: 5px;
+  margin-top: -5px;
+  width: 25px;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  border-radius: 0px 10px 0px 0px;
+  box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, 0.123);
+}
+.windowoptions:hover {
+  background: #11a4e8;
+  cursor: pointer;
+}
+.windowoptions:hover > .kryss {
+  color: white;
+}
+.kryss {
+  text-align: center;
+}
+
+.navigation {
+  background: linear-gradient(270.01deg, #00000013 5.25%, #1988c900 300.49%);
+  padding-top: 5px;
+  border-radius: 10px 10px 0px 0px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
 .wannasave {
   color: rgb(102, 102, 102);
   font-size: 18px;
@@ -298,7 +475,7 @@
   height: 100%;
   left: 0;
   top: 0;
-  z-index: 98;
+  z-index: 100;
   display: flex;
   background: rgba(44, 44, 44, 0.322);
 }
@@ -332,6 +509,7 @@
 .numbers {
   color: white;
   font-weight: 900 !important;
+  font-size: 19px;
 }
 .dropper {
   height: 250px !important;
@@ -356,6 +534,13 @@
 .close > img {
   filter: drop-shadow(0px 0px 4px #7c7c7c);
 }
+.selectdrop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  width: 100%;
+}
 .chooseproject {
   cursor: pointer;
   background: #1988c9;
@@ -363,6 +548,7 @@
   padding-left: 7px;
   padding-right: 7px;
   border-radius: 3px;
+  min-width: 150px;
   background: #1988c9;
   display: flex;
   flex-direction: column;
@@ -437,7 +623,6 @@
 }
 .strecher {
   display: flex;
-  width: 100%;
   margin-top: -1px;
 }
 .buttons > * {
@@ -471,20 +656,38 @@
   color: #ffffff;
 }
 .Timewid {
-  width: 50%;
-  height: 50px;
-  margin-top: -1px;
+  width: 350px;
+  height: 350px;
+  border-radius: 11px 11px 11px 11px;
+  z-index: 99;
+  align-self: center;
+  justify-self: center;
 
   background-color: #1988c9;
 
   display: flex;
+  flex-direction: column;
   align-items: center;
+  align-content: center;
   justify-content: space-between;
-  padding-right: 20px;
+  padding-bottom: 25px;
   box-shadow: inset 0px 2px 3px 1px rgba(0, 0, 0, 0.233);
+}
+.specialdome {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.11);
+  z-index: 99;
+  top: 0%;
+  left: 0%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 #Timer {
   display: flex;
+
   flex-direction: column;
 }
 @keyframes gradient {
@@ -502,51 +705,50 @@
   }
 
   100% {
-    background-position: 1000%;
+    background-position: 200%;
   }
 }
 
 .timecaps {
   display: flex;
-  width: 100%;
-
+  flex-direction: column;
   justify-content: space-around;
-  align-items: center;
+  align-content: center;
+  grid-gap: 50px;
+  margin: 5px;
 }
+.timecaps :nth-last-child(2) {
+  order: 1;
+}
+
 .Icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 0px 0px 50px 0px;
+  width: 51px;
+  height: 51px;
+  border-radius: 5px;
   box-shadow: 0px 2px 3px 1px rgba(0, 0, 0, 0.233);
+  background: linear-gradient(90deg, #206dc5, #437ea0, #5574ca, #206dc5);
+  background-size: 500px 500px;
+
+  animation: gradients 7s infinite linear;
   cursor: pointer;
-  margin-top: -1px;
-  background: linear-gradient(
-    270.01deg,
-    #e5fd7b 1.25%,
-    #1988c9 30.49%,
-    #1988c9 80.41%
-  );
-  background-size: 1000px;
 }
 
 .Iconclosed {
   width: 51px;
   height: 51px;
-  border-radius: 0px 0px 50px 0px;
+  border-radius: 5px;
   box-shadow: 0px 2px 3px 1px rgba(0, 0, 0, 0.233);
-  background: linear-gradient(-45deg, #206dc5, #437ea0, #5574ca, #3297be);
-  background-size: 20px 20px;
+  background: linear-gradient(90deg, #206dc5, #437ea0, #5574ca, #206dc5);
+  background-size: 500px 500px;
 
   animation: gradients 7s infinite linear;
   cursor: pointer;
 }
 .Iconclosed > img {
-  margin-top: 5px;
-  margin-right: 5px;
+  margin-top: 10px;
 }
 .Icon > img {
-  margin-top: 5px;
-  margin-right: 5px;
+  margin-top: 10px;
 }
 .normal-enter-active {
   animation: normal-in 0.5s;
@@ -562,12 +764,10 @@
 }
 @keyframes normal-in {
   0% {
-    width: 0%;
     opacity: 0;
   }
 
   100% {
-    width: 50%;
   }
 }
 @keyframes notnormalffs-in {
@@ -715,89 +915,8 @@ textarea {
   grid-gap: 0px;
   justify-content: space-around;
 }
-@media only screen and (max-width: 786px) {
-  #Timer {
-    width: 100% !important;
-  }
-  .strecher {
-    width: 100% !important;
-  }
-  .Iconclosed {
-    border-radius: 0px 50px 0px 0px;
-  }
-  .Iconclosed > img {
-    margin-top: 13px;
-  }
-  .Icon {
-    border-radius: 0px 50px 0px 0px;
-    height: 300px;
-  }
-  .Icon > img {
-    margin-top: 13px;
-  }
-  .Timewid {
-    width: 65vw;
-    flex: 2;
-    height: 300px;
-    margin-top: 0px;
-    background-color: #1988c9;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding-right: 20px;
-    box-shadow: inset 0px 2px 3px 1px rgba(0, 0, 0, 0.233);
-  }
-  .timecaps {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-content: center;
-    grid-gap: 50px;
-    margin: 5px;
-  }
-  .sureoverlay {
-    position: absolute;
-    z-index: 2;
-    border-radius: 0px 50px 0px 0px;
-  }
-  .buttons {
-    margin-left: -90px;
-  }
-
-  .buttons > * {
-    padding: 15px;
-  }
-  .numbers {
-    font-size: 25px;
-  }
-  .overcaps {
-    top: 5%;
-    left: 10%;
-    height: 240px;
-  }
-
-  .timecaps :nth-last-child(2) {
-    order: 1;
-  }
-
-  @keyframes normal-in {
-    0% {
-      width: 0vw;
-      opacity: 0;
-    }
-    100% {
-      width: 65vw;
-    }
-  }
-}
-
-@media only screen and (max-width: 786px) {
-  .container {
-  }
-  .timecontMobile {
-  }
+.buttons > * {
+  padding: 15px;
 }
 </style>
 <script>
@@ -808,6 +927,7 @@ import moment from "moment";
 import io from "socket.io-client";
 import { TimerVue as Timer } from "@josephuspaye/timer";
 import Button from "./Button.vue";
+import anime from "animejs";
 export default {
   components: { DropdownMenu, Timer, Button },
 
