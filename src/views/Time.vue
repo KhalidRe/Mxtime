@@ -1168,7 +1168,7 @@ export default {
         oldhours: this.oldhours,
         oldminutes: this.oldminutes,
       };
-      this.etime.Datum = new Date(this.edate).getTime();
+      this.etime.Datum = new Date(this.edate);
       this.socketInstance.emit("edittime", sender);
     },
     Edit(id, datum) {

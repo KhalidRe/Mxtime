@@ -51,7 +51,11 @@
             </div>
           </span>
           <span
-            @click="(advancedview = !advancedview), getAdvanced(projects)"
+            @click="
+              setforchart(projects),
+                getAdvanced(projects),
+                viewtrello(projects.id)
+            "
             class="title"
             >{{ projects.Title }}</span
           >
@@ -740,233 +744,461 @@
           </div>
 
           <div class="advancedcontent">
-            <div class="advancedleft"></div>
-            <div class="advancedmiddle">
-              <div class="advancedmiddletop"></div>
-              <div class="advancedmiddlebot">
-                <div class="gradecaps">
-                  <div
-                    class="grade"
-                    v-for="(info, x) in advarr"
-                    :key="info.index"
-                  >
-                    <div class="pointerholder">
-                      <svg
-                        width="88"
-                        height="108"
-                        viewBox="0 0 88 108"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g filter="url(#filter0_d_104_74)">
-                          <g filter="url(#filter1_i_104_74)">
-                            <rect
-                              x="12.9353"
-                              width="61.772"
-                              height="59.466"
-                              rx="20"
-                              fill="#FEFEFE"
-                            />
-                          </g>
-                          <g filter="url(#filter2_i_104_74)">
-                            <path
-                              d="M51.8833 92.1708C48.1971 97.1934 46.354 99.7047 43.8215 99.7047C41.289 99.7047 39.4459 97.1934 35.7597 92.1708L7.56989 53.7608C5.30643 50.6768 4.17471 49.1347 4.24503 47.3862C4.31533 45.6377 5.56721 44.1916 8.07098 41.2992L36.2608 8.73421C39.778 4.67112 41.5366 2.63958 43.8215 2.63958C46.1064 2.63958 47.865 4.67112 51.3822 8.7342L79.572 41.2992C82.0758 44.1916 83.3277 45.6377 83.398 47.3862C83.4683 49.1347 82.3366 50.6768 80.0731 53.7608L51.8833 92.1708Z"
-                              fill="#FEFEFE"
-                            />
-                          </g>
-                          <g filter="url(#filter3_i_104_74)">
-                            <rect
-                              x="16.7175"
-                              y="1.21362"
-                              width="55.4687"
-                              height="53.3981"
-                              rx="20"
-                              fill="#FEFEFE"
-                            />
-                          </g>
-                        </g>
-
-                        <defs>
-                          <filter
-                            id="filter0_d_104_74"
-                            x="0.241943"
-                            y="0"
-                            width="87.1592"
-                            height="107.705"
-                            filterUnits="userSpaceOnUse"
-                            color-interpolation-filters="sRGB"
-                          >
-                            <feFlood
-                              flood-opacity="0"
-                              result="BackgroundImageFix"
-                            />
-                            <feColorMatrix
-                              in="SourceAlpha"
-                              type="matrix"
-                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                              result="hardAlpha"
-                            />
-                            <feOffset dy="4" />
-                            <feGaussianBlur stdDeviation="2" />
-                            <feComposite in2="hardAlpha" operator="out" />
-                            <feColorMatrix
-                              type="matrix"
-                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
-                            />
-                            <feBlend
-                              mode="normal"
-                              in2="BackgroundImageFix"
-                              result="effect1_dropShadow_104_74"
-                            />
-                            <feBlend
-                              mode="normal"
-                              in="SourceGraphic"
-                              in2="effect1_dropShadow_104_74"
-                              result="shape"
-                            />
-                          </filter>
-                          <filter
-                            id="filter1_i_104_74"
-                            x="12.9353"
-                            y="0"
-                            width="61.772"
-                            height="59.4661"
-                            filterUnits="userSpaceOnUse"
-                            color-interpolation-filters="sRGB"
-                          >
-                            <feFlood
-                              flood-opacity="0"
-                              result="BackgroundImageFix"
-                            />
-                            <feBlend
-                              mode="normal"
-                              in="SourceGraphic"
-                              in2="BackgroundImageFix"
-                              result="shape"
-                            />
-                            <feColorMatrix
-                              in="SourceAlpha"
-                              type="matrix"
-                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                              result="hardAlpha"
-                            />
-                            <feOffset />
-                            <feGaussianBlur stdDeviation="1" />
-                            <feComposite
-                              in2="hardAlpha"
-                              operator="arithmetic"
-                              k2="-1"
-                              k3="1"
-                            />
-                            <feColorMatrix
-                              type="matrix"
-                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
-                            />
-                            <feBlend
-                              mode="normal"
-                              in2="shape"
-                              result="effect1_innerShadow_104_74"
-                            />
-                          </filter>
-                          <filter
-                            id="filter2_i_104_74"
-                            x="4.24194"
-                            y="1.63953"
-                            width="79.1592"
-                            height="98.0652"
-                            filterUnits="userSpaceOnUse"
-                            color-interpolation-filters="sRGB"
-                          >
-                            <feFlood
-                              flood-opacity="0"
-                              result="BackgroundImageFix"
-                            />
-                            <feBlend
-                              mode="normal"
-                              in="SourceGraphic"
-                              in2="BackgroundImageFix"
-                              result="shape"
-                            />
-                            <feColorMatrix
-                              in="SourceAlpha"
-                              type="matrix"
-                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                              result="hardAlpha"
-                            />
-                            <feOffset dy="-1" />
-                            <feGaussianBlur stdDeviation="1" />
-                            <feComposite
-                              in2="hardAlpha"
-                              operator="arithmetic"
-                              k2="-1"
-                              k3="1"
-                            />
-                            <feColorMatrix
-                              type="matrix"
-                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
-                            />
-                            <feBlend
-                              mode="normal"
-                              in2="shape"
-                              result="effect1_innerShadow_104_74"
-                            />
-                          </filter>
-                          <filter
-                            id="filter3_i_104_74"
-                            x="16.7175"
-                            y="1.21362"
-                            width="55.4688"
-                            height="53.3981"
-                            filterUnits="userSpaceOnUse"
-                            color-interpolation-filters="sRGB"
-                          >
-                            <feFlood
-                              flood-opacity="0"
-                              result="BackgroundImageFix"
-                            />
-                            <feBlend
-                              mode="normal"
-                              in="SourceGraphic"
-                              in2="BackgroundImageFix"
-                              result="shape"
-                            />
-                            <feColorMatrix
-                              in="SourceAlpha"
-                              type="matrix"
-                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                              result="hardAlpha"
-                            />
-                            <feOffset />
-                            <feGaussianBlur stdDeviation="1" />
-                            <feComposite
-                              in2="hardAlpha"
-                              operator="arithmetic"
-                              k2="-1"
-                              k3="1"
-                            />
-                            <feColorMatrix
-                              type="matrix"
-                              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
-                            />
-                            <feBlend
-                              mode="normal"
-                              in2="shape"
-                              result="effect1_innerShadow_104_74"
-                            />
-                          </filter>
-                        </defs>
-                      </svg>
-                      <img
-                        class="profileadv"
-                        :src="`https://mxtime.se/mxprofile/${info[0].Profile}.jpg`"
-                        alt=""
-                      />
+            <div class="advancedleft">
+              <div
+                v-for="addesc in descdisp"
+                :key="addesc.index"
+                class="flip-card"
+              >
+                <div class="flip-card-inner">
+                  <div class="flip-card-front">
+                    <div class="frontcapsule">
+                      <div class="profileandname">
+                        <img
+                          class="leftprofile"
+                          :src="`https://mxtime.se/mxprofile/${addesc.Profile}.jpg`"
+                          alt=""
+                        />
+                        <h2>{{ addesc.Name }}</h2>
+                      </div>
+                      <div class="frontdates">
+                        <div>
+                          {{ parseInt(addesc.Datum) | moment }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="isdebit" v-if="addesc.Debit == 1">Debit</div>
+                    <div class="isnotdebit" v-else>Ej Debit</div>
+                  </div>
+                  <div class="flip-card-back">
+                    <div class="topbarcont">
+                      <div class="frontcapsule">
+                        <div class="profileandname">
+                          <img
+                            class="leftprofile"
+                            :src="`https://mxtime.se/mxprofile/${addesc.Profile}.jpg`"
+                            alt=""
+                          />
+                          <h2>{{ addesc.Name }}</h2>
+                        </div>
+                        <div class="frontdates">
+                          <div>
+                            {{ parseInt(addesc.Datum) | moment }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="isdebit" v-if="addesc.Debit == 1">Debit</div>
+                      <div class="isnotdebit" v-else>Ej Debit</div>
+                    </div>
+                    <div class="descriptioncontainer">
+                      {{ addesc.Description }}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="advancedright"></div>
+            <div class="advancedmiddle">
+              <div class="advancedmiddletop">
+                <Frekvenschart id="chart" :to-chart="amountadvdata" />
+              </div>
+              <div class="advancedmiddlebot">
+                <div class="gradecaps">
+                  <div></div>
+                  <div class="gradecapper">
+                    <div
+                      class="grade"
+                      v-for="(info, x) in advarr"
+                      :key="info.index"
+                      :style="{ background: rcolor[x], width: advpr[x] + '%' }"
+                    >
+                      <div class="pointerholder" v-if="advpr[x] > 1">
+                        <svg
+                          width="88"
+                          height="108"
+                          viewBox="0 0 88 108"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <g filter="url(#filter0_d_205_2)">
+                            <g filter="url(#filter1_i_205_2)">
+                              <rect
+                                x="13.0852"
+                                width="61.772"
+                                height="59.466"
+                                rx="20"
+                                fill="#FEFEFE"
+                              />
+                            </g>
+                            <g filter="url(#filter2_i_205_2)">
+                              <path
+                                d="M52.0332 92.1708C48.347 97.1934 46.5039 99.7047 43.9714 99.7047C41.4389 99.7047 39.5958 97.1934 35.9096 92.1708L7.71979 53.7608C5.45634 50.6768 4.32462 49.1347 4.39493 47.3862C4.46523 45.6377 5.71712 44.1916 8.22088 41.2992L36.4107 8.73421C39.9279 4.67112 41.6865 2.63958 43.9714 2.63958C46.2563 2.63958 48.0149 4.67112 51.5321 8.7342L79.7219 41.2992C82.2257 44.1916 83.4776 45.6377 83.5479 47.3862C83.6182 49.1347 82.4865 50.6768 80.223 53.7608L52.0332 92.1708Z"
+                                fill="#FEFEFE"
+                              />
+                            </g>
+                            <g filter="url(#filter3_i_205_2)">
+                              <rect
+                                x="16.8674"
+                                y="1.21362"
+                                width="55.4687"
+                                height="53.3981"
+                                rx="20"
+                                fill="#FEFEFE"
+                              />
+                            </g>
+                          </g>
+                          <g filter="url(#filter4_i_205_2)">
+                            <ellipse
+                              cx="44.7327"
+                              cy="66.5"
+                              rx="17.6592"
+                              ry="10.5"
+                              fill="#FCFCFC"
+                            />
+                          </g>
+                          <defs>
+                            <filter
+                              id="filter0_d_205_2"
+                              x="0.391846"
+                              y="0"
+                              width="87.1592"
+                              height="107.705"
+                              filterUnits="userSpaceOnUse"
+                              color-interpolation-filters="sRGB"
+                            >
+                              <feFlood
+                                flood-opacity="0"
+                                result="BackgroundImageFix"
+                              />
+                              <feColorMatrix
+                                in="SourceAlpha"
+                                type="matrix"
+                                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                result="hardAlpha"
+                              />
+                              <feOffset dy="4" />
+                              <feGaussianBlur stdDeviation="2" />
+                              <feComposite in2="hardAlpha" operator="out" />
+                              <feColorMatrix
+                                type="matrix"
+                                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                              />
+                              <feBlend
+                                mode="normal"
+                                in2="BackgroundImageFix"
+                                result="effect1_dropShadow_205_2"
+                              />
+                              <feBlend
+                                mode="normal"
+                                in="SourceGraphic"
+                                in2="effect1_dropShadow_205_2"
+                                result="shape"
+                              />
+                            </filter>
+                            <filter
+                              id="filter1_i_205_2"
+                              x="13.0852"
+                              y="0"
+                              width="61.772"
+                              height="59.4661"
+                              filterUnits="userSpaceOnUse"
+                              color-interpolation-filters="sRGB"
+                            >
+                              <feFlood
+                                flood-opacity="0"
+                                result="BackgroundImageFix"
+                              />
+                              <feBlend
+                                mode="normal"
+                                in="SourceGraphic"
+                                in2="BackgroundImageFix"
+                                result="shape"
+                              />
+                              <feColorMatrix
+                                in="SourceAlpha"
+                                type="matrix"
+                                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                result="hardAlpha"
+                              />
+                              <feOffset />
+                              <feGaussianBlur stdDeviation="1" />
+                              <feComposite
+                                in2="hardAlpha"
+                                operator="arithmetic"
+                                k2="-1"
+                                k3="1"
+                              />
+                              <feColorMatrix
+                                type="matrix"
+                                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                              />
+                              <feBlend
+                                mode="normal"
+                                in2="shape"
+                                result="effect1_innerShadow_205_2"
+                              />
+                            </filter>
+                            <filter
+                              id="filter2_i_205_2"
+                              x="4.39185"
+                              y="1.63953"
+                              width="79.1592"
+                              height="98.0652"
+                              filterUnits="userSpaceOnUse"
+                              color-interpolation-filters="sRGB"
+                            >
+                              <feFlood
+                                flood-opacity="0"
+                                result="BackgroundImageFix"
+                              />
+                              <feBlend
+                                mode="normal"
+                                in="SourceGraphic"
+                                in2="BackgroundImageFix"
+                                result="shape"
+                              />
+                              <feColorMatrix
+                                in="SourceAlpha"
+                                type="matrix"
+                                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                result="hardAlpha"
+                              />
+                              <feOffset dy="-1" />
+                              <feGaussianBlur stdDeviation="1" />
+                              <feComposite
+                                in2="hardAlpha"
+                                operator="arithmetic"
+                                k2="-1"
+                                k3="1"
+                              />
+                              <feColorMatrix
+                                type="matrix"
+                                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                              />
+                              <feBlend
+                                mode="normal"
+                                in2="shape"
+                                result="effect1_innerShadow_205_2"
+                              />
+                            </filter>
+                            <filter
+                              id="filter3_i_205_2"
+                              x="16.8674"
+                              y="1.21362"
+                              width="55.4688"
+                              height="53.3981"
+                              filterUnits="userSpaceOnUse"
+                              color-interpolation-filters="sRGB"
+                            >
+                              <feFlood
+                                flood-opacity="0"
+                                result="BackgroundImageFix"
+                              />
+                              <feBlend
+                                mode="normal"
+                                in="SourceGraphic"
+                                in2="BackgroundImageFix"
+                                result="shape"
+                              />
+                              <feColorMatrix
+                                in="SourceAlpha"
+                                type="matrix"
+                                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                result="hardAlpha"
+                              />
+                              <feOffset />
+                              <feGaussianBlur stdDeviation="1" />
+                              <feComposite
+                                in2="hardAlpha"
+                                operator="arithmetic"
+                                k2="-1"
+                                k3="1"
+                              />
+                              <feColorMatrix
+                                type="matrix"
+                                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                              />
+                              <feBlend
+                                mode="normal"
+                                in2="shape"
+                                result="effect1_innerShadow_205_2"
+                              />
+                            </filter>
+                            <filter
+                              id="filter4_i_205_2"
+                              x="27.0735"
+                              y="56"
+                              width="35.3184"
+                              height="21"
+                              filterUnits="userSpaceOnUse"
+                              color-interpolation-filters="sRGB"
+                            >
+                              <feFlood
+                                flood-opacity="0"
+                                result="BackgroundImageFix"
+                              />
+                              <feBlend
+                                mode="normal"
+                                in="SourceGraphic"
+                                in2="BackgroundImageFix"
+                                result="shape"
+                              />
+                              <feColorMatrix
+                                in="SourceAlpha"
+                                type="matrix"
+                                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                                result="hardAlpha"
+                              />
+                              <feOffset />
+                              <feGaussianBlur stdDeviation="1" />
+                              <feComposite
+                                in2="hardAlpha"
+                                operator="arithmetic"
+                                k2="-1"
+                                k3="1"
+                              />
+                              <feColorMatrix
+                                type="matrix"
+                                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                              />
+                              <feBlend
+                                mode="normal"
+                                in2="shape"
+                                result="effect1_innerShadow_205_2"
+                              />
+                            </filter>
+                          </defs>
+                        </svg>
+
+                        <img
+                          class="profileadv"
+                          :src="`https://mxtime.se/mxprofile/${info[0].Profile}.jpg`"
+                          alt=""
+                        />
+                        <div class="precentage">{{ advpr[x] }}%</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="advancedright">
+              <div class="advtrelloview">
+                <div class="textinfo" v-if="atrello.length < 1">
+                  <h2>Skapa Uppgifter för projektet</h2>
+                  <p>
+                    Här kommer dina uppgifter som delas med deltagarna att visas
+                  </p>
+                  <p>Skapa uppgifter genom att använda fälten nedan!</p>
+                </div>
+                <div
+                  class="trellocard advtrellocard"
+                  v-for="trello in atrello"
+                  :key="trello.id"
+                >
+                  <transition name="notsoepic-form">
+                    <div v-if="trello.completed === 0">
+                      <div class="trellohead">
+                        <div>{{ trello.title }}</div>
+                      </div>
+                      <div class="trellooptions">
+                        <div
+                          class="trellodelete"
+                          @click="trellodelete(trello.id)"
+                        >
+                          X
+                        </div>
+                        <div class="trellodone" @click="trellodone(trello.id)">
+                          <img
+                            width="25px"
+                            src="@/assets/Trellocomplete.png"
+                            alt=""
+                          />
+                        </div>
+                      </div>
+
+                      <div class="trellodesc">
+                        <pre class="prerenderstuff">{{
+                          trello.description
+                        }}</pre>
+                      </div>
+                    </div>
+                  </transition>
+                  <transition name="epic-form">
+                    <div class="trellochecked" v-if="trello.completed === 1">
+                      <div class="trellohead">
+                        <div>{{ trello.title }}</div>
+                      </div>
+                      <div class="trellooptions">
+                        <div
+                          class="trellodelete"
+                          @click="trellodelete(trello.id)"
+                        >
+                          X
+                        </div>
+                        <div class="trellodone" @click="trellodone(trello.id)">
+                          <img
+                            width="25px"
+                            src="@/assets/Trellocomplete.png"
+                            alt=""
+                          />
+                        </div>
+                      </div>
+
+                      <div class="trellodesc">
+                        <pre class="prerenderstuff">{{
+                          trello.description
+                        }}</pre>
+                      </div>
+                    </div>
+                  </transition>
+                </div>
+              </div>
+              <div class="inputsholdernshadow">
+                <div class="textareapadtitle">
+                  <input
+                    class="advtrellotext"
+                    v-model="Ttitle"
+                    placeholder="Title"
+                  />
+                </div>
+                <div class="advtrelloinput">
+                  <div class="textareapad">
+                    <textarea
+                      class="advtrellotext"
+                      name=""
+                      id=""
+                      cols="30"
+                      rows="10"
+                      placeholder="Aa"
+                      v-model="Tdescription"
+                      @keyup.13.exact="
+                        if (Ttitle.length > 0 && Tdescription.length > 0) {
+                          addtrello(projects.id);
+                        }
+                      "
+                    ></textarea>
+                  </div>
+
+                  <div
+                    class="advtrellosend"
+                    v-if="
+                      this.Ttitle.length > 0 && this.Tdescription.length > 0
+                    "
+                    @click="addtrello(projects.id)"
+                  >
+                    Skapa
+                  </div>
+                  <div
+                    class="advtrellosendfaker"
+                    v-if="
+                      this.Ttitle.length < 1 || this.Tdescription.length < 1
+                    "
+                  >
+                    Skapa
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -978,10 +1210,257 @@
   .advancedcontent {
     flex-direction: column;
     height: 200% !important;
+    width: 100% !important;
+    justify-items: center !important;
+  }
+  .advancedmiddle {
+    justify-self: center !important;
+    max-width: unset !important;
+    width: 100% !important;
+    justify-content: center !important;
+    align-items: center;
+  }
+  .advancedmiddletop {
+    width: 90%;
+  }
+  .advancedmiddlebot {
+    width: 90%;
   }
 }
-.pointholder {
+.leftprofile {
   width: 50px;
+  height: 50px;
+  border-radius: 20px;
+}
+.profileandname {
+  display: flex;
+  margin-left: 8px;
+  margin-top: 5px;
+  grid-gap: 5px;
+  align-items: center;
+  font-size: 12px;
+}
+.frontcapsule {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  color: white;
+}
+.frontdates {
+  text-align: left;
+  margin-left: 10px;
+}
+.isdebit {
+  background: white;
+  border-radius: 5px;
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-right: 25px;
+  font-weight: bold;
+
+  height: 20px;
+}
+.isnotdebit {
+  background: white;
+  border-radius: 5px;
+  padding: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-right: 25px;
+  font-weight: bold;
+  height: 20px;
+}
+.flip-card-back > .topbarcont > .isdebit,
+.isnotdebit {
+  margin-top: 30px;
+}
+.topbarcont {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.advancedleft {
+  background-color: white;
+  margin: 5px;
+  flex: 2;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.flip-card {
+  background-color: transparent;
+  width: 100%;
+  height: 100px;
+  perspective: 1000px;
+  transition: 1s;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+.descriptioncontainer {
+  color: white;
+  height: 100%;
+  overflow-y: auto;
+  word-wrap: break-word;
+}
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  text-align: center;
+
+  transition: height 1s;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition-delay: transform 300ms;
+  margin-bottom: 120px;
+}
+
+.flip-card:hover .flip-card-inner {
+  transition: 1s;
+  margin-bottom: 120px;
+  transform: rotateY(180deg);
+
+  height: 200px;
+
+  transition: 1s;
+}
+.flip-card:hover {
+  margin-bottom: 105px;
+}
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  margin-bottom: 120px;
+}
+
+.flip-card-front {
+  background-color: #1988c9;
+
+  transition: 1s;
+  margin-bottom: 120px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flip-card-back {
+  background-color: #2980b9;
+
+  transition: 1s;
+  margin-bottom: 120px;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  grid-gap: 20px;
+}
+.textinfo {
+  margin-top: 50px;
+}
+.gradecapper {
+  background: linear-gradient(180deg, #1d80ab 0%, #31b3ff 100%);
+  display: flex;
+  height: 70%;
+  align-items: flex-end;
+  border-radius: 20px 20px 0px 0px;
+  width: 100%;
+  align-self: baseline;
+  box-shadow: 0px 0px 5px 1px rgb(158, 158, 158);
+}
+.inputsholdernshadow {
+  padding-top: 5px;
+  box-shadow: 0px -5px 5px -6px rgb(214, 214, 214);
+}
+.advtrellocard {
+  margin-left: auto;
+  margin-right: auto;
+}
+.textareapad {
+  padding: 10px;
+  border-radius: 20px;
+  height: 20px;
+  border-radius: 20px;
+  width: 90%;
+  background: #f3f3f5;
+}
+.textareapadtitle {
+  padding: 10px;
+  border-radius: 20px;
+  height: 20px;
+  width: 20%;
+  margin-left: 25px;
+  background: #f3f3f5;
+}
+.advtrelloview {
+  height: 100%;
+  overflow-y: scroll;
+  justify-content: center;
+  box-shadow: inset 0px 0px 5px 1px rgb(214, 214, 214);
+}
+
+.advtrellotext {
+  height: 20px;
+  width: 100%;
+  resize: none;
+  border: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  outline: none;
+  background: #f3f3f5;
+}
+.advtrelloinput:focus {
+  border: none;
+}
+.advtrelloinput:active {
+  border: none;
+}
+.advtrellosendfaker {
+  display: flex;
+  background: rgb(114, 114, 114);
+  width: 75px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 50px;
+}
+.advtrellosend {
+  display: flex;
+  background: #1988c9;
+  color: white;
+  width: 75px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 50px;
+}
+.advtrelloinput {
+  display: flex;
+  width: 90%;
+  align-self: center;
+  grid-gap: 5px;
+  background: #f3f3f5;
+  border-radius: 30px;
+  padding: 5px;
+  margin: 5px;
+}
+.grade {
+  height: 55px;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+.precentage {
+  margin-top: -50px;
+  margin-left: 20px;
+  font-size: 12px;
+}
+.pointerholder {
+  margin-top: -80px;
 }
 .profileadv {
   margin-left: -69px;
@@ -993,7 +1472,11 @@
   image-resolution: 10dpi;
 }
 .gradecaps {
-  background: #223e57;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  align-items: bottom;
 }
 .advancedcontent {
   display: flex;
@@ -1002,26 +1485,25 @@
   grid-gap: 1vw;
   overflow-y: scroll;
 }
-.advancedleft {
-  background-color: rgb(210, 210, 210);
-  margin: 5px;
-  flex: 2;
-  overflow-y: scroll;
-}
+
 .advancedmiddletop {
-  background: #b9b9b9;
-  height: 65%;
-  overflow-y: scroll;
+  background-color: white;
+  height: 75%;
+  box-shadow: #d1d1d1 0px 0px 5px 1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 0px 0px 20px 20px;
 }
 .advancedmiddlebot {
   background: #fffefe;
-  height: 35%;
+  height: 20%;
 }
 .advancedmiddle {
-  background-color: rgb(225, 222, 222);
+  background-color: rgb(255, 255, 255);
   margin: 5px;
   flex: 5;
-
+  max-width: 50%;
   display: flex;
   grid-gap: 20px;
   flex-direction: column;
@@ -1029,10 +1511,15 @@
   justify-content: space-between;
 }
 .advancedright {
-  background-color: rgb(230, 225, 225);
-  margin: 5px;
   flex: 2;
-  overflow-y: scroll;
+
+  background-color: white;
+  height: 99%;
+  box-shadow: #d1d1d1 0px 0px 5px 1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 0px 0px 20px 20px;
 }
 .close {
   padding-right: 20px;
@@ -1308,6 +1795,7 @@
   margin-top: 25px;
   border-radius: 10px;
   width: 80%;
+  background: white;
 }
 .trellocapsule {
   display: flex;
@@ -2209,7 +2697,10 @@ import ding from "../assets/soundeffect/ding.mp3";
 import pop from "../assets/soundeffect/pop.mp3";
 import Timer from "@/components/Timer.vue";
 import DropdownMenu from "v-dropdown-menu";
+import Frekvenschart from "../components/Frekvenschart.vue";
 import "v-dropdown-menu/dist/v-dropdown-menu.css";
+import moment from "moment";
+
 export default {
   components: {
     Postit,
@@ -2218,6 +2709,7 @@ export default {
     Minitrello,
     Timer,
     DropdownMenu,
+    Frekvenschart,
   },
   //
   data() {
@@ -2303,6 +2795,281 @@ export default {
       advancetimeholder: [],
       advarr: [],
       advpr: [],
+      descdisp: [],
+      amountadvdata: [],
+      advanceid: 0,
+      rcolor: [
+        "#63b598",
+        "#ce7d78",
+        "#ea9e70",
+        "#a48a9e",
+        "#c6e1e8",
+        "#648177",
+        "#0d5ac1",
+        "#f205e6",
+        "#1c0365",
+        "#14a9ad",
+        "#4ca2f9",
+        "#a4e43f",
+        "#d298e2",
+        "#6119d0",
+        "#d2737d",
+        "#c0a43c",
+        "#f2510e",
+        "#651be6",
+        "#79806e",
+        "#61da5e",
+        "#cd2f00",
+        "#9348af",
+        "#01ac53",
+        "#c5a4fb",
+        "#996635",
+        "#b11573",
+        "#4bb473",
+        "#75d89e",
+        "#2f3f94",
+        "#2f7b99",
+        "#da967d",
+        "#34891f",
+        "#b0d87b",
+        "#ca4751",
+        "#7e50a8",
+        "#c4d647",
+        "#e0eeb8",
+        "#11dec1",
+        "#289812",
+        "#566ca0",
+        "#ffdbe1",
+        "#2f1179",
+        "#935b6d",
+        "#916988",
+        "#513d98",
+        "#aead3a",
+        "#9e6d71",
+        "#4b5bdc",
+        "#0cd36d",
+        "#250662",
+        "#cb5bea",
+        "#228916",
+        "#ac3e1b",
+        "#df514a",
+        "#539397",
+        "#880977",
+        "#f697c1",
+        "#ba96ce",
+        "#679c9d",
+        "#c6c42c",
+        "#5d2c52",
+        "#48b41b",
+        "#e1cf3b",
+        "#5be4f0",
+        "#57c4d8",
+        "#a4d17a",
+        "#be608b",
+        "#96b00c",
+        "#088baf",
+        "#f158bf",
+        "#e145ba",
+        "#ee91e3",
+        "#05d371",
+        "#5426e0",
+        "#4834d0",
+        "#802234",
+        "#6749e8",
+        "#0971f0",
+        "#8fb413",
+        "#b2b4f0",
+        "#c3c89d",
+        "#c9a941",
+        "#41d158",
+        "#fb21a3",
+        "#51aed9",
+        "#5bb32d",
+        "#21538e",
+        "#89d534",
+        "#d36647",
+        "#7fb411",
+        "#0023b8",
+        "#3b8c2a",
+        "#986b53",
+        "#f50422",
+        "#983f7a",
+        "#ea24a3",
+        "#79352c",
+        "#521250",
+        "#c79ed2",
+        "#d6dd92",
+        "#e33e52",
+        "#b2be57",
+        "#fa06ec",
+        "#1bb699",
+        "#6b2e5f",
+        "#64820f",
+        "#21538e",
+        "#89d534",
+        "#d36647",
+        "#7fb411",
+        "#0023b8",
+        "#3b8c2a",
+        "#986b53",
+        "#f50422",
+        "#983f7a",
+        "#ea24a3",
+        "#79352c",
+        "#521250",
+        "#c79ed2",
+        "#d6dd92",
+        "#e33e52",
+        "#b2be57",
+        "#fa06ec",
+        "#1bb699",
+        "#6b2e5f",
+        "#64820f",
+        "#9cb64a",
+        "#996c48",
+        "#9ab9b7",
+        "#06e052",
+        "#e3a481",
+        "#0eb621",
+        "#fc458e",
+        "#b2db15",
+        "#aa226d",
+        "#792ed8",
+        "#73872a",
+        "#520d3a",
+        "#cefcb8",
+        "#a5b3d9",
+        "#7d1d85",
+        "#c4fd57",
+        "#f1ae16",
+        "#8fe22a",
+        "#ef6e3c",
+        "#243eeb",
+        "#dd93fd",
+        "#3f8473",
+        "#e7dbce",
+        "#421f79",
+        "#7a3d93",
+        "#635f6d",
+        "#93f2d7",
+        "#9b5c2a",
+        "#15b9ee",
+        "#0f5997",
+        "#409188",
+        "#911e20",
+        "#1350ce",
+        "#10e5b1",
+        "#fff4d7",
+        "#cb2582",
+        "#ce00be",
+        "#32d5d6",
+        "#608572",
+        "#c79bc2",
+        "#00f87c",
+        "#77772a",
+        "#6995ba",
+        "#fc6b57",
+        "#f07815",
+        "#8fd883",
+        "#060e27",
+        "#96e591",
+        "#21d52e",
+        "#d00043",
+        "#b47162",
+        "#1ec227",
+        "#4f0f6f",
+        "#1d1d58",
+        "#947002",
+        "#bde052",
+        "#e08c56",
+        "#28fcfd",
+        "#36486a",
+        "#d02e29",
+        "#1ae6db",
+        "#3e464c",
+        "#a84a8f",
+        "#911e7e",
+        "#3f16d9",
+        "#0f525f",
+        "#ac7c0a",
+        "#b4c086",
+        "#c9d730",
+        "#30cc49",
+        "#3d6751",
+        "#fb4c03",
+        "#640fc1",
+        "#62c03e",
+        "#d3493a",
+        "#88aa0b",
+        "#406df9",
+        "#615af0",
+        "#2a3434",
+        "#4a543f",
+        "#79bca0",
+        "#a8b8d4",
+        "#00efd4",
+        "#7ad236",
+        "#7260d8",
+        "#1deaa7",
+        "#06f43a",
+        "#823c59",
+        "#e3d94c",
+        "#dc1c06",
+        "#f53b2a",
+        "#b46238",
+        "#2dfff6",
+        "#a82b89",
+        "#1a8011",
+        "#436a9f",
+        "#1a806a",
+        "#4cf09d",
+        "#c188a2",
+        "#67eb4b",
+        "#b308d3",
+        "#fc7e41",
+        "#af3101",
+        "#71b1f4",
+        "#a2f8a5",
+        "#e23dd0",
+        "#d3486d",
+        "#00f7f9",
+        "#474893",
+        "#3cec35",
+        "#1c65cb",
+        "#5d1d0c",
+        "#2d7d2a",
+        "#ff3420",
+        "#5cdd87",
+        "#a259a4",
+        "#e4ac44",
+        "#1bede6",
+        "#8798a4",
+        "#d7790f",
+        "#b2c24f",
+        "#de73c2",
+        "#d70a9c",
+        "#88e9b8",
+        "#c2b0e2",
+        "#86e98f",
+        "#ae90e2",
+        "#1a806b",
+        "#436a9e",
+        "#0ec0ff",
+        "#f812b3",
+        "#b17fc9",
+        "#8d6c2f",
+        "#d3277a",
+        "#2ca1ae",
+        "#9685eb",
+        "#8a96c6",
+        "#dba2e6",
+        "#76fc1b",
+        "#608fa4",
+        "#20f6ba",
+        "#07d7f6",
+        "#dce77a",
+        "#77ecca",
+      ],
     };
   },
 
@@ -2461,12 +3228,31 @@ export default {
           });
       });
   },
+  filters: {
+    moment: function (date) {
+      return moment(date).format("L");
+    },
+  },
+  //#1D80AB,#31FFF3 background: linear-gradient(90deg, #1D80AB 0%, #31FFF3 100%);
   watch: {
     see: function () {},
   },
   methods: {
+    setforchart(id) {
+      this.advanceid = id;
+    },
+    moment: function () {
+      return moment();
+    },
+    setforchart(advancedata) {
+      this.socketInstance.emit("getamountadvanced", advancedata);
+      this.socketInstance.on("anothertester", (getamountadvancedrecived) => {
+        this.amountadvdata = getamountadvancedrecived;
+        this.advancedataholder = advancedata;
+        this.advancedview = false;
+      });
+    },
     getAdvanced(advancedata) {
-      this.advancedataholder = advancedata;
       this.socketInstance.emit("getadvancedata", advancedata);
 
       this.socketInstance.on("advancedatarecived", (advancedatarecived) => {
@@ -2516,7 +3302,15 @@ export default {
         this.advarr = pt;
         console.log("shitgotcrazy", this.advarr);
       });
+      this.socketInstance.emit("getadvancedatatime", advancedata);
+      this.socketInstance.on(
+        "advancedatatimerecived",
+        (advancedattimearecived) => {
+          this.descdisp = advancedattimearecived;
+        }
+      );
     },
+
     testfilter() {
       this.testarr = [];
       this.filtredproject = [];
@@ -2749,6 +3543,8 @@ export default {
       };
       this.socketInstance.emit("trello:created", trello);
       this.dingsound.play();
+      this.Ttitle = "";
+      this.Tdescription = "";
     },
     trellodone(id) {
       const trellostatus = {

@@ -104,7 +104,7 @@
       @click="exportReportToExcel(this)"
       value="Exportera till Excel"
     />
-
+    <!--
     <transition name="slide-fade">
       <div v-if="!R" class="noclick">
         <div id="Deleteform">
@@ -141,6 +141,8 @@
         </div>
       </div>
     </transition>
+  
+-->
   </div>
 </template>
 <style scoped>
