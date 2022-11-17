@@ -105,10 +105,9 @@
               <span>Tidsbudget</span>
               <input type="number" value="1" min="1" v-model="timebudget" />
             </span>
-            <input
+            <div
               type="submit"
               class="skapaknapp"
-              value="Skapa"
               v-if="
                 this.title.replace(/\s/g, '').length > 0 &&
                 this.date.length > 0 &&
@@ -116,18 +115,18 @@
                 this.timebudget > 0
               "
               @click="createProject(), (show = !show)"
-            />
-            <input
+            >
+              skapa
+            </div>
+            <div
               v-else
               type="submit"
               class="fakerskapaknapp"
               title="Fyll i alla fält"
-              disabled
-              value="Skapa"
-            />
-            <button class="avbryt" type="button" @click="show = !show">
-              Avbryt
-            </button>
+            >
+              Skapa
+            </div>
+            <div class="avbryt" @click="show = !show">Avbryt</div>
           </form>
         </div>
       </div>
@@ -262,42 +261,32 @@
   border-radius: 10px 10px 0px 0px;
 }
 .avbryt {
-  font-style: normal;
-  font-weight: normal;
-  background: linear-gradient(180deg, #f96d6d 0%, #cf4040 46.88%, #ed8282 100%);
-  width: 104px;
-  height: 24px;
-  box-shadow: 0px 4px 4px rgba(186, 186, 186, 0.25);
-  border-radius: 24px;
+  margin-top: 10px;
+  background: rgb(218, 81, 81);
+  border-radius: 20px;
+  width: 100px;
+  height: 20px;
+  text-align: center;
+  color: white;
   font-size: 15px;
-  line-height: 17px;
-  border: none;
-  font-weight: 600;
-  color: #01537c;
+  padding: 5px;
   cursor: pointer;
 }
 .fakerskapaknapp {
-  border: none;
-  background: linear-gradient(180deg, #aab1ab 0%, #c3cec5 46.88%, #bdc9bf 100%);
-  box-shadow: 0px 5px 5px 1px rgba(255, 255, 255, 0.151);
-  width: 150px;
-  height: 60px;
-  border-radius: 25px;
-  font-size: 30px;
-  font-weight: bold;
-  color: #666666;
+  background: #979899;
+  width: 80%;
+  cursor: pointer;
+  padding: 10px;
+  color: white;
+  border-radius: 20px;
 }
 .skapaknapp {
-  border: none;
-  background: linear-gradient(180deg, #6df983 0%, #3db951 46.88%, #82ed93 100%);
-  box-shadow: 0px 5px 5px 1px rgba(255, 255, 255, 0.151);
-  width: 150px;
-  height: 60px;
-  border-radius: 25px;
-  font-size: 30px;
-  font-weight: bold;
-  color: #01537c;
+  background: #1988c9;
+  width: 80%;
   cursor: pointer;
+  padding: 10px;
+  color: white;
+  border-radius: 20px;
 }
 #Addbtn {
   overflow: hidden;
@@ -522,7 +511,9 @@ export default {
       };
 
       this.socketInstance.emit("post", postdata);
+
       this.dingsound.play();
+
       swal({
         title: "Projekt Skapat!",
         text: "Du har skapat ett projekt!",

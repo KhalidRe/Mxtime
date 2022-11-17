@@ -154,7 +154,7 @@
                   title="Välj projekt"
                 >
                   <div class="selectdrop">
-                    <span>Välj project</span>
+                    <span>Välj projekt</span>
                     <div>
                       <svg
                         width="25"
@@ -310,8 +310,8 @@
                   <div dropdown-closer slot="body">
                     <div
                       class="drop-item"
-                      v-for="project in filterFunction"
-                      :key="project.id"
+                      v-for="(project, index) in filterFunction"
+                      :key="project.index"
                       @click="dataPrimer(project.id, project.Title)"
                       dropdown-closer
                     >
@@ -1082,22 +1082,14 @@ export default {
         if (this.loggedin.nanoid == undefined) {
           window.location.reload();
         }
+        this.socketInstance.on("specificproject", (specificproject) => {
+          this.project = specificproject;
+        });
+
         this.socketInstance.emit("mytime", this.loggedin.Username);
 
         this.socketInstance.on("mytimedata", (mytimedata) => {
           this.time = mytimedata;
-
-          this.socketInstance.on("data:received", (projectdata) => {
-            this.project = projectdata;
-
-            if (this.loggedstatus == "Admin") {
-              this.project = projectdata;
-            } else {
-              this.project = projectdata.filter(
-                (result) => result.Authorstatus == this.loggedstatus
-              );
-            }
-          });
 
           this.amountonhours = [];
           this.amountonminutes = [];

@@ -289,14 +289,8 @@ export default {
         this.uploader = new SocketIOFileUpload(this.socketInstance);
 
         this.socketInstance.emit("loggedinfo", this.loggedin);
-        this.socketInstance.on("data:received", (projectdata) => {
-          if (this.loggedstatus == "Admin") {
-            this.project = projectdata;
-          } else {
-            this.project = projectdata.filter(
-              (result) => result.Authorstatus == this.loggedin.Status
-            );
-          }
+        this.socketInstance.on("specificproject", (specificproject) => {
+          this.project = specificproject;
 
           this.Aktiv = this.project.filter((results) => {
             return results.Statu.includes("A");

@@ -55,7 +55,7 @@
     <div>
       <div class="usnc">
         <div class="headercaps">
-          <h2>Users</h2>
+          <h2>Användare</h2>
           <span>{{ loggedin.Used }}/{{ loggedin.Size }}</span>
         </div>
 
@@ -87,9 +87,9 @@
       <table cellpadding="0" cellspacing="0" border="0">
         <thead>
           <tr class="trhead">
-            <th>Profile</th>
-            <th>Stats <span>?</span></th>
-            <th>Chart</th>
+            <th>Användare</th>
+            <th>Status</th>
+            <th>Profil</th>
           </tr>
         </thead>
       </table>
@@ -114,7 +114,7 @@
                 class="readmorebtn"
                 @click="View(users.id), (showprofile = !showprofile)"
               >
-                View
+                Visa
               </button>
             </td>
             <!--
@@ -874,9 +874,13 @@ video {
 .readmorebtn {
   font-weight: 700;
   padding: 10px;
+  padding-right: 15px;
+  padding-left: 15px;
   border: none;
-  background: #7387a4;
+  background: #1988c9;
   border-radius: 20px;
+  font-family: "ubuntu";
+  color: white;
 }
 .readmorebtn:hover {
   background: -webkit-linear-gradient(left, #3bf0a4, #38c6d3);

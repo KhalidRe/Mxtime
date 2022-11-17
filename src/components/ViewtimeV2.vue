@@ -525,7 +525,9 @@ export default {
                 .then((response) => response.json())
                 .then((result) => {
                   this.time = result;
-
+                  this.time.sort(
+                    (a, b) => parseInt(b.Datum) - parseInt(a.Datum)
+                  );
                   this.subar = [];
                   this.uniqueproject = [
                     ...new Set(this.time.map((item) => item.Title)),
@@ -599,6 +601,7 @@ export default {
         .then((response) => response.json())
         .then((result) => {
           this.time = result;
+          this.time.sort((a, b) => parseInt(b.Datum) - parseInt(a.Datum));
           if (this.startholder > 0 && this.endholder > 0) {
             this.time = this.time.filter((results) => {
               return (

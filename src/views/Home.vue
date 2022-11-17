@@ -1,8 +1,10 @@
 <template>
   <div id="Home">
     <Workernav />
-    <div class="filterbtncont">
-      <div
+
+    <!--
+         <div class="filterbtncont">
+        <div
         class="filterbtn"
         @click="(filterwhereiam = !filterwhereiam), testfilter()"
         :class="{ filterbtnactive: filterwhereiam }"
@@ -14,11 +16,13 @@
           ></div>
         </div>
       </div>
-    </div>
+       </div>
+      -->
+
     <div class="Grid">
       <div
         class="Card"
-        v-for="(projects, index) in project"
+        v-for="(projects, index) in projectnw"
         :key="projects.index"
       >
         <div class="tabletop">
@@ -175,7 +179,8 @@
                         <button
                           class="now"
                           @click="
-                            Edit(projects.id, index),
+                            holdproject(projects),
+                              Edit(projects.id, index),
                               (arkiveraoverlay = !arkiveraoverlay)
                           "
                         >
@@ -265,7 +270,8 @@
                         <button
                           class="now"
                           @click="
-                            Edit(projects.id, index),
+                            holdproject(projects),
+                              Edit(projects.id, index),
                               modProject(
                                 index,
                                 projects.id
@@ -338,11 +344,11 @@
                 <h2 class="dangertext">
                   Raderade projekt försvinner permanent!
                 </h2>
-                <h1 class="dsure">Säker att du vill radera detta projekt?</h1>
+
                 <div class="dflex">
                   <div class="dinputcapsule">
                     <span class="dwrite"
-                      >Skriv in projektetsnamn för att radera</span
+                      >Skriv in projektets namn för att radera</span
                     >
 
                     <input
@@ -369,7 +375,7 @@
                     @click="R = !R"
                   />
                 </div>
-                <button class="dAvbryt" @click="R = !R">Avbryt</button>
+                <div class="dAvbryt" @click="R = !R">Avbryt</div>
               </div>
 
               <input type="hidden" name="id" id="id" :value="this.x" />
@@ -540,14 +546,8 @@
                 />
               </span>
 
-              <input
-                class="skapaknapp"
-                type="submit"
-                @click="sendEdit(), (T = !T)"
-              />
-              <button class="avbryt" type="button" @click="T = !T">
-                Avbryt
-              </button>
+              <div class="skapaknapp" @click="sendEdit(), (T = !T)">Ändra</div>
+              <div class="avbryt" type="button" @click="T = !T">Avbryt</div>
             </form>
           </div>
         </div>
@@ -564,50 +564,11 @@
             ></iframe>
             <form method="POST" action="" target="dummyframe">
               <div class="arkivtitle">
-                <h1 style="margin: 0px">Arkivera</h1>
+                <h1 style="margin: 0px">Slutför</h1>
                 <h2>{{ this.etitle }}</h2>
               </div>
-
-              <input type="hidden" name="id" id="id" :value="this.z" />
-              <input
-                type="hidden"
-                name="title"
-                id="title"
-                :value="this.etitle"
-              />
-              <input
-                type="hidden"
-                name="author"
-                id="author"
-                :value="this.eauthor"
-              />
-              <input
-                type="hidden"
-                name="workers"
-                id="workers"
-                :value="this.eworker"
-              />
-              <div class="e">
-                <span>Budget</span>
-                <input
-                  type="number"
-                  id="budget"
-                  value="0"
-                  name="budget"
-                  v-model="budget"
-                />
-              </div>
-              <div class="e">
-                <span>Belopp</span>
-                <input
-                  type="Number"
-                  id="belopp"
-                  value="0"
-                  name="belopp"
-                  v-model="belopp"
-                />
-              </div>
-
+              <div>vill du slutföra förljande projekt?</div>
+              <div>{{ this.etitle }}</div>
               <div class="e">
                 <button
                   type="Submit"
@@ -622,13 +583,12 @@
                   <span></span>
                 </button>
 
-                <button
+                <div
                   class="arkivavbryt"
-                  type="button"
                   @click="arkiveraoverlay = !arkiveraoverlay"
                 >
                   Avbryt
-                </button>
+                </div>
               </div>
             </form>
           </div>
@@ -740,7 +700,9 @@
             <div></div>
             <h2>{{ advancedataholder.Title }}</h2>
 
-            <div @click="advancedview = !advancedview" class="close">x</div>
+            <div @click="advancedview = !advancedview" class="close">
+              <img width="16px" src="@/assets/Kryss2.png" alt="" />
+            </div>
           </div>
 
           <div class="advancedcontent">
@@ -750,7 +712,7 @@
                 :key="addesc.index"
                 class="flip-card"
               >
-                <div class="flip-card-inner">
+                <div v-if="descdisp.length > 0" class="flip-card-inner">
                   <div class="flip-card-front">
                     <div class="frontcapsule">
                       <div class="profileandname">
@@ -796,10 +758,37 @@
                   </div>
                 </div>
               </div>
+              <div v-if="descdisp.length < 1" class="descdispinfo">
+                <h2>Arbets notiser</h2>
+                <p>
+                  Här visas alla deltagares beskrivning på arbete utfört genom
+                  den loggade tiden
+                </p>
+
+                <router-link class="links" to="/Time">
+                  <p class="provalogga">Prova logga tid för detta projekt!</p>
+                </router-link>
+              </div>
             </div>
             <div class="advancedmiddle">
               <div class="advancedmiddletop">
-                <Frekvenschart id="chart" :to-chart="amountadvdata" />
+                <Frekvenschart
+                  v-if="amountadvdata.length > 0"
+                  id="chart"
+                  :to-chart="amountadvdata"
+                />
+                <div class="diaginfocaps" v-else>
+                  <h2>Dags diagram</h2>
+                  <h4 class="diaginfo">
+                    Här kommer det visas en diagram som visar alla rapporterade
+                    dagar med information om vilken dag som har haft störst
+                    insats
+                  </h4>
+                  <h4>
+                    I den nedresta blå ruta visas ett diagram med procent insats
+                    av den totala tiden spenderat av varje deltagare
+                  </h4>
+                </div>
               </div>
               <div class="advancedmiddlebot">
                 <div class="gradecaps">
@@ -1206,6 +1195,26 @@
   </div>
 </template>
 <style scoped>
+.diaginfocaps {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.diaginfo {
+  display: flex;
+  justify-content: center;
+  width: 70%;
+  text-align: center;
+  align-items: center;
+}
+.descdispinfo {
+  height: 100%;
+  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+}
 @media only screen and (max-width: 1200px) {
   .advancedcontent {
     flex-direction: column;
@@ -1483,9 +1492,18 @@
   width: 100%;
   height: 90%;
   grid-gap: 1vw;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
-
+.submittimes {
+  background: #1988c9;
+  width: 80%;
+  cursor: pointer;
+  padding: 10px;
+  color: white;
+  border-radius: 20px;
+}
+.avbryt {
+}
 .advancedmiddletop {
   background-color: white;
   height: 75%;
@@ -1528,6 +1546,9 @@
 .headercont {
   display: flex;
   justify-content: space-between;
+  border-radius: 10px 10px 0px 0px;
+  background: #0089d0;
+  color: white;
 }
 #AdvanceForm {
   position: absolute;
@@ -1536,9 +1557,8 @@
   width: 80%;
   height: 80%;
   background: white;
-  overflow-y: scroll;
+  border-radius: 11px;
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.377);
-  border-radius: 10px;
 }
 .included {
   background: rgb(252, 219, 219);
@@ -1978,13 +1998,15 @@ input[type="radio"]:after {
   cursor: pointer;
 }
 .dAvbryt {
-  background: linear-gradient(180deg, #4dacc1 0%, #5578ad 50.52%, #4dacc1 100%);
-  border: none;
-  border-radius: 5px;
-  margin-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
+  margin-top: 10px;
+  background: rgb(218, 81, 81);
+  border-radius: 20px;
+  width: 100px;
   height: 20px;
+  text-align: center;
+  color: white;
+  font-size: 15px;
+  padding: 5px;
   cursor: pointer;
 }
 .dsure {
@@ -2172,7 +2194,7 @@ input[type="radio"]:after {
   width: 95%;
 
   margin: 30px;
-  margin-top: 0px;
+  margin-top: 20px;
   grid-gap: 20px;
 }
 @import url("https://fonts.googleapis.com/css2?family=Scada&family=Sen:wght@700&family=Ubuntu:ital@0;1&display=swap");
@@ -2190,6 +2212,11 @@ input[type="radio"]:after {
   padding-bottom: 10px;
   color: #b1abab;
   box-shadow: 0px 5px 10px 1px rgba(85, 85, 85, 0.397);
+  transition: 1s;
+}
+.Card:hover {
+  transition: 0.6s;
+  transform: scale(1.1);
 }
 .slide-fade-enter-active {
   transition: all 0.6s ease;
@@ -2336,6 +2363,7 @@ epic-form .esd {
   box-shadow: 0px 2px 5px 1px rgba(100, 100, 100, 0.5);
   transition: 1;
   object-fit: cover !important;
+  transition: 0.2s;
 }
 .deltagares {
   width: 40px;
@@ -2347,7 +2375,8 @@ epic-form .esd {
   align-self: center;
 }
 .deltagare:hover {
-  margin-top: -10px;
+  transition: 0.2s;
+  transform: translateY(-5px);
 }
 .va {
   margin-left: -10px;
@@ -2457,19 +2486,16 @@ input[type="date"] {
   background: #1988c9;
 }
 .arkivavbryt {
-  font-style: normal;
-  font-weight: normal;
-  background: linear-gradient(180deg, #f96d6d 0%, #cf4040 46.88%, #ed8282 100%);
-  width: 104px;
-  height: 24px;
-  box-shadow: 0px 4px 4px rgba(186, 186, 186, 0.25);
-  border-radius: 24px;
+  margin-top: 10px;
+  background: rgb(218, 81, 81);
+  border-radius: 20px;
+  width: 100px;
+  height: 20px;
+  text-align: center;
+  color: white;
   font-size: 15px;
-  line-height: 17px;
-  border: none;
-  font-weight: 600;
-  color: #01537c;
-  margin-top: 20px;
+  font-weight: 800;
+  padding: 5px;
   cursor: pointer;
 }
 .container {
@@ -2527,31 +2553,25 @@ input[type="date"] {
   display: none;
 }
 .avbryt {
-  font-style: normal;
-  font-weight: normal;
-  background: linear-gradient(180deg, #f96d6d 0%, #cf4040 46.88%, #ed8282 100%);
-  width: 104px;
-  height: 24px;
-  box-shadow: 0px 4px 4px rgba(186, 186, 186, 0.25);
-  border-radius: 24px;
+  margin-top: 10px;
+  background: rgb(218, 81, 81);
+  border-radius: 20px;
+  width: 100px;
+  height: 20px;
+  text-align: center;
+  color: white;
   font-size: 15px;
-  line-height: 17px;
-  border: none;
-  font-weight: 600;
-  color: #01537c;
+  font-weight: 800;
+  padding: 5px;
   cursor: pointer;
 }
 .skapaknapp {
-  border: none;
-  background: linear-gradient(180deg, #6df983 0%, #3db951 46.88%, #82ed93 100%);
-  box-shadow: 0px 5px 5px 1px rgba(255, 255, 255, 0.151);
-  width: 260px;
-  height: 60px;
-  border-radius: 25px;
-  font-size: 30px;
-  font-weight: bold;
-  color: #01537c;
+  background: #1988c9;
+  width: 80%;
   cursor: pointer;
+  padding: 10px;
+  color: white;
+  border-radius: 20px;
 }
 .e {
   width: 100%;
@@ -2798,6 +2818,8 @@ export default {
       descdisp: [],
       amountadvdata: [],
       advanceid: 0,
+      projectnw: [],
+      arkivholder: [],
       rcolor: [
         "#63b598",
         "#ce7d78",
@@ -3159,55 +3181,78 @@ export default {
                     pingTimeout: 1000 * 60 * 5,
                   });
                   this.socketInstance.emit("loggedinfo", this.loggedin);
-                  this.socketInstance.on("data:received", (projectdata) => {
-                    if (this.loggedstatus == "Admin") {
+                  this.socketInstance.on(
+                    "data:received",
+                    async (projectdata) => {
                       this.project = projectdata;
                       this.projectplaceholder = projectdata;
-                    } else {
-                      this.project = projectdata.filter(
-                        (result) => result.Authorstatus == this.loggedstatus
-                      );
-                      this.projectplaceholder = projectdata.filter(
-                        (result) => result.Authorstatus == this.loggedstatus
-                      );
-                    }
 
-                    this.timearray = [];
-                    this.array = [];
-                    for (this.i = 0; this.i < this.project.length; this.i++) {
-                      this.tu = this.project[this.i].Timeused;
-                      this.tb = this.project[this.i].Timebudget;
-                      this.timep = Math.round((this.tu / this.tb) * 100);
+                      this.timearray = [];
+                      this.array = [];
+                      this.socketInstance.on(
+                        "workerdeltag:received",
+                        (workerdeltag) => {
+                          this.workersassignd = workerdeltag;
+                          this.workerson = this.user;
+                          this.sparr = [];
 
-                      this.start = new Date(this.project[this.i].Date);
-                      this.end = new Date(this.project[this.i].Deadline);
-                      this.today = new Date();
-                      this.q = Math.abs(this.today - this.start);
-                      this.d = Math.abs(this.end - this.start);
+                          for (
+                            this.forinpw = 0;
+                            this.project.length > this.forinpw;
+                            this.forinpw++
+                          ) {
+                            this.sparr.push(
+                              this.workersassignd.filter(
+                                (result) =>
+                                  result.projectid ==
+                                  this.project[this.forinpw].id
+                              )
+                            );
+                          }
+                          this.testarr = [];
+                          this.filtredproject = [];
+                          if (this.loggedin.Status !== "Admin") {
+                            this.mycreated = this.project.filter(
+                              (result) => result.Authorid == this.loggedin.id
+                            );
 
-                      this.optimal = Math.round((this.q / this.d) * 100);
+                            for (
+                              this.findex = 0;
+                              this.sparr.length > this.findex;
+                              this.findex++
+                            ) {
+                              this.testarr.push(
+                                this.sparr[this.findex].find(
+                                  (results) =>
+                                    results.workerid == this.loggedin.id
+                                )
+                              );
+                            }
 
-                      if (this.project[this.i].Deadline.length < 1) {
-                        this.optimal = 0;
-                      }
-                      if (this.optimal > 100 || this.end < this.today) {
-                        this.optimal = 100;
-                      }
-                      this.timearray.push(this.timep);
-                      this.array.push(this.optimal);
-                    }
-                  });
-                  this.socketInstance.on("trello:received", (trellodata) => {
-                    this.trellodata = trellodata;
-                    this.atrello = this.trellodata.filter(
-                      (result) => result.fatherid == this.trelloprojectid
-                    );
-                  });
-                  this.socketInstance.on(
-                    "workerdeltag:received",
-                    (workerdeltag) => {
-                      this.workersassignd = workerdeltag;
-                      this.workerson = this.user;
+                            this.testarr = this.testarr.filter((element) => {
+                              return element !== undefined;
+                            });
+                            for (
+                              this.findex = 0;
+                              this.testarr.length > this.findex;
+                              this.findex++
+                            )
+                              this.filtredproject.push(
+                                this.project.find(
+                                  (result) =>
+                                    result.id ==
+                                    this.testarr[this.findex].projectid
+                                )
+                              );
+                            this.filtredproject = this.filtredproject.concat(
+                              this.mycreated
+                            );
+
+                            this.project = this.filtredproject;
+
+                            //     }
+                            /*if (this.filterwhereiam == false) {
+                      this.project = this.projectplaceholder;
                       this.sparr = [];
                       for (
                         this.forinpw = 0;
@@ -3221,8 +3266,81 @@ export default {
                           )
                         );
                       }
+                    } */
+
+                            for (
+                              this.i = 0;
+                              this.i < this.project.length;
+                              this.i++
+                            ) {
+                              this.tu = this.project[this.i].Timeused;
+                              this.tb = this.project[this.i].Timebudget;
+                              this.timep = Math.round(
+                                (this.tu / this.tb) * 100
+                              );
+
+                              this.start = new Date(this.project[this.i].Date);
+                              this.end = new Date(
+                                this.project[this.i].Deadline
+                              );
+                              this.today = new Date();
+                              this.q = Math.abs(this.today - this.start);
+                              this.d = Math.abs(this.end - this.start);
+
+                              this.optimal = Math.round(
+                                (this.q / this.d) * 100
+                              );
+
+                              if (this.project[this.i].Deadline.length < 1) {
+                                this.optimal = 0;
+                              }
+                              if (this.optimal > 100 || this.end < this.today) {
+                                this.optimal = 100;
+                              }
+                              this.timearray.push(this.timep);
+                              this.array.push(this.optimal);
+                            }
+                            this.projectnw = this.project;
+                            this.projectnw.sort((a, b) => {
+                              let fa = a.Statu.toLowerCase(),
+                                fb = b.Statu.toLowerCase();
+
+                              if (fa < fb) {
+                                return -1;
+                              }
+                              if (fa > fb) {
+                                return 1;
+                              }
+                              return 0;
+                            });
+                            console.log(this.projectnw);
+                            this.sparr = [];
+                            for (
+                              this.forinpw = 0;
+                              this.project.length > this.forinpw;
+                              this.forinpw++
+                            ) {
+                              this.sparr.push(
+                                this.workersassignd.filter(
+                                  (result) =>
+                                    result.projectid ==
+                                    this.project[this.forinpw].id
+                                )
+                              );
+                            }
+                          } else {
+                            this.projectnw = this.project;
+                          }
+                        }
+                      );
                     }
                   );
+                  this.socketInstance.on("trello:received", (trellodata) => {
+                    this.trellodata = trellodata;
+                    this.atrello = this.trellodata.filter(
+                      (result) => result.fatherid == this.trelloprojectid
+                    );
+                  });
                 }
               });
           });
@@ -3238,6 +3356,10 @@ export default {
     see: function () {},
   },
   methods: {
+    holdproject(project) {
+      this.arkivholder = project;
+      console.log(this.arkivholder);
+    },
     setforchart(id) {
       this.advanceid = id;
     },
@@ -3311,79 +3433,14 @@ export default {
       );
     },
 
-    testfilter() {
-      this.testarr = [];
-      this.filtredproject = [];
-      if (this.filterwhereiam == true) {
-        this.mycreated = this.project.filter(
-          (result) => result.Authorid == this.loggedin.id
-        );
-
-        for (this.findex = 0; this.sparr.length > this.findex; this.findex++) {
-          this.testarr.push(
-            this.sparr[this.findex].find(
-              (results) => results.workerid == this.loggedin.id
-            )
-          );
-        }
-
-        this.testarr = this.testarr.filter((element) => {
-          return element !== undefined;
-        });
-        for (this.findex = 0; this.testarr.length > this.findex; this.findex++)
-          this.filtredproject.push(
-            this.project.find(
-              (result) => result.id == this.testarr[this.findex].projectid
-            )
-          );
-        this.filtredproject = this.filtredproject.concat(this.mycreated);
-
-        this.project = this.filtredproject;
-        this.sparr = [];
-        for (
-          this.forinpw = 0;
-          this.project.length > this.forinpw;
-          this.forinpw++
-        ) {
-          this.sparr.push(
-            this.workersassignd.filter(
-              (result) => result.projectid == this.project[this.forinpw].id
-            )
-          );
-        }
-      }
-      if (this.filterwhereiam == false) {
-        this.project = this.projectplaceholder;
-        this.sparr = [];
-        for (
-          this.forinpw = 0;
-          this.project.length > this.forinpw;
-          this.forinpw++
-        ) {
-          this.sparr.push(
-            this.workersassignd.filter(
-              (result) => result.projectid == this.project[this.forinpw].id
-            )
-          );
-        }
-      }
-    },
+    testfilter() {},
 
     toVictory() {
       sendArkiv();
     },
     sendArkiv() {
-      const arkivdata = {
-        id: this.z,
-        title: this.etitle,
-        author: this.eauthor,
-        workers: this.eworker,
-        budget: this.budget,
-        belopp: this.belopp,
-        fakturerat: this.fakturerat,
-        deltagare: this.arkivworkers,
-        authornanoid: this.enanoid,
-      };
+      const arkivdata = this.arkivholder;
+      console.log("HÄR ÄR DEN FÖFFFAN", arkivdata);
       this.socketInstance.emit("arkiv", arkivdata);
       swal({
         title: "Grattis!",

@@ -1,7 +1,7 @@
 <template>
   <div class="Charts">
     <div id="aktivP">
-      <h1>Aktiva i project</h1>
+      <h1>Aktiva i projekt</h1>
       <Barchart class="barchart" />
     </div>
   </div>

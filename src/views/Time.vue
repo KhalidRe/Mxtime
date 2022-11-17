@@ -79,7 +79,7 @@
         </div>
         <div class="daycont">
           <div class="nextWC">
-            <div class="nextW" @click="previousWeek()">Back</div>
+            <div class="nextW" @click="previousWeek()">Tillbaka</div>
           </div>
           <div class="daybtn" @click="selectday(Mon)">
             <a href="/#/Time/#Mon" class="daypick">M</a>
@@ -110,7 +110,7 @@
             <div class="singDate">{{ this.SunDate }}</div>
           </div>
           <div class="nextWC">
-            <div class="nextW" @click="nextWeek()">Next</div>
+            <div class="nextW" @click="nextWeek()">Nästa</div>
           </div>
         </div>
         <div class="formCont" v-bind:class="{ onForm: picked !== undefined }">
@@ -171,7 +171,7 @@
                   class="chooseproject"
                   slot="trigger"
                 >
-                  Välj project
+                  Välj projekt
                 </div>
                 <div
                   v-if="chosenproject.length > 0"
@@ -181,7 +181,7 @@
                 >
                   {{ chosenproject }}
                 </div>
-                <div class="dropper" slot="body">
+                <div class="droppers" slot="body">
                   <input
                     class="searchbar"
                     type="text"
@@ -207,11 +207,23 @@
             <div class="mh">
               <div>
                 <div>Timmar</div>
-                <input v-model="Hours" type="number" min="0" max="15" />
+                <input
+                  v-model="Hours"
+                  type="number"
+                  min="0"
+                  max="15"
+                  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                />
               </div>
               <div>
                 <div>Minuter</div>
-                <input v-model="Minutes" type="number" min="0" max="60" />
+                <input
+                  v-model="Minutes"
+                  type="number"
+                  min="0"
+                  max="60"
+                  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                />
               </div>
             </div>
             <div class="dbcaps">
@@ -242,7 +254,6 @@
                 </label>
               </div>
             </div>
-
             <br />
             <div class="e">
               <div>Notes</div>
@@ -269,9 +280,11 @@
           </div>
         </div>
       </div>
+
       <div class="UrnCaps">
         <div class="s">
-          <radial-progress-bar
+          <!--
+<radial-progress-bar
             :diameter="140"
             :completed-steps="
               parseInt(this.amountonhours + this.amountonminutes)
@@ -291,11 +304,34 @@
               ><span class="slash">/</span><span class="worktime">8h</span>
             </div>
           </radial-progress-bar>
+         
+function 
+        -->
+          <div class="center">
+            <div class="circle">
+              <div class="tidcaps">
+                <span class="datatime">{{ combtime }}h</span>
+              </div>
+              <div class="wave" :style="{ top: precentage + '%' }"></div>
+              <div id="background-wrap">
+                <div class="bubble x1"></div>
+                <div class="bubble x2"></div>
+                <div class="bubble x3"></div>
+                <div class="bubble x4"></div>
+                <div class="bubble x5"></div>
+                <div class="bubble x6"></div>
+                <div class="bubble x7"></div>
+                <div class="bubble x8"></div>
+                <div class="bubble x9"></div>
+                <div class="bubble x10"></div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="bfcaps">
-          <div class="bf" @click="previousDay()">back</div>
+          <div class="bf" @click="previousDay()">Tillbaka</div>
           <div class="urndate">{{ picked }}</div>
-          <div class="bf" @click="nextDay()">next</div>
+          <div class="bf" @click="nextDay()">Nästa</div>
         </div>
 
         <div class="dayinfo">
@@ -335,8 +371,20 @@
                   )
                 "
                 class="deletetime"
-                >Delete</span
               >
+                <svg
+                  width="19"
+                  height="20"
+                  viewBox="0 0 19 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7 16C7.26522 16 7.51957 15.8946 7.70711 15.7071C7.89464 15.5196 8 15.2652 8 15V9C8 8.73478 7.89464 8.48043 7.70711 8.29289C7.51957 8.10536 7.26522 8 7 8C6.73478 8 6.48043 8.10536 6.29289 8.29289C6.10536 8.48043 6 8.73478 6 9V15C6 15.2652 6.10536 15.5196 6.29289 15.7071C6.48043 15.8946 6.73478 16 7 16ZM17 4H13V3C13 2.20435 12.6839 1.44129 12.1213 0.87868C11.5587 0.316071 10.7956 0 10 0H8C7.20435 0 6.44129 0.316071 5.87868 0.87868C5.31607 1.44129 5 2.20435 5 3V4H1C0.734784 4 0.48043 4.10536 0.292893 4.29289C0.105357 4.48043 0 4.73478 0 5C0 5.26522 0.105357 5.51957 0.292893 5.70711C0.48043 5.89464 0.734784 6 1 6H2V17C2 17.7956 2.31607 18.5587 2.87868 19.1213C3.44129 19.6839 4.20435 20 5 20H13C13.7956 20 14.5587 19.6839 15.1213 19.1213C15.6839 18.5587 16 17.7956 16 17V6H17C17.2652 6 17.5196 5.89464 17.7071 5.70711C17.8946 5.51957 18 5.26522 18 5C18 4.73478 17.8946 4.48043 17.7071 4.29289C17.5196 4.10536 17.2652 4 17 4ZM7 3C7 2.73478 7.10536 2.48043 7.29289 2.29289C7.48043 2.10536 7.73478 2 8 2H10C10.2652 2 10.5196 2.10536 10.7071 2.29289C10.8946 2.48043 11 2.73478 11 3V4H7V3ZM14 17C14 17.2652 13.8946 17.5196 13.7071 17.7071C13.5196 17.8946 13.2652 18 13 18H5C4.73478 18 4.48043 17.8946 4.29289 17.7071C4.10536 17.5196 4 17.2652 4 17V6H14V17ZM11 16C11.2652 16 11.5196 15.8946 11.7071 15.7071C11.8946 15.5196 12 15.2652 12 15V9C12 8.73478 11.8946 8.48043 11.7071 8.29289C11.5196 8.10536 11.2652 8 11 8C10.7348 8 10.4804 8.10536 10.2929 8.29289C10.1054 8.48043 10 8.73478 10 9V15C10 15.2652 10.1054 15.5196 10.2929 15.7071C10.4804 15.8946 10.7348 16 11 16Z"
+                    fill="#B54848"
+                  />
+                </svg>
+              </span>
             </div>
           </div>
         </div>
@@ -347,6 +395,318 @@
   </div>
 </template>
 <style scoped>
+#background-wrap {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 90%;
+  top: 30%;
+  z-index: 98;
+}
+
+/* KEYFRAMES */
+
+@-webkit-keyframes animateBubble {
+  0% {
+    margin-top: 1000px;
+  }
+  100% {
+    margin-top: -100%;
+  }
+}
+
+@-moz-keyframes animateBubble {
+  0% {
+    margin-top: 1000px;
+  }
+  100% {
+    margin-top: -100%;
+  }
+}
+
+@keyframes animateBubble {
+  0% {
+    margin-top: 1000px;
+  }
+  100% {
+    margin-top: -100%;
+  }
+}
+
+@-webkit-keyframes sideWays {
+  0% {
+    margin-left: 0px;
+  }
+  100% {
+    margin-left: 50px;
+  }
+}
+
+@-moz-keyframes sideWays {
+  0% {
+    margin-left: 0px;
+  }
+  100% {
+    margin-left: 50px;
+  }
+}
+
+@keyframes sideWays {
+  0% {
+    margin-left: 0px;
+  }
+  100% {
+    margin-left: 50px;
+  }
+}
+
+/* ANIMATIONS */
+
+.x1 {
+  -webkit-animation: animateBubble 25s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+  -moz-animation: animateBubble 25s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+  animation: animateBubble 25s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+
+  left: -25%;
+  top: 5%;
+
+  -webkit-transform: scale(0.1);
+  -moz-transform: scale(0.1);
+  transform: scale(0.1);
+}
+
+.x2 {
+  -webkit-animation: animateBubble 20s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
+  -moz-animation: animateBubble 20s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
+  animation: animateBubble 20s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
+
+  left: -35%;
+  top: 80%;
+
+  -webkit-transform: scale(0.1);
+  -moz-transform: scale(0.1);
+  transform: scale(0.1);
+}
+
+.x3 {
+  -webkit-animation: animateBubble 28s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+  -moz-animation: animateBubble 28s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+  animation: animateBubble 28s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+
+  left: -10%;
+  top: 40%;
+
+  -webkit-transform: scale(0.1);
+  -moz-transform: scale(0.1);
+  transform: scale(0.1);
+}
+
+.x4 {
+  -webkit-animation: animateBubble 22s linear infinite,
+    sideWays 3s ease-in-out infinite alternate;
+  -moz-animation: animateBubble 22s linear infinite,
+    sideWays 3s ease-in-out infinite alternate;
+  animation: animateBubble 22s linear infinite,
+    sideWays 3s ease-in-out infinite alternate;
+
+  left: -35%;
+  top: 0;
+
+  -webkit-transform: scale(0.1);
+  -moz-transform: scale(0.1);
+  transform: scale(0.1);
+}
+
+.x5 {
+  -webkit-animation: animateBubble 29s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
+  -moz-animation: animateBubble 29s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
+  animation: animateBubble 29s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
+
+  left: -20%;
+  top: 50%;
+
+  -webkit-transform: scale(0.1);
+  -moz-transform: scale(0.1);
+  transform: scale(0.1);
+}
+
+.x6 {
+  -webkit-animation: animateBubble 21s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+  -moz-animation: animateBubble 21s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+  animation: animateBubble 21s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+
+  left: -30%;
+  top: 0;
+
+  -webkit-transform: scale(0.1);
+  -moz-transform: scale(0.1);
+  transform: scale(0.1);
+}
+
+.x7 {
+  -webkit-animation: animateBubble 20s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+  -moz-animation: animateBubble 20s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+  animation: animateBubble 20s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+
+  left: -45%;
+  top: 70%;
+
+  -webkit-transform: scale(0.1);
+  -moz-transform: scale(0.1);
+  transform: scale(0.1);
+}
+
+.x8 {
+  -webkit-animation: animateBubble 22s linear infinite,
+    sideWays 3s ease-in-out infinite alternate;
+  -moz-animation: animateBubble 22s linear infinite,
+    sideWays 3s ease-in-out infinite alternate;
+  animation: animateBubble 22s linear infinite,
+    sideWays 3s ease-in-out infinite alternate;
+
+  left: -15%;
+  top: 10%;
+
+  -webkit-transform: scale(0.1);
+  -moz-transform: scale(0.1);
+  transform: scale(0.1);
+}
+
+.x9 {
+  -webkit-animation: animateBubble 29s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
+  -moz-animation: animateBubble 29s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
+  animation: animateBubble 29s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
+
+  left: -25%;
+  top: 50%;
+
+  -webkit-transform: scale(0.1);
+  -moz-transform: scale(0.1);
+  transform: scale(0.1);
+}
+
+.x10 {
+  -webkit-animation: animateBubble 26s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+  -moz-animation: animateBubble 26s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+  animation: animateBubble 26s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+
+  left: -20%;
+  top: 80%;
+
+  -webkit-transform: scale(0.1);
+  -moz-transform: scale(0.1);
+  transform: scale(0.1);
+}
+
+/* OBJECTS */
+
+.bubble {
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+
+  -webkit-box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2),
+    inset 0px 10px 30px 5px rgba(255, 255, 255, 1);
+  -moz-box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2),
+    inset 0px 10px 30px 5px rgba(255, 255, 255, 1);
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2),
+    inset 0px 10px 30px 5px rgba(255, 255, 255, 1);
+
+  height: 200px;
+  position: absolute;
+  width: 200px;
+}
+
+.bubble:after {
+  background: -moz-radial-gradient(
+    center,
+    ellipse cover,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0) 70%
+  ); /* FF3.6+ */
+  background: -webkit-gradient(
+    radial,
+    center center,
+    0px,
+    center center,
+    100%,
+    color-stop(0%, rgba(255, 255, 255, 0.5)),
+    color-stop(70%, rgba(255, 255, 255, 0))
+  ); /* Chrome,Safari4+ */
+  background: -webkit-radial-gradient(
+    center,
+    ellipse cover,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0) 70%
+  ); /* Chrome10+,Safari5.1+ */
+  background: -o-radial-gradient(
+    center,
+    ellipse cover,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0) 70%
+  ); /* Opera 12+ */
+  background: -ms-radial-gradient(
+    center,
+    ellipse cover,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0) 70%
+  ); /* IE10+ */
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0) 70%
+  ); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80ffffff', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+
+  -webkit-box-shadow: inset 0 20px 30px rgba(255, 255, 255, 0.3);
+  -moz-box-shadow: inset 0 20px 30px rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 20px 30px rgba(255, 255, 255, 0.3);
+
+  content: "";
+  height: 180px;
+  left: 10px;
+  position: absolute;
+  width: 180px;
+}
+.tidcaps {
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  top: 35%;
+  z-index: 99;
+  text-shadow: 1px 1px 2px white;
+}
 .submittimes {
   background: #1988c9;
   width: 80%;
@@ -435,12 +795,14 @@
   align-self: center;
   margin: 2px;
   margin-left: 10px;
+
+  width: 50px !important;
 }
 .deletetime:hover {
   transition: 0.2s;
   color: #ff3916;
   font-size: 10px;
-  transform: scale(1.2);
+  transform: scale(0.1);
 }
 .projectcaps {
   display: flex;
@@ -573,6 +935,7 @@
   background: rgb(60, 126, 167);
   color: white;
   border-radius: 5px;
+  width: 25%;
 }
 .mh {
   display: flex;
@@ -659,6 +1022,54 @@ textarea {
   display: flex;
   justify-content: center;
 }
+
+.center {
+  width: 175px;
+  height: 175px;
+  margin-bottom: 50px;
+  border-radius: 100px;
+  box-shadow: 2px 3px 5px 5px rgb(255, 255, 255);
+}
+.circle {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgb(250, 250, 250), #c0e3f8);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  box-shadow: inset 2px 0px 5px 0px rgba(71, 73, 73, 0.322);
+
+  cursor: pointer;
+}
+.wave {
+  background-color: #1988c9;
+  position: absolute;
+  top: 110%;
+  height: 200%;
+  width: 200%;
+  border-radius: 38%;
+  left: -50%;
+  transform: rotate(360deg);
+  transition: all 1s ease;
+  animation: wave 50s linear infinite;
+  box-shadow: inset 2px 0px 5px 5px rgba(154, 252, 255, 0.322);
+}
+@keyframes wave {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(3600deg);
+  }
+}
+.circle:hover .wave {
+  top: 20%;
+}
 .onForm {
 }
 .UrnCaps {
@@ -696,7 +1107,7 @@ textarea {
   text-align: center;
   width: 6vw;
   height: 50px;
-  background-color: #397ce2;
+  background-color: #1988c9;
   color: white;
   cursor: pointer;
 }
@@ -710,7 +1121,7 @@ textarea {
   text-align: center;
 
   height: 50px;
-  background-color: #397ce2;
+  background-color: #1988c9;
   color: white;
   cursor: pointer;
 }
@@ -883,6 +1294,8 @@ export default {
       toltip: false,
       etime: "",
       edate: "",
+      combtime: 0,
+      precentage: 100,
     };
   },
   created() {
@@ -925,22 +1338,13 @@ export default {
         if (this.loggedin.nanoid == undefined) {
           window.location.reload();
         }
+        this.socketInstance.on("specificproject", (specificproject) => {
+          this.project = specificproject;
+        });
         this.socketInstance.emit("mytime", this.loggedin.Username);
 
         this.socketInstance.on("mytimedata", (mytimedata) => {
           this.time = mytimedata;
-
-          this.socketInstance.on("data:received", (projectdata) => {
-            this.project = projectdata;
-
-            if (this.loggedstatus == "Admin") {
-              this.project = projectdata;
-            } else {
-              this.project = projectdata.filter(
-                (result) => result.Authorstatus == this.loggedstatus || "Admin"
-              );
-            }
-          });
 
           this.amountonhours = [];
           this.amountonminutes = [];
@@ -974,13 +1378,29 @@ export default {
             this.amountonminutes.push(this.datetime[this.i].Minutes);
           }
           this.amountonhours = this.amountonhours.reduce((a, b) => a + b, 0);
-          this.amountonminutes = Math.floor(
-            this.amountonminutes.reduce((a, b) => a + b, 0) / 60
+          this.amountonminutes = this.amountonminutes.reduce(
+            (a, b) => a + b,
+            0
           );
+
+          this.amountonminutes = parseFloat(this.amountonminutes / 60).toFixed(
+            2
+          );
+          this.amountonminutes = parseFloat(this.amountonminutes);
+          this.combtime = parseFloat(
+            this.amountonhours + this.amountonminutes
+          ).toFixed(2);
+          this.precentage = 105 - Math.round((100 * this.combtime) / 8);
+          if (this.precentage < 5) {
+            this.precentage = 5;
+          }
         });
       });
   },
   methods: {
+    checkthatbitch(bitch) {
+      console.log(indexOf(bitch));
+    },
     nextWeek() {
       this.Sun += 7;
       this.Mon += 7;
@@ -1042,9 +1462,17 @@ export default {
         this.amountonminutes.push(this.datetime[this.i].Minutes);
       }
       this.amountonhours = this.amountonhours.reduce((a, b) => a + b, 0);
-      this.amountonminutes = Math.floor(
-        this.amountonminutes.reduce((a, b) => a + b, 0) / 60
-      );
+      this.amountonminutes = this.amountonminutes.reduce((a, b) => a + b, 0);
+
+      this.amountonminutes = parseFloat(this.amountonminutes / 60).toFixed(2);
+      this.amountonminutes = parseFloat(this.amountonminutes);
+      this.combtime = parseFloat(
+        this.amountonhours + this.amountonminutes
+      ).toFixed(2);
+      this.precentage = 105 - Math.round((100 * this.combtime) / 8);
+      if (this.precentage < 5) {
+        this.precentage = 5;
+      }
     },
     previousDay() {
       this.amountonhours = [];
@@ -1070,10 +1498,19 @@ export default {
         this.amountonhours.push(this.datetime[this.i].Hours);
         this.amountonminutes.push(this.datetime[this.i].Minutes);
       }
+
       this.amountonhours = this.amountonhours.reduce((a, b) => a + b, 0);
-      this.amountonminutes = Math.floor(
-        this.amountonminutes.reduce((a, b) => a + b, 0) / 60
-      );
+      this.amountonminutes = this.amountonminutes.reduce((a, b) => a + b, 0);
+      console.log(this.amountonminutes);
+      this.amountonminutes = parseFloat(this.amountonminutes / 60).toFixed(2);
+      this.amountonminutes = parseFloat(this.amountonminutes);
+      this.combtime = parseFloat(
+        this.amountonhours + this.amountonminutes
+      ).toFixed(2);
+      this.precentage = 105 - Math.round((100 * this.combtime) / 8);
+      if (this.precentage < 5) {
+        this.precentage = 5;
+      }
     },
     nextDay() {
       this.amountonhours = [];
@@ -1101,9 +1538,17 @@ export default {
         this.amountonminutes.push(this.datetime[this.i].Minutes);
       }
       this.amountonhours = this.amountonhours.reduce((a, b) => a + b, 0);
-      this.amountonminutes = Math.floor(
-        this.amountonminutes.reduce((a, b) => a + b, 0) / 60
-      );
+      this.amountonminutes = this.amountonminutes.reduce((a, b) => a + b, 0);
+
+      this.amountonminutes = parseFloat(this.amountonminutes / 60).toFixed(2);
+      this.amountonminutes = parseFloat(this.amountonminutes);
+      this.combtime = parseFloat(
+        this.amountonhours + this.amountonminutes
+      ).toFixed(2);
+      this.precentage = 105 - Math.round((100 * this.combtime) / 8);
+      if (this.precentage < 5) {
+        this.precentage = 5;
+      }
     },
     dataPrimer(id, title) {
       this.chosenproject = title;
@@ -1168,7 +1613,7 @@ export default {
         oldhours: this.oldhours,
         oldminutes: this.oldminutes,
       };
-      this.etime.Datum = new Date(this.edate);
+      this.etime.Datum = new Date(this.edate).getTime();
       this.socketInstance.emit("edittime", sender);
     },
     Edit(id, datum) {

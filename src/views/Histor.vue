@@ -1,6 +1,6 @@
 <template>
   <div id="Histor">
-    <h1 style="color: white">Arkiv</h1>
+    <h1 style="color: white">Slutförda Projekt</h1>
     <div>
       <table cellpadding="0" cellspacing="0" border="0">
         <thead>
@@ -8,8 +8,8 @@
             <th>Projekt</th>
             <th>Skapare</th>
             <th>Datum</th>
-            <th>Budget</th>
-            <th>Belopp</th>
+            <th>Tidsbudget</th>
+            <th>Använt tid</th>
           </tr>
         </thead>
       </table>
@@ -21,8 +21,13 @@
             <td>{{ arkivs.Title }}</td>
             <td>{{ arkivs.Author }}</td>
             <td>{{ arkivs.Datum }}</td>
-            <td>{{ arkivs.Budget }}(.kr)</td>
-            <td>{{ arkivs.Belopp }}(.kr)</td>
+            <td>{{ arkivs.Budget }}</td>
+            <td class="safezone" v-if="arkivs.Budget >= arkivs.Belopp">
+              {{ arkivs.Budget }}/{{ arkivs.Belopp }}
+            </td>
+            <td class="dangerzone" v-else>
+              {{ arkivs.Budget }}/{{ arkivs.Belopp }}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -30,10 +35,17 @@
   </div>
 </template>
 <style scoped>
+.overall {
+  height: 100%;
+}
 tbody {
   box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.37);
 }
-.tbl-content {
+.safezone {
+  color: rgb(115, 255, 150);
+}
+.dangerzone {
+  color: rgb(253, 119, 119);
 }
 h1 {
   background-color: #006aae;
@@ -54,7 +66,8 @@ table {
 }
 
 .tbl-content {
-  height: 80%;
+  display: flex;
+  height: 90%;
   overflow-x: auto;
   margin-top: 0px;
 }
@@ -77,10 +90,12 @@ td {
   border-bottom: solid 1px rgba(255, 255, 255, 0.1);
 }
 #Histor {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100vh;
   background-color: #ffffff;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 ::-webkit-scrollbar {
   width: 6px;

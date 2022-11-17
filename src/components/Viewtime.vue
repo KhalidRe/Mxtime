@@ -44,7 +44,12 @@
           /></span>
           <span><input type="date" name="End" id="End" v-model="end" /></span>
 
-          <input type="submit" value="Filtrera" @click="filtertime()" />
+          <input
+            class="filterbtnforfilter"
+            type="submit"
+            value="Filtrera"
+            @click="filtertime()"
+          />
         </div>
       </div>
       <table id="testTable">
@@ -133,6 +138,10 @@
 </template>
 <style scoped>
 .excbtn {
+  font-family: "Scada", sans-serif;
+  font-family: "Sen", sans-serif;
+  font-family: "Ubuntu", sans-serif;
+  font-weight: bolder;
   border: none;
   padding: 10px;
   border-radius: 10px;
@@ -144,14 +153,19 @@
   cursor: pointer;
 }
 .excbtn:hover {
-  background: #4dacc1;
+  background: #367bca;
 }
 .totalsum > td {
   font-size: 18px;
   font-weight: 800;
 }
 #debited {
+  font-family: "Scada", sans-serif;
+  font-family: "Sen", sans-serif;
+  font-family: "Ubuntu", sans-serif;
+  font-weight: bolder;
   width: 100px;
+  font-weight: 700;
   font-size: 10px;
 }
 @media only screen and (max-width: 650px) {
@@ -190,6 +204,10 @@
   font-size: 8px;
 }
 .inputsflex {
+  font-family: "Scada", sans-serif;
+  font-family: "Sen", sans-serif;
+  font-family: "Ubuntu", sans-serif;
+  font-weight: bolder;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -207,6 +225,10 @@ h2 {
   margin: 0;
 }
 .topcont {
+  font-family: "Scada", sans-serif;
+  font-family: "Sen", sans-serif;
+  font-family: "Ubuntu", sans-serif;
+  font-weight: bolder;
   display: flex;
   justify-content: space-between;
   padding: 20px;
@@ -429,6 +451,11 @@ section {
 .made-with-love a:hover {
   text-decoration: underline;
 }
+.filterbtnforfilter {
+  font-family: "Scada", sans-serif;
+  font-family: "Sen", sans-serif;
+  font-family: "Ubuntu", sans-serif;
+}
 
 /* for custom scrollbar for webkit browser*/
 
@@ -509,6 +536,9 @@ export default {
               .then((response) => response.json())
               .then((result) => {
                 this.time = result;
+
+                this.time.sort((a, b) => parseInt(b.Datum) - parseInt(a.Datum));
+
                 this.uniqueproject = [
                   ...new Set(this.time.map((item) => item.Title)),
                 ];
@@ -580,6 +610,7 @@ export default {
         .then((response) => response.json())
         .then((result) => {
           this.time = result;
+          this.time.sort((a, b) => parseInt(b.Datum) - parseInt(a.Datum));
           if (this.startholder > 0 && this.endholder > 0) {
             this.time = this.time.filter((results) => {
               return (
