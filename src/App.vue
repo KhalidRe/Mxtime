@@ -28,7 +28,14 @@ export default {
   },
   computed: {
     isLogin() {
-      return this.$route.name === "Login";
+      console.log(this.$route.name);
+      if (
+        this.$route.name === "Login" ||
+        this.$route.name === "Forgotpass" ||
+        this.$route.name === "Resetpass"
+      ) {
+        return true;
+      }
     },
   },
 };

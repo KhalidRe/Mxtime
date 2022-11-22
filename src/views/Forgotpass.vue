@@ -1,5 +1,5 @@
 <template>
-  <div id="Login">
+  <div id="Forgotpass">
     <div class="flexnav">
       <div class="mxtimelogo">
         <img src="@/assets/mxklogg2.png" alt="" />
@@ -18,52 +18,30 @@
       ></iframe>
       <transition name="slide-fade">
         <div v-if="show" id="LoginForm">
-          <h2 class="header">Logga in</h2>
+          <h2 class="header">Glömt Lösenord</h2>
 
           <div>
-            <label for="">Användarnamn</label>
+            <label for="">Ange Mail adress</label>
             <br />
             <input
               type="text"
-              id="Username"
-              name="Username"
-              placeholder="Username"
-              ref="Username"
+              id="email"
+              name="email"
+              placeholder="Mail adress.."
+              ref="email"
             />
           </div>
-          <br />
-          <div style="margin-bottom: 10px">
-            <label for="">Lösenord</label><br />
-            <input
-              type="password"
-              id="Password"
-              name="Password"
-              placeholder="Password"
-              autocomplete="false"
-              ref="Password"
-            />
-          </div>
+
+          <div class="errormessage">{{ errormessage.text }}</div>
           <div>
             <input
               style="margin: 5px"
               type="submit"
-              @click="login()"
-              value="Logga in"
+              @click="forgotpass()"
+              value="Skicka Mail"
               class="loginbtn"
             />
           </div>
-          <div class="errormessage">{{ errormessage.text }}</div>
-          <p class="senti">
-            har du inget konto? <br /><a href="https://app.mxtime.se"
-              >skapa ett här</a
-            >
-          </p>
-
-          <router-link class="links" to="/Forgotpass">
-            <button class="forgotbtn" style="margin: 5px">
-              Glömt lösenord
-            </button>
-          </router-link>
         </div>
       </transition>
     </div>
@@ -102,7 +80,7 @@
   transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
 }
 .slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
+  /* .slide-fade-leave-active below version 2.1.8 */ {
   transform: translateY(-100%);
   opacity: 0;
 }
@@ -167,7 +145,7 @@ label {
 ::-webkit-scrollbar-thumb {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
-#Login {
+#Forgotpass {
   width: 100%;
   height: 100vh;
   background: -webkit-linear-gradient(120deg, #9fc0d6, #f3f3f3);
@@ -237,8 +215,9 @@ input[type="password"]:focus {
 </style>
 <script>
 import domain from "../domain";
+import { nanoid } from "nanoid";
 export default {
-  name: "Login",
+  name: "Forgottpass",
   data() {
     return {
       auth: "",
@@ -251,24 +230,12 @@ export default {
     };
   },
   created() {
-    setTimeout(() => {
-      this.show = true;
-    }, "500");
-    this.someValue = "";
+    this.show = true;
   },
-
-  computed: {
-    someValue: {
-      get() {
-        return this.$store.state.someValue;
-      },
-      set(someValue) {
-        this.$store.commit("setSomeValue", someValue);
-      },
-    },
-  },
+  computed: {},
   methods: {
-    login() {
+    forgotpass() {
+      console.log(this.$refs.email.value, nanoid());
       const auth = {
         method: "POST",
         mode: "cors",
@@ -279,24 +246,16 @@ export default {
         },
 
         body: JSON.stringify({
-          Username: this.$refs.Username.value,
-          Password: this.$refs.Password.value,
+          getnano: nanoid(),
+          email: this.$refs.email.value,
         }),
       };
 
-      fetch("https://mxtime.se:3000/authenticate", auth)
+      fetch("https://mxtime.se:3000/forgotpassword", auth)
         .then((response) => response.json())
         .then((result) => {
           this.errormessage = result;
-          this.setvalue();
         });
-    },
-    setvalue() {
-      if (this.errormessage.itswrong !== true) {
-        this.someValue = this.$refs.Username.value;
-        console.log(this.someValue);
-        window.location.href = "https://app.mxtime.se/#/Home";
-      }
     },
   },
 };

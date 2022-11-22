@@ -1,5 +1,5 @@
 <template>
-  <div id="Login">
+  <div id="Forgotpass">
     <div class="flexnav">
       <div class="mxtimelogo">
         <img src="@/assets/mxklogg2.png" alt="" />
@@ -16,56 +16,64 @@
         id="dummyframe"
         style="display: none"
       ></iframe>
-      <transition name="slide-fade">
-        <div v-if="show" id="LoginForm">
-          <h2 class="header">Logga in</h2>
 
-          <div>
-            <label for="">Användarnamn</label>
-            <br />
-            <input
-              type="text"
-              id="Username"
-              name="Username"
-              placeholder="Username"
-              ref="Username"
-            />
-          </div>
+      <div v-if="secondhold == true && cani == true" id="LoginForm">
+        <h2 class="header">Ändra Lösenord</h2>
+
+        <div>
+          <label for="">Ange nytt lösenord</label>
           <br />
-          <div style="margin-bottom: 10px">
-            <label for="">Lösenord</label><br />
-            <input
-              type="password"
-              id="Password"
-              name="Password"
-              placeholder="Password"
-              autocomplete="false"
-              ref="Password"
-            />
-          </div>
-          <div>
-            <input
-              style="margin: 5px"
-              type="submit"
-              @click="login()"
-              value="Logga in"
-              class="loginbtn"
-            />
-          </div>
-          <div class="errormessage">{{ errormessage.text }}</div>
-          <p class="senti">
-            har du inget konto? <br /><a href="https://app.mxtime.se"
-              >skapa ett här</a
-            >
-          </p>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Lösenord.."
+            ref="password"
+            v-model="password"
+            @keyup="checker()"
+          />
+          <br />
+          <br />
+          <label for="">Ange samma lösenord igen</label>
+          <br />
 
-          <router-link class="links" to="/Forgotpass">
-            <button class="forgotbtn" style="margin: 5px">
-              Glömt lösenord
-            </button>
-          </router-link>
+          <input
+            type="password"
+            id="passwordc"
+            name="passwordc"
+            placeholder="Lösenord.."
+            ref="passwordc"
+            v-model="passwordc"
+            @keyup="checker()"
+          />
         </div>
-      </transition>
+        <div v-if="!checker()" class="errormessage">
+          Båda lösenorden måste vara samma
+        </div>
+        <div v-if="this.password.length < 8" class="errormessage">
+          Lösenordet måste vara längre än 8
+        </div>
+        <div>
+          <input
+            v-if="this.password.length >= 8 && this.password === this.passwordc"
+            style="margin: 5px"
+            type="submit"
+            @click="resetpass()"
+            value="Byt lösenord"
+            class="loginbtn"
+          />
+          <input
+            v-else
+            style="margin: 5px"
+            type="submit"
+            value="Logga in"
+            class="loginbtnf"
+          />
+        </div>
+      </div>
+      <div class="notgilt" v-if="secondhold == false && cani == false">
+        <h1>Länken är inte giltig</h1>
+      </div>
     </div>
     <div class="logocaps">
       <img class="mxklog" src="@/assets/mx-komm-logo.png" alt="" />
@@ -73,6 +81,18 @@
   </div>
 </template>
 <style scoped>
+.notgilt {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  background: white;
+  width: 80%;
+  height: 80%;
+  border-radius: 30px;
+  box-shadow: 0px 2px 5px 6px rgba(0, 0, 0, 0.322);
+}
 .errormessage {
   font-size: 12px;
   color: red;
@@ -95,17 +115,7 @@
   font-weight: 600;
   cursor: pointer;
 }
-.slide-fade-enter-active {
-  transition: all 0.6s ease;
-}
-.slide-fade-leave-active {
-  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
-}
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateY(-100%);
-  opacity: 0;
-}
+
 .forgotbtn {
   border: none;
   padding: 5px;
@@ -118,6 +128,16 @@
 }
 .forgotbtn:hover {
   background: #5c9eca;
+}
+.loginbtnf {
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  background: #6f767a;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
 }
 .loginbtn {
   border: none;
@@ -167,7 +187,7 @@ label {
 ::-webkit-scrollbar-thumb {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
-#Login {
+#Forgotpass {
   width: 100%;
   height: 100vh;
   background: -webkit-linear-gradient(120deg, #9fc0d6, #f3f3f3);
@@ -237,38 +257,66 @@ input[type="password"]:focus {
 </style>
 <script>
 import domain from "../domain";
+import { nanoid } from "nanoid";
 export default {
-  name: "Login",
+  name: "Resettpass",
   data() {
     return {
       auth: "",
-      Username: "",
+      nanoholder: "",
       show: false,
+      password: "",
+      passwordc: "",
+      cani: false,
+      secondhold: true,
       errormessage: {
         itswrong: true,
         text: "",
       },
+      wth: "",
     };
   },
   created() {
-    setTimeout(() => {
-      this.show = true;
-    }, "500");
-    this.someValue = "";
-  },
+    this.show = true;
 
-  computed: {
-    someValue: {
-      get() {
-        return this.$store.state.someValue;
+    const auth = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
-      set(someValue) {
-        this.$store.commit("setSomeValue", someValue);
-      },
+
+      body: JSON.stringify({
+        nanoid: this.$route.query.key,
+      }),
+    };
+    fetch("https://mxtime.se:3000/resetpasswordcheck", auth)
+      .then((response) => response.json())
+      .then((result) => {
+        this.cani = result.itsok;
+        this.secondhold = result.itsok;
+        this.nanoholder = result.results[0].rpnano;
+      });
+  },
+  computed: {},
+  watch: {
+    // whenever question changes, this function will run
+    question(newQuestion, oldQuestion) {
+      if (newQuestion.includes("?")) {
+        this.getAnswer();
+      }
     },
   },
+
   methods: {
-    login() {
+    checker() {
+      if (this.password === this.passwordc) {
+        return true;
+      } else return false;
+    },
+    resetpass() {
       const auth = {
         method: "POST",
         mode: "cors",
@@ -279,23 +327,22 @@ export default {
         },
 
         body: JSON.stringify({
-          Username: this.$refs.Username.value,
-          Password: this.$refs.Password.value,
+          password: this.password,
+          nanoidholder: this.nanoholder,
         }),
       };
-
-      fetch("https://mxtime.se:3000/authenticate", auth)
+      fetch("https://mxtime.se:3000/resetpass", auth)
         .then((response) => response.json())
         .then((result) => {
-          this.errormessage = result;
+          this.wth = result;
           this.setvalue();
         });
     },
     setvalue() {
-      if (this.errormessage.itswrong !== true) {
-        this.someValue = this.$refs.Username.value;
-        console.log(this.someValue);
-        window.location.href = "https://app.mxtime.se/#/Home";
+      if (this.wth == true) {
+        window.location.href = "https://app.mxtime.se/#/";
+      } else {
+        alert("critical error");
       }
     },
   },

@@ -27,6 +27,7 @@
     "js-cookie": "^3.0.1",
     "moment": "^2.29.2",
     "mysql": "^2.18.1",
+    "nanoid": "^4.0.0",
     "node-phpass-leo": "^1.0.0",
     "nodemon": "^2.0.15",
     "register-service-worker": "^1.7.1",

@@ -10,6 +10,8 @@ import Time from "../views/Time.vue";
 import Planner from "../views/Planner.vue";
 import UsersV2 from "../views/UsersV2";
 import Mytime from "../views/Mytime.vue";
+import Forgotpass from "../views/Forgotpass.vue";
+import Resetpass from "../views/Resetpass.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -62,6 +64,16 @@ const routes = [
     path: "/Mytime",
     name: "Mytime",
     component: Mytime,
+  },
+  {
+    path: "/Forgotpass",
+    name: "Forgotpass",
+    component: Forgotpass,
+  },
+  {
+    path: "/Resetpass",
+    name: "Resetpass",
+    component: Resetpass,
   },
 ];
 
