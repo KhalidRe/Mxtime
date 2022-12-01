@@ -1,6 +1,7 @@
 <template>
   <div id="Home">
     <Workernav />
+    <div class="christmasspecials"></div>
 
     <!--
          <div class="filterbtncont">
@@ -30,7 +31,11 @@
             style="color: blue; float: left"
             v-bind:id="projects.id"
             class="edit"
-            @click="Edit(projects.id), (T = !T), modProject(index, projects.id)"
+            @click="
+              Edit(projects.id),
+                (T = !T),
+                modProject(index, projects.id, projects)
+            "
           >
             <img width="20px" height="25px" src="@/assets/edit.png" alt="" />
             <div class="satuscont">
@@ -1195,6 +1200,16 @@
   </div>
 </template>
 <style scoped>
+.christmasspecials {
+  background: url("~@/assets/christmasspecials.png");
+
+  height: 190px !important;
+  width: 100vw !important;
+}
+.christmasspecials > img {
+}
+.crhistmasborder {
+}
 .diaginfocaps {
   width: 100%;
   display: flex;
@@ -1218,9 +1233,12 @@
 @media only screen and (max-width: 1200px) {
   .advancedcontent {
     flex-direction: column;
-    height: 200% !important;
+    height: 90% !important;
     width: 100% !important;
     justify-items: center !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: block !important;
   }
   .advancedmiddle {
     justify-self: center !important;
@@ -1230,10 +1248,20 @@
     align-items: center;
   }
   .advancedmiddletop {
-    width: 90%;
+    width: 100%;
   }
   .advancedmiddlebot {
-    width: 90%;
+    margin-top: 50px;
+    width: 100%;
+  }
+  .advancedleft {
+    height: 50%;
+    flex: 1 !important;
+  }
+  .advancedright {
+    margin-bottom: 2code0px !important;
+  }
+  #AdvanceForm {
   }
 }
 .leftprofile {
@@ -2129,6 +2157,7 @@ input[type="radio"]:after {
   color: rgb(255, 255, 255);
   overflow: hidden;
   height: 100%;
+  width: 100%;
 }
 .title:hover {
   cursor: pointer;
@@ -2184,24 +2213,32 @@ input[type="radio"]:after {
   width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  background: white;
+  background: rgb(234, 241, 248);
   background-repeat: no-repeat;
   background-size: cover;
+
+  align-items: center;
 }
 .Grid {
   display: grid;
+
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   width: 95%;
 
-  margin: 30px;
-  margin-top: 20px;
+  margin-top: -150px;
+  margin-left: 2%;
+  margin-right: 2.5%;
   grid-gap: 20px;
+  justify-items: center !important;
+  justify-self: center !important;
+  align-self: center !important;
+  align-items: center;
 }
 @import url("https://fonts.googleapis.com/css2?family=Scada&family=Sen:wght@700&family=Ubuntu:ital@0;1&display=swap");
 .Card {
   background: #ffffff;
   border-radius: 15px;
-
+  display: inline-block;
   width: 250px;
   font-family: "Scada", sans-serif;
   font-family: "Sen", sans-serif;
@@ -3092,6 +3129,7 @@ export default {
         "#dce77a",
         "#77ecca",
       ],
+      selectedproject: "",
     };
   },
 
@@ -3144,6 +3182,7 @@ export default {
                       this.deltagare = this.user.filter(
                         (e) => !e.Name.includes(this.loggedin.Name)
                       );
+                      console.log(this.deltagare);
                       this.workerson = this.user;
                     });
 
@@ -3459,19 +3498,21 @@ export default {
         this.modProject(this.selectedtaskindex, this.selectedtaskid);
       }, 100);
     },
-    addUser(x) {
+    addUser(x, project) {
       console.log(x);
       const addworkerdata = {
         user: x,
         taskid: this.selectedtaskid,
+        project: this.selectedproject,
       };
       this.socketInstance.emit("adduserP", addworkerdata);
       setTimeout(() => {
         this.modProject(this.selectedtaskindex, this.selectedtaskid);
       }, 100);
     },
-    modProject(x, y) {
-      console.log(x, y);
+    modProject(x, y, fefan) {
+      console.log(x, y, fefan);
+      this.selectedproject = fefan;
       this.selectedtaskid = y;
       this.selectedtaskindex = x;
       this.selectedusers = [];

@@ -2,7 +2,7 @@
   <div id="Workernav">
     <div v-show="openoverlay" class="changeprofileoverlay">
       <div class="overlay">
-        <h2 class="header">Byt profilbild</h2>
+        <h2 class="header">Redigera profil</h2>
         <div class="flexit">
           <label class="lab" for="siofu_input">
             <img
@@ -27,24 +27,30 @@
                 @change="preview()"
               />
             </div>
-
-            <button
-              class="uploadbtn"
-              @click="upload()"
-              v-if="previewprimed.length > 0"
-            >
-              Spara
-            </button>
-            <button class="uploadbtn faker" v-if="previewprimed.length == 0">
-              Spara
-            </button>
           </div>
-          <button class="close" @click="openoverlay = !openoverlay">
-            Stäng
-          </button>
+          <div class="changenamecont">
+            <input
+              type="text"
+              :placeholder="loggedin.Name"
+              v-model="displaynamechange"
+            />
+            <div
+              v-if="
+                displaynamechange.length > 5 && displaynamechange.length < 15
+              "
+              @click="changedisplayname(displaynamechange)"
+              class="btnsend"
+            >
+              Ändra
+            </div>
+            <div v-else class="btnsendfaker">Ändra</div>
+          </div>
         </div>
+
+        <button class="close" @click="openoverlay = !openoverlay">Stäng</button>
       </div>
     </div>
+
     <div class="e aktiv">
       <span>Aktiv</span>
       <span class="st A">{{ Aktiv.length }}</span>
@@ -70,6 +76,31 @@
   </div>
 </template>
 <style scoped>
+.changenamecont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-gap: 5px;
+  background: rgb(223, 223, 223);
+  width: 80%;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: -80px;
+  align-self: center;
+}
+.btnsend {
+  background: #2b91cc;
+  padding: 10px;
+  border-radius: 10px;
+}
+.btnsendfaker {
+  background: #727272;
+  padding: 10px;
+  border-radius: 10px;
+}
+.btnsend:active {
+  background: #2374a3;
+}
 .profile {
   cursor: pointer;
 }
@@ -87,6 +118,7 @@
   color: white;
   font-weight: 600;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 .close:hover {
   background: #1988c9;
@@ -94,7 +126,7 @@
 .flexit {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   height: 80%;
 }
 .inputWrapper {
@@ -226,6 +258,27 @@
   grid-gap: 10px;
   font-weight: bolder;
 }
+input[type="text"] {
+  border: none;
+  border-bottom-style: solid;
+
+  height: 20px;
+
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-bottom: 1px solid #217346;
+}
+input[type="password"] {
+  border: none;
+  border-bottom-style: solid;
+  height: 20px;
+
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-bottom: 1px solid #217346;
+}
 @media only screen and (max-width: 1000px) {
   #Workernav {
     display: flex;
@@ -264,6 +317,7 @@ export default {
       previewprimed: "",
       imagefile: "",
       profileimage: "",
+      displaynamechange: "",
     };
   },
   created() {
@@ -311,6 +365,12 @@ export default {
       });
   },
   methods: {
+    changedisplayname(name) {
+      const displaydata = {
+        name: name,
+      };
+      this.socketInstance.emit("changedisplayname", displaydata);
+    },
     preview() {
       let filer = new File(
         [this.$refs.files.files],
@@ -329,7 +389,6 @@ export default {
       this.$refs.profilepreview.src = preview;
       this.previewprimed = preview;
     },
-    upload() {},
   },
 };
 </script>

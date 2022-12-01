@@ -5,5 +5,8 @@ module.exports = {
   pwa: {
     name: "MX-Time",
     themeColor: "#1988c9",
+    workboxOptions: {
+      skipWaiting: true,
+    },
   },
 };

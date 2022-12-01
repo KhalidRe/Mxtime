@@ -21,13 +21,14 @@
             <td>{{ arkivs.Title }}</td>
             <td>{{ arkivs.Author }}</td>
             <td>{{ arkivs.Datum }}</td>
-            <td>{{ arkivs.Budget }}</td>
-            <td class="safezone" v-if="arkivs.Budget >= arkivs.Belopp">
-              {{ arkivs.Budget }}/{{ arkivs.Belopp }}
+            <td>{{ arkivs.Budget }}h</td>
+            <td
+              class="safezone"
+              v-if="parseFloat(arkivs.Budget) >= parseFloat(arkivs.Belopp)"
+            >
+              {{ arkivs.Belopp }}h
             </td>
-            <td class="dangerzone" v-else>
-              {{ arkivs.Budget }}/{{ arkivs.Belopp }}
-            </td>
+            <td class="dangerzone" v-else>{{ arkivs.Belopp }}h</td>
           </tr>
         </tbody>
       </table>

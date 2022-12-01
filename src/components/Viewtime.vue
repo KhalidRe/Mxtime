@@ -3,6 +3,77 @@
     id="ViewtimeV2"
     v-if="userstatus !== 'Admin' && userstatus !== 'Finanse'"
   >
+    <div class="noclickzone" v-if="!vieweditwindow">
+      <div class="overlayzone">
+        <div class="editcontent">
+          <h2>Ändra tid</h2>
+          <div class="pad">
+            <input type="date" v-model="edate" />
+            <div class="mh">
+              <div>
+                <div>Timmar</div>
+                <input v-model="etime.Hours" type="number" min="0" max="15" />
+              </div>
+              <div>
+                <div>Minuter</div>
+                <input v-model="etime.Minutes" type="number" min="0" max="60" />
+              </div>
+            </div>
+            <div class="dbcaps">
+              <div class="db">
+                <label class="container">
+                  <input
+                    v-model="etime.debit"
+                    id="debitja"
+                    class="deltagcheckbox"
+                    type="radio"
+                    value="1"
+                  />
+                  <label for="debitja" class="checkmark">
+                    <div>DEBIT</div>
+                  </label>
+                </label>
+                <label class="container">
+                  <input
+                    v-model="etime.debit"
+                    id="debitnej"
+                    class="deltagcheckbox"
+                    type="radio"
+                    value="0"
+                  />
+                  <label for="debitnej" class="checkmark">
+                    <div>EJ DEBIT</div>
+                  </label>
+                </label>
+              </div>
+            </div>
+            <div class="e">
+              <div>Notes</div>
+              <textarea
+                v-model="etime.Description"
+                name=""
+                id=""
+                cols="30"
+                rows="10"
+              ></textarea>
+            </div>
+            <br />
+            <div
+              class="submittimes"
+              @click="editTime(), (vieweditwindow = !vieweditwindow)"
+            >
+              Lägg till
+            </div>
+            <div
+              class="avbryt"
+              @click="(vieweditwindow = !vieweditwindow), avbrytedit()"
+            >
+              Avbryt
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <section>
       <div class="topcont">
         <h2>My Time</h2>
@@ -70,8 +141,22 @@
           <table cellpadding="0" cellspacing="0" border="0">
             <tbody>
               <tr class="row" v-for="times in time" :key="times.id">
-                <td>
-                  {{ times.Title }}
+                <td class="titleandedit">
+                  <span class="editimg">
+                    <img
+                      @click="
+                        Edit(times.id, times.Datum, times),
+                          (vieweditwindow = !vieweditwindow)
+                      "
+                      src="@/assets/edit.png"
+                      width="20px"
+                      alt=""
+                    />
+                    <span>
+                      {{ times.Title }}
+                    </span>
+                  </span>
+
                   <span class="debinf" v-if="times.debit == 1">(debit)</span>
                   <span class="debinf" v-if="times.debit == 0">(Ejdebit)</span>
                 </td>
@@ -80,7 +165,10 @@
                     new Date(parseInt(times.Datum)).getMonth() + 1
                   }}/{{ new Date(parseInt(times.Datum)).getDate() }}
                 </td>
-                <td>{{ times.Hours }}</td>
+
+                <td>
+                  {{ times.Hours }}
+                </td>
                 <td>{{ times.Minutes }}</td>
                 <td>{{ times.Description }}</td>
               </tr>
@@ -137,6 +225,13 @@
   </div>
 </template>
 <style scoped>
+.titleandedit {
+  display: flex;
+  align-items: left;
+  grid-gap: 5px;
+  flex-direction: column;
+  justify-content: flex-start;
+}
 .excbtn {
   font-family: "Scada", sans-serif;
   font-family: "Sen", sans-serif;
@@ -346,6 +441,7 @@ h2 {
 #ViewtimeV2 {
   width: 100%;
   margin-bottom: 50px;
+  overflow-x: scroll;
 }
 
 h1 {
@@ -426,6 +522,295 @@ body {
 }
 section {
 }
+.submittimes {
+  background: #1988c9;
+  width: 80%;
+  cursor: pointer;
+  padding: 10px;
+  color: white;
+  border-radius: 20px;
+}
+.projectcaps {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  grid-gap: 20px;
+}
+.checkmark {
+  position: absolute;
+  width: 50px;
+  padding: 10px;
+  background-color: #e0eeff;
+
+  border: solid white 2px;
+}
+.container:hover input ~ .checkmark {
+  background-color: #e0eeff;
+}
+.container input:checked ~ .checkmark {
+  background-color: #1988c9;
+  color: white;
+  border: 2px rgb(32, 102, 151) solid;
+}
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  display: none;
+}
+.container {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  margin-right: 70px;
+  font-size: 12px;
+}
+.deltagcheckbox {
+  appearance: none;
+}
+.debitstuff {
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+  border-radius: 20px;
+  color: white;
+  background: #1988c9;
+}
+.debitcheck {
+  appearance: none;
+}
+.dbcaps {
+  margin-top: 15px;
+}
+.db {
+  display: flex;
+  justify-content: center;
+  grid-gap: 20px;
+  height: 50px;
+}
+.spacer {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  width: 100%;
+}
+.urntimecaps {
+  padding: 20px;
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.urntimecaps:nth-child(odd) {
+  background: #d8d8d8;
+}
+.urntimecaps:nth-child(even) {
+  background: #f0f0f0;
+  border-top: solid 1px rgba(0, 0, 0, 0.247);
+}
+.urntimecaps:hover {
+  background: rgb(176, 189, 190);
+}
+.urntimetitle {
+  display: flex;
+  align-items: right;
+  text-align: right;
+  font-size: 12px;
+}
+.urntimetime {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: right;
+  text-align: right;
+}
+.bfcaps {
+  width: 100%;
+
+  display: flex !important;
+  justify-content: space-around !important;
+  align-items: center;
+}
+.urndate {
+  background: #397ce2;
+  padding: 5px;
+  color: white;
+
+  border-radius: 5px;
+}
+.bf {
+  padding: 5px;
+  cursor: pointer;
+  background: rgb(60, 126, 167);
+  color: white;
+  border-radius: 5px;
+  width: 25%;
+}
+.mh {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-gap: 20px;
+}
+
+.submittime {
+  background: #1988c9;
+  cursor: pointer;
+  padding: 10px;
+  color: white;
+  border-radius: 20px;
+}
+.e {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  text-align: left;
+  justify-content: flex-start;
+}
+textarea {
+  resize: none;
+  height: 100px;
+}
+.drop-item {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: white;
+  cursor: pointer;
+}
+.drop-item:hover {
+  background: rgb(226, 226, 226);
+}
+.chooseproject {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  background: rgb(238, 244, 249);
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.185);
+}
+.chooseproject:hover {
+  background: rgb(225, 238, 249);
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.32);
+}
+.dayinfo {
+  color: rgb(105, 105, 105);
+  text-align: left;
+  height: 100%;
+  overflow-y: scroll;
+  width: 100%;
+  padding: 10px;
+}
+.s {
+  align-self: center;
+}
+.slash {
+  font-size: 30px;
+}
+.worktime {
+  font-size: 30px;
+}
+.datatime {
+  font-size: 30px;
+}
+.Forminnershown {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin-bottom: 20px;
+  padding: 30px;
+
+  background: rgb(238, 249, 255);
+}
+.innerOnShown {
+  opacity: 1;
+}
+.formCont {
+  width: 100%;
+
+  background: rgb(255, 255, 255);
+  display: flex;
+  justify-content: center;
+}
+.avbryt {
+  margin-top: 10px;
+  background: rgb(218, 81, 81);
+  border-radius: 20px;
+  width: 100px;
+  height: 20px;
+  text-align: center;
+  color: white;
+  font-size: 15px;
+  padding: 5px;
+  cursor: pointer;
+}
+.editimg {
+  margin-right: 5px;
+
+  grid-gap: 10px;
+}
+.editimg > img {
+  width: 20px;
+  transition: 0.5s;
+}
+.editimg > img:hover {
+  width: 25px;
+  cursor: pointer;
+}
+.editimg > span {
+  margin-left: 5px;
+}
+.editcontent > h2 {
+  background: #1988c9;
+  border-radius: 20px 20px 0px 0px;
+  padding: 10px;
+  color: white;
+  margin-top: 0;
+}
+.pad {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  grid-gap: 5px;
+}
+.noclickzone {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0%;
+  left: 0%;
+  background: #00000036;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+
+  align-items: center;
+}
+.overlayzone {
+  width: 300px;
+  height: 500px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.356);
+}
 
 /* follow me template */
 .made-with-love {
@@ -472,6 +857,7 @@ section {
 <script>
 import Addtimeform from "@/components/Addtimeform.vue";
 import moment from "moment";
+import io from "socket.io-client";
 export default {
   components: {
     Addtimeform,
@@ -479,6 +865,7 @@ export default {
   data() {
     return {
       R: true,
+      vieweditwindow: true,
       show: false,
       time: "",
       logged: this.$store.state.someValue,
@@ -498,6 +885,12 @@ export default {
       uniqueproject: [],
       From: "F",
       To: "T",
+      z: 0,
+      x: 0,
+      etime: "",
+      oldhours: "",
+      oldminutes: "",
+      edate: "",
     };
   },
 
@@ -516,6 +909,7 @@ export default {
       .then((response) => response.json())
       .then((result) => {
         this.loggedin = result[0];
+
         const searchnano = {
           method: "POST",
 
@@ -531,29 +925,36 @@ export default {
           .then((response) => response.json())
           .then((result) => {
             this.userstatus = result[0].Status;
+            this.socketInstance = io("https://mxtime.se:3000/");
+            this.socketInstance.emit("loggedinfo", this.loggedin);
+            this.socketInstance.emit("mytime", this.loggedin.Username);
 
-            fetch("https://mxtime.se:3000/mytime", requestOptions)
-              .then((response) => response.json())
-              .then((result) => {
-                this.time = result;
+            this.socketInstance.on("mytimedata", (mytimedata) => {
+              this.time = mytimedata;
 
-                this.time.sort((a, b) => parseInt(b.Datum) - parseInt(a.Datum));
+              if (this.loggedin.nanoid == undefined) {
+                window.location.reload();
+              }
 
-                this.uniqueproject = [
-                  ...new Set(this.time.map((item) => item.Title)),
-                ];
+              this.time.sort((a, b) => parseInt(b.Datum) - parseInt(a.Datum));
 
-                this.subar = [];
-                for (this.i = 0; this.time.length > 0; this.i++) {
-                  this.subar.push(
-                    this.time[this.i].Hours +
-                      parseFloat((this.time[this.i].Minutes / 60).toFixed(1))
-                  );
-                  this.sum = parseFloat(
-                    this.subar.reduce((a, b) => a + b, 0)
-                  ).toFixed(1);
-                }
-              });
+              this.uniqueproject = [
+                ...new Set(this.time.map((item) => item.Title)),
+              ];
+
+              this.subar = [];
+              let sum = this.time.reduce((accumulator, object) => {
+                return accumulator + object.Hours;
+              }, 0);
+              let sums = this.time.reduce((accumulator, object) => {
+                return accumulator + object.Minutes / 60;
+              }, 0);
+              sums = parseFloat(sums).toFixed(1);
+              console.log("SUM", sum);
+              console.log("SUMS", sums);
+              this.sum = parseInt(sum) + parseFloat(sums);
+              console.log(this.sum);
+            });
             fetch("https://mxtime.se:3000/getusers", searchnano)
               .then((response) => response.json())
               .then((result) => {
@@ -563,6 +964,26 @@ export default {
       });
   },
   methods: {
+    editTime() {
+      const sender = {
+        etime: this.etime,
+        oldhours: this.oldhours,
+        oldminutes: this.oldminutes,
+      };
+      this.etime.Datum = new Date(this.edate).getTime();
+      this.socketInstance.emit("edittime", sender);
+      console.log(sender);
+    },
+    Edit(id, datum, cont) {
+      this.z = id;
+      this.x = id - 1;
+      this.etime = cont;
+      this.oldhours = this.etime.Hours;
+      this.oldminutes = this.etime.Minutes;
+      this.edate = moment(parseInt(datum)).format("YYYY-MM-DD");
+      console.log(this.edate);
+      console.log(this.etime);
+    },
     Remove(id) {
       this.z = id - 1;
       this.x = id;
@@ -592,6 +1013,11 @@ export default {
     },
     reloadPage() {
       setTimeout(window.location.reload(), 2000);
+    },
+    avbrytedit() {
+      console.log(this.edate);
+      console.log(this.etime);
+      this.socketInstance.emit("mytime", this.loggedin.Username);
     },
     filtertime() {
       this.startholder = new Date(this.start).getTime();
@@ -631,15 +1057,17 @@ export default {
             });
           }
           this.subar = [];
-          for (this.i = 0; this.time.length > 0; this.i++) {
-            this.subar.push(
-              this.time[this.i].Hours +
-                parseFloat((this.time[this.i].Minutes / 60).toFixed(1))
-            );
-            this.sum = parseFloat(
-              this.subar.reduce((a, b) => a + b, 0)
-            ).toFixed(1);
-          }
+          let sum = this.time.reduce((accumulator, object) => {
+            return accumulator + object.Hours;
+          }, 0);
+          let sums = this.time.reduce((accumulator, object) => {
+            return accumulator + object.Minutes / 60;
+          }, 0);
+          sums = parseFloat(sums).toFixed(1);
+          console.log("SUM", sum);
+          console.log("SUMS", sums);
+          this.sum = parseInt(sum) + parseFloat(sums);
+          console.log(this.sum);
           if (this.time.length == 0) {
             this.sum = 0;
           }

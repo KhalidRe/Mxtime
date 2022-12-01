@@ -478,6 +478,8 @@
   z-index: 100;
   display: flex;
   background: rgba(44, 44, 44, 0.322);
+  justify-content: center !important;
+  align-items: center !important;
 }
 .overcaps > h2 {
   background: #0381bb;
@@ -495,8 +497,8 @@
   height: 300px;
   z-index: 99;
 
-  top: 20%;
-  left: 45%;
+  top: 25%;
+
   display: flex;
   justify-content: center;
   align-items: center;

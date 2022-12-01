@@ -802,7 +802,7 @@ function
   transition: 0.2s;
   color: #ff3916;
   font-size: 10px;
-  transform: scale(0.1);
+  transform: scale(1.3);
 }
 .projectcaps {
   display: flex;
@@ -1615,6 +1615,7 @@ export default {
       };
       this.etime.Datum = new Date(this.edate).getTime();
       this.socketInstance.emit("edittime", sender);
+      console.log(sender);
     },
     Edit(id, datum) {
       this.z = id;
