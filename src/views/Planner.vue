@@ -90,26 +90,6 @@
                     v-for="deltag in deltagare"
                     :key="deltag.index"
                     class="workchecks"
-                    v-if="usersid.includes(deltag.id)"
-                  >
-                    <div @click="removeUser(deltag.id)" class="itemcont">
-                      <div class="imgandtxt">
-                        <img
-                          class="deltagare va"
-                          :src="`https://mxtime.se/mxprofile/${deltag.Profile}.jpg`"
-                          alt=""
-                        />
-                        {{ deltag.Name }}
-                      </div>
-                      <div>+</div>
-                    </div>
-                  </div>
-                  <div class="showme">add new</div>
-                  <div
-                    id="Fruits"
-                    v-for="deltag in deltagare"
-                    :key="deltag.index"
-                    class="workchecks"
                     v-if="!usersid.includes(deltag.id)"
                     @click="addUser(deltag)"
                   >

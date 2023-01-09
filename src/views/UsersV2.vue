@@ -90,6 +90,7 @@
             <th>Användare</th>
             <th>Status</th>
             <th>Profil</th>
+            <th></th>
           </tr>
         </thead>
       </table>
@@ -117,9 +118,11 @@
                 Visa
               </button>
             </td>
-            <!--
-<td>
+
+            <td>
               <svg
+                v-if="users.Status !== 'Admin'"
+                @click="uin(users)"
                 class="kogwheel"
                 width="50"
                 height="50"
@@ -159,7 +162,6 @@
                 </defs>
               </svg>
             </td>
-            -->
           </tr>
         </tbody>
       </table>
@@ -515,9 +517,321 @@
         </div>
       </div>
     </transition>
+    <transition name="slide-fade">
+      <div v-if="useredit" class="createusernoclick">
+        <div class="createusercaps">
+          <div class="editusertitle">
+            {{ selecteduser.Name }}
+            <span @click="suredelete = !suredelete" class="deletetime">
+              <svg
+                width="19"
+                height="20"
+                viewBox="0 0 19 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7 16C7.26522 16 7.51957 15.8946 7.70711 15.7071C7.89464 15.5196 8 15.2652 8 15V9C8 8.73478 7.89464 8.48043 7.70711 8.29289C7.51957 8.10536 7.26522 8 7 8C6.73478 8 6.48043 8.10536 6.29289 8.29289C6.10536 8.48043 6 8.73478 6 9V15C6 15.2652 6.10536 15.5196 6.29289 15.7071C6.48043 15.8946 6.73478 16 7 16ZM17 4H13V3C13 2.20435 12.6839 1.44129 12.1213 0.87868C11.5587 0.316071 10.7956 0 10 0H8C7.20435 0 6.44129 0.316071 5.87868 0.87868C5.31607 1.44129 5 2.20435 5 3V4H1C0.734784 4 0.48043 4.10536 0.292893 4.29289C0.105357 4.48043 0 4.73478 0 5C0 5.26522 0.105357 5.51957 0.292893 5.70711C0.48043 5.89464 0.734784 6 1 6H2V17C2 17.7956 2.31607 18.5587 2.87868 19.1213C3.44129 19.6839 4.20435 20 5 20H13C13.7956 20 14.5587 19.6839 15.1213 19.1213C15.6839 18.5587 16 17.7956 16 17V6H17C17.2652 6 17.5196 5.89464 17.7071 5.70711C17.8946 5.51957 18 5.26522 18 5C18 4.73478 17.8946 4.48043 17.7071 4.29289C17.5196 4.10536 17.2652 4 17 4ZM7 3C7 2.73478 7.10536 2.48043 7.29289 2.29289C7.48043 2.10536 7.73478 2 8 2H10C10.2652 2 10.5196 2.10536 10.7071 2.29289C10.8946 2.48043 11 2.73478 11 3V4H7V3ZM14 17C14 17.2652 13.8946 17.5196 13.7071 17.7071C13.5196 17.8946 13.2652 18 13 18H5C4.73478 18 4.48043 17.8946 4.29289 17.7071C4.10536 17.5196 4 17.2652 4 17V6H14V17ZM11 16C11.2652 16 11.5196 15.8946 11.7071 15.7071C11.8946 15.5196 12 15.2652 12 15V9C12 8.73478 11.8946 8.48043 11.7071 8.29289C11.5196 8.10536 11.2652 8 11 8C10.7348 8 10.4804 8.10536 10.2929 8.29289C10.1054 8.48043 10 8.73478 10 9V15C10 15.2652 10.1054 15.5196 10.2929 15.7071C10.4804 15.8946 10.7348 16 11 16Z"
+                  fill="#B54848"
+                />
+              </svg>
+            </span>
+          </div>
+
+          <div class="createuserinputs">
+            <div>
+              <div>Email</div>
+              <input name="email" v-model="selecteduser.email" />
+            </div>
+            <div class="se">
+              <div>Lösenord</div>
+              <div @click="sendreset()" class="sendreset">
+                Skicka återställnings länk
+              </div>
+            </div>
+            <div>
+              <div>Roll för Användare</div>
+              <select v-model="selecteduser.Status" name="" id="acctype">
+                <option
+                  :v-model="selecteduser.Status"
+                  v-for="rolls in tags"
+                  :key="rolls.index"
+                >
+                  {{ rolls.Usertags }}
+                </option>
+              </select>
+            </div>
+            <div class="confirmation">
+              <div class="userconf" v-if="selecteduser.email.length > 5">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 10 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5.00011 0.554688C4.12108 0.554688 3.26179 0.81535 2.53091 1.30371C1.80002 1.79207 1.23037 2.4862 0.893979 3.29832C0.55759 4.11043 0.469575 5.00406 0.641065 5.8662C0.812555 6.72834 1.23585 7.52026 1.85741 8.14183C2.47898 8.7634 3.2709 9.18669 4.13304 9.35818C4.99518 9.52967 5.88881 9.44165 6.70093 9.10526C7.51304 8.76887 8.20717 8.19922 8.69553 7.46833C9.18389 6.73745 9.44456 5.87816 9.44456 4.99913C9.44456 3.82039 8.9763 2.68993 8.14281 1.85644C7.30931 1.02294 6.17885 0.554688 5.00011 0.554688V0.554688ZM7.90289 3.50747L4.25289 7.15469L2.09733 4.99913C2.02366 4.92546 1.98227 4.82554 1.98227 4.72135C1.98227 4.61717 2.02366 4.51725 2.09733 4.44358C2.171 4.36991 2.27092 4.32852 2.37511 4.32852C2.4793 4.32852 2.57922 4.36991 2.65289 4.44358L4.25844 6.04913L7.35289 2.95747C7.38937 2.92099 7.43267 2.89205 7.48033 2.87231C7.528 2.85257 7.57908 2.84241 7.63067 2.84241C7.68225 2.84241 7.73334 2.85257 7.781 2.87231C7.82866 2.89205 7.87197 2.92099 7.90844 2.95747C7.94492 2.99394 7.97386 3.03725 7.9936 3.08491C8.01334 3.13257 8.0235 3.18365 8.0235 3.23524C8.0235 3.28683 8.01334 3.33791 7.9936 3.38558C7.97386 3.43324 7.94492 3.47654 7.90844 3.51302L7.90289 3.50747Z"
+                    fill="#5CAB2B"
+                  />
+                </svg>
+
+                Input email
+              </div>
+
+              <div class="userconf" v-if="selecteduser.Status.length > 1">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 10 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5.00011 0.554688C4.12108 0.554688 3.26179 0.81535 2.53091 1.30371C1.80002 1.79207 1.23037 2.4862 0.893979 3.29832C0.55759 4.11043 0.469575 5.00406 0.641065 5.8662C0.812555 6.72834 1.23585 7.52026 1.85741 8.14183C2.47898 8.7634 3.2709 9.18669 4.13304 9.35818C4.99518 9.52967 5.88881 9.44165 6.70093 9.10526C7.51304 8.76887 8.20717 8.19922 8.69553 7.46833C9.18389 6.73745 9.44456 5.87816 9.44456 4.99913C9.44456 3.82039 8.9763 2.68993 8.14281 1.85644C7.30931 1.02294 6.17885 0.554688 5.00011 0.554688V0.554688ZM7.90289 3.50747L4.25289 7.15469L2.09733 4.99913C2.02366 4.92546 1.98227 4.82554 1.98227 4.72135C1.98227 4.61717 2.02366 4.51725 2.09733 4.44358C2.171 4.36991 2.27092 4.32852 2.37511 4.32852C2.4793 4.32852 2.57922 4.36991 2.65289 4.44358L4.25844 6.04913L7.35289 2.95747C7.38937 2.92099 7.43267 2.89205 7.48033 2.87231C7.528 2.85257 7.57908 2.84241 7.63067 2.84241C7.68225 2.84241 7.73334 2.85257 7.781 2.87231C7.82866 2.89205 7.87197 2.92099 7.90844 2.95747C7.94492 2.99394 7.97386 3.03725 7.9936 3.08491C8.01334 3.13257 8.0235 3.18365 8.0235 3.23524C8.0235 3.28683 8.01334 3.33791 7.9936 3.38558C7.97386 3.43324 7.94492 3.47654 7.90844 3.51302L7.90289 3.50747Z"
+                    fill="#5CAB2B"
+                  />
+                </svg>
+                User type chosen
+              </div>
+
+              <div class="userconf" v-if="selecteduser.email.length < 6">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 10 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M5.00008 0.416016C2.46883 0.416016 0.416748 2.4681 0.416748 4.99935C0.416748 7.5306 2.46883 9.58268 5.00008 9.58268C7.53133 9.58268 9.58342 7.5306 9.58342 4.99935C9.58342 2.4681 7.53133 0.416016 5.00008 0.416016ZM6.54466 4.04393C6.62056 3.96535 6.66256 3.8601 6.66161 3.75085C6.66066 3.6416 6.61684 3.53709 6.53959 3.45984C6.46234 3.38259 6.35783 3.33877 6.24858 3.33782C6.13933 3.33687 6.03408 3.37887 5.9555 3.45477L5.00008 4.41018L4.04466 3.45477C4.00623 3.41497 3.96025 3.38323 3.90942 3.36139C3.85858 3.33955 3.80391 3.32806 3.74858 3.32758C3.69326 3.3271 3.63839 3.33764 3.58718 3.35859C3.53598 3.37954 3.48946 3.41048 3.45033 3.4496C3.41121 3.48872 3.38027 3.53524 3.35932 3.58645C3.33837 3.63766 3.32783 3.69252 3.32831 3.74785C3.32879 3.80317 3.34029 3.85785 3.36212 3.90868C3.38396 3.95952 3.4157 4.0055 3.4555 4.04393L4.41092 4.99935L3.4555 5.95477C3.4157 5.9932 3.38396 6.03918 3.36212 6.09001C3.34029 6.14085 3.32879 6.19552 3.32831 6.25085C3.32783 6.30617 3.33837 6.36104 3.35932 6.41225C3.38027 6.46345 3.41121 6.50998 3.45033 6.5491C3.48946 6.58822 3.53598 6.61916 3.58718 6.64011C3.63839 6.66106 3.69326 6.6716 3.74858 6.67112C3.80391 6.67064 3.85858 6.65915 3.90942 6.63731C3.96025 6.61547 4.00623 6.58373 4.04466 6.54393L5.00008 5.58852L5.9555 6.54393C6.03408 6.61983 6.13933 6.66183 6.24858 6.66088C6.35783 6.65993 6.46234 6.61611 6.53959 6.53886C6.61684 6.4616 6.66066 6.3571 6.66161 6.24785C6.66256 6.1386 6.62056 6.03335 6.54466 5.95477L5.58925 4.99935L6.54466 4.04393Z"
+                    fill="#F06363"
+                  />
+                </svg>
+                Input email
+              </div>
+
+              <div class="userconf" v-if="selecteduser.Status.length < 1">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 10 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M5.00008 0.416016C2.46883 0.416016 0.416748 2.4681 0.416748 4.99935C0.416748 7.5306 2.46883 9.58268 5.00008 9.58268C7.53133 9.58268 9.58342 7.5306 9.58342 4.99935C9.58342 2.4681 7.53133 0.416016 5.00008 0.416016ZM6.54466 4.04393C6.62056 3.96535 6.66256 3.8601 6.66161 3.75085C6.66066 3.6416 6.61684 3.53709 6.53959 3.45984C6.46234 3.38259 6.35783 3.33877 6.24858 3.33782C6.13933 3.33687 6.03408 3.37887 5.9555 3.45477L5.00008 4.41018L4.04466 3.45477C4.00623 3.41497 3.96025 3.38323 3.90942 3.36139C3.85858 3.33955 3.80391 3.32806 3.74858 3.32758C3.69326 3.3271 3.63839 3.33764 3.58718 3.35859C3.53598 3.37954 3.48946 3.41048 3.45033 3.4496C3.41121 3.48872 3.38027 3.53524 3.35932 3.58645C3.33837 3.63766 3.32783 3.69252 3.32831 3.74785C3.32879 3.80317 3.34029 3.85785 3.36212 3.90868C3.38396 3.95952 3.4157 4.0055 3.4555 4.04393L4.41092 4.99935L3.4555 5.95477C3.4157 5.9932 3.38396 6.03918 3.36212 6.09001C3.34029 6.14085 3.32879 6.19552 3.32831 6.25085C3.32783 6.30617 3.33837 6.36104 3.35932 6.41225C3.38027 6.46345 3.41121 6.50998 3.45033 6.5491C3.48946 6.58822 3.53598 6.61916 3.58718 6.64011C3.63839 6.66106 3.69326 6.6716 3.74858 6.67112C3.80391 6.67064 3.85858 6.65915 3.90942 6.63731C3.96025 6.61547 4.00623 6.58373 4.04466 6.54393L5.00008 5.58852L5.9555 6.54393C6.03408 6.61983 6.13933 6.66183 6.24858 6.66088C6.35783 6.65993 6.46234 6.61611 6.53959 6.53886C6.61684 6.4616 6.66066 6.3571 6.66161 6.24785C6.66256 6.1386 6.62056 6.03335 6.54466 5.95477L5.58925 4.99935L6.54466 4.04393Z"
+                    fill="#F06363"
+                  />
+                </svg>
+                User type chosen
+              </div>
+            </div>
+            <div
+              type="submit"
+              v-if="
+                selecteduser.Status.length > 1 && selecteduser.email.length > 5
+              "
+              class="skapaanv"
+              @click="edituserinfo()"
+            >
+              Skapa
+            </div>
+
+            <div
+              v-if="
+                selecteduser.Status.length < 1 || selecteduser.email.length < 5
+              "
+              class="skapaanvf"
+            >
+              Skapa
+            </div>
+            <div class="avbrtanv" @click="useredit = !useredit">Avbryt</div>
+          </div>
+        </div>
+        <div v-if="suredelete" class="deleteusercaps">
+          <h2>Ta bort Användare</h2>
+          <div class="flexhere">
+            <div>
+              <p>
+                Om du tar bort denna användare kommer den försvinna permanent
+              </p>
+              <p>Skriv in användarens namn för att ta bort</p>
+            </div>
+
+            <div class="inputs">
+              <input v-model="checker" type="text" />
+              <div
+                type="submit"
+                v-if="selecteduser.Name === checker"
+                class="skapaanv"
+                @click="
+                  deleteUser(),
+                    (suredelete = !suredelete),
+                    (useredit = !useredit)
+                "
+              >
+                Ta bort
+              </div>
+
+              <div v-if="selecteduser.Name !== checker" class="skapaanvf">
+                Ta bort
+              </div>
+              <div class="avbrtdel" @click="suredelete = !suredelete">
+                Avbryt
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 <style scoped>
+.inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 20%;
+  grid-gap: 5px;
+  margin-bottom: 5px;
+}
+.inputs > input {
+  width: 200px;
+}
+.avbrtdel {
+  background: #92cdfd;
+  border-radius: 20px;
+  padding: 5px;
+  width: 70px;
+  color: white;
+  align-self: center;
+  cursor: pointer;
+  font-size: 13px;
+}
+.avbrtdel:hover {
+  background: rgb(241, 159, 159);
+}
+.delete {
+  background: rgb(209, 91, 91);
+  border-radius: 20px;
+  padding: 10px;
+  width: 90px;
+  color: white;
+  align-self: center;
+  cursor: pointer;
+}
+.deletef {
+  background: rgb(204, 204, 204);
+  border-radius: 20px;
+  padding: 10px;
+  width: 90px;
+  color: white;
+  align-self: center;
+  cursor: pointer;
+}
+.flexhere {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.deleteusercaps > h2 {
+  margin-top: 0px;
+  background: #1988c9;
+  padding: 10px;
+  text-align: center;
+  color: white;
+  border-radius: 15px 15px 0px 0px;
+}
+.flexhere > div > p {
+  max-width: 300px;
+  padding: 20px;
+}
+.se {
+  display: flex;
+  flex-direction: column;
+}
+.sendreset {
+  background: rgb(27, 120, 226);
+  padding: 8px;
+  border-radius: 25px;
+  width: 70%;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+  font-size: 12px;
+  color: white;
+  cursor: pointer;
+}
+.sendreset:hover {
+  background: rgb(49, 139, 241);
+}
+.flexthis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 85%;
+}
+.selections {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 85%;
+}
+.infocont {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  height: 70%;
+}
+.o {
+  background: #006aae;
+  width: 100%;
+  border-radius: 15px 15px 0px 0px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: flex;
+  justify-content: center;
+}
+.nameandprofile {
+  display: flex;
+  justify-content: space-between;
+  width: 95%;
+}
+.nameandprofile > img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+}
+.nameandprofile > p {
+  font-size: 19px;
+  color: white;
+}
+.noclick {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+}
+.useredit {
+  position: absolute;
+  width: 250px;
+  top: 20%;
+  background: white;
+  height: 480px;
+  border-radius: 20px;
+  box-shadow: 0px 5px 5px 1px rgba(88, 88, 88, 0.178);
+}
 .headercaps {
   display: flex;
   align-items: center;
@@ -661,6 +975,22 @@
   color: white;
   font-size: 18px;
   border-radius: 20px 20px 0px 0px;
+  display: flex;
+  justify-content: center;
+}
+.editusertitle {
+  padding: 10px;
+  background-color: #3382df;
+  width: 250px;
+  color: white;
+  font-size: 18px;
+  border-radius: 20px 20px 0px 0px;
+  display: flex;
+  justify-content: space-between;
+}
+.deletetime {
+  justify-self: baseline;
+  align-self: flex-end;
 }
 .createuserinputs {
   height: 90%;
@@ -686,6 +1016,16 @@
   height: 480px;
   border-radius: 20px;
   box-shadow: 0px 5px 5px 1px rgba(88, 88, 88, 0.178);
+  z-index: 100;
+}
+.deleteusercaps {
+  position: absolute;
+  top: 20%;
+  background: white;
+  min-height: 380px;
+  border-radius: 20px;
+  box-shadow: 0px 5px 5px 1px rgba(88, 88, 88, 0.178);
+  z-index: 100;
 }
 
 .createuserbtn {
@@ -1099,6 +1439,10 @@ export default {
       tagname: "",
       tagid: 0,
       tags: [],
+      useredit: false,
+      selecteduser: "",
+      suredelete: false,
+      checker: "",
     };
   },
   created() {
@@ -1136,7 +1480,45 @@ export default {
             .then((result) => {
               this.loggedin = result[0];
               console.log(this.loggedin);
+              this.socketInstance = io.connect("https://mxtime.se:3000/", {
+                transports: ["websocket"],
+                reconnection: true, // automatically attempt to reconnect to server
+                reconnectionDelay: 1000, // 1 second
+                reconnectionDelayMax: 5000, // 5 seconds
+                reconnectionAttempts: Infinity, // try to reconnect indefinitely
+                pingInterval: 5000, // send a ping message to the server every 5 seconds
+                pingTimeout: 3000,
+              });
               this.socketInstance.emit("loggedinfo", this.loggedin);
+              var loggedin = this.loggedin.nanoid;
+              this.socketInstance.on("tags", (tags) => {
+                this.tags = tags;
+                console.log(this.tags);
+              });
+              this.socketInstance.on("confirmationU", (confirmationuser) => {
+                console.log(confirmationuser);
+                if (confirmationuser !== "") {
+                  this.confirmu = true;
+                  console.log(this.confirmu, "username");
+                }
+              });
+              if (this.loggedin.Status == "Admin") {
+                console.log(this.loggedin);
+                this.socketInstance.emit("adminusers", loggedin);
+                console.log("sent");
+
+                this.socketInstance.on("updateusers", (updateusers) => {
+                  console.log("recived", updateusers);
+                  this.user = updateusers;
+                  this.newusername = "";
+                  this.newpassword = "";
+                  this.newname = "";
+                  this.newemail = "";
+                  this.newtype = "";
+                  this.createuser = false;
+                });
+              }
+
               if (this.loggedin.nanoid == undefined) {
                 window.location.reload();
               }
@@ -1150,11 +1532,13 @@ export default {
 
                 body: JSON.stringify({ nanoid: this.loggedin.nanoid }),
               };
-              fetch("https://mxtime.se:3000/getusers", searchnano)
-                .then((response) => response.json())
-                .then((result) => {
-                  this.user = result;
-                });
+              if (this.loggedin.Status !== "Admin") {
+                fetch("https://mxtime.se:3000/getusers", searchnano)
+                  .then((response) => response.json())
+                  .then((result) => {
+                    this.user = result;
+                  });
+              }
 
               fetch("https://mxtime.se:3000/myprojects", requestOptions)
                 .then((response) => response.json())
@@ -1170,34 +1554,21 @@ export default {
             });
         }
       });
-    this.socketInstance = io("https://mxtime.se:3000/");
-
-    this.socketInstance.on("tags", (tags) => {
-      this.tags = tags;
-      console.log(this.tags);
-    });
-    this.socketInstance.on("confirmationU", (confirmationuser) => {
-      console.log(confirmationuser);
-      if (confirmationuser !== "") {
-        this.confirmu = true;
-        console.log(this.confirmu, "username");
-      }
-    });
-    this.socketInstance.on("confirmationE", (confirmationemail) => {
-      console.log(confirmationemail);
-      if (confirmationemail !== "") {
-        this.confirme = true;
-        console.log("hej", this.confirme, "email");
-      }
-      if (this.confirmu == true && this.confirme == true) {
-        this.createuser = !this.createuser;
-      }
-    });
-    this.socketInstance.on("updateusers", (updateusers) => {
-      console.log(updateusers);
-    });
   },
   methods: {
+    deleteUser() {
+      console.log(this.checker);
+      this.socketInstance.emit("deleteUser", this.selecteduser);
+    },
+    uin(user) {
+      this.useredit = !this.useredit;
+      this.selecteduser = user;
+      console.log(user);
+    },
+    edituserinfo() {
+      console.log(this.selecteduser.email);
+      console.log(this.selecteduser.Status);
+    },
     View(id) {
       this.z = id;
       this.x = id;
@@ -1242,7 +1613,6 @@ export default {
         nanoid: this.loggedin.nanoid,
       };
       this.socketInstance.emit("accountinfo", accountinfo);
-      window.location.reload();
     },
     addtag() {
       const taginfo = {

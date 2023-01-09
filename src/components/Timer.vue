@@ -1117,7 +1117,23 @@ export default {
         this.loggedstatus = this.loggedin.Status;
 
         this.socketInstance = io("https://mxtime.se:3000/");
-        this.socketInstance.emit("loggedinfo", this.loggedin);
+        var socketInstance = this.socketInstance;
+        var loggedin = this.loggedin;
+        socketInstance.on("connect", function () {
+          console.log("Connected to server");
+          socketInstance.emit("loggedinfo", loggedin);
+        });
+
+        this.socketInstance.on("disconnect", function () {
+          console.log("Disconnected from server");
+        });
+
+        this.socketInstance.on("ping", function () {});
+
+        this.socketInstance.on("pong", function () {
+          console.log("Received pong from server");
+        });
+
         if (this.loggedin.nanoid == undefined) {
           window.location.reload();
         }

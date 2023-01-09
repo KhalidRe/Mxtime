@@ -364,6 +364,7 @@
                 <img src="@/assets/sendstopwatch.png" alt="" />
               </button>
             </div>
+
             <Timer
               ref="timer"
               class="numbers"
@@ -377,7 +378,17 @@
               @pause="onPause"
               @resume="onResume"
               @overflow="onOverflow"
-            />
+              v-slot="{ time, isDone, isOverflowed }"
+            >
+              <!-- change the above to `type="countdown"` for a countdown timer -->
+              <div>
+                <span>
+                  <span>{{ time.h }}:</span>
+                  <span>{{ time.m }}:</span>
+                  <span>{{ time.s }}</span>
+                </span>
+              </div>
+            </Timer>
           </div>
         </div>
       </transition>
@@ -391,6 +402,9 @@
   </div>
 </template>
 <style scoped>
+.timer__milliseconds {
+  display: none;
+}
 .lined {
   position: absolute;
   left: 0.5%;
@@ -1079,8 +1093,32 @@ export default {
         this.loggedin = result[0];
         this.loggedstatus = this.loggedin.Status;
 
-        this.socketInstance = io("https://mxtime.se:3000/");
-        this.socketInstance.emit("loggedinfo", this.loggedin);
+        this.socketInstance = io("https://mxtime.se:3000/", {
+          transports: ["websocket"],
+          pingInterval: 1000 * 60 * 10,
+          pingTimeout: 1000 * 60 * 5,
+          reconnection: true,
+          reconnectionDelay: 1000,
+          reconnectionDelayMax: 5000,
+          reconnectionAttempts: Infinity,
+        });
+        var socketInstance = this.socketInstance;
+        var loggedin = this.loggedin;
+        socketInstance.on("connect", function () {
+          console.log("Connected to server");
+          socketInstance.emit("loggedinfo", loggedin);
+        });
+
+        this.socketInstance.on("disconnect", function () {
+          console.log("Disconnected from server");
+        });
+
+        this.socketInstance.on("ping", function () {});
+
+        this.socketInstance.on("pong", function () {
+          console.log("Received pong from server");
+        });
+
         if (this.loggedin.nanoid == undefined) {
           window.location.reload();
         }

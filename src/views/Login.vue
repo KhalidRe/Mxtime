@@ -29,6 +29,7 @@
               name="Username"
               placeholder="Username"
               ref="Username"
+              v-on:keyup.enter="login()"
             />
           </div>
           <br />
@@ -41,6 +42,7 @@
               placeholder="Password"
               autocomplete="false"
               ref="Password"
+              v-on:keyup.enter="login()"
             />
           </div>
           <div>
@@ -53,11 +55,6 @@
             />
           </div>
           <div class="errormessage">{{ errormessage.text }}</div>
-          <p class="senti">
-            har du inget konto? <br /><a href="https://app.mxtime.se"
-              >skapa ett här</a
-            >
-          </p>
 
           <router-link class="links" to="/Forgotpass">
             <button class="forgotbtn" style="margin: 5px">

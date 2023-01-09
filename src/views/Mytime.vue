@@ -41,5 +41,6 @@ export default {
 .va {
   height: 100%;
   margin-bottom: 0px !important;
+  overflow-x: hidden !important;
 }
 </style>

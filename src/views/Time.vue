@@ -313,18 +313,7 @@ function
                 <span class="datatime">{{ combtime }}h</span>
               </div>
               <div class="wave" :style="{ top: precentage + '%' }"></div>
-              <div id="background-wrap">
-                <div class="bubble x1"></div>
-                <div class="bubble x2"></div>
-                <div class="bubble x3"></div>
-                <div class="bubble x4"></div>
-                <div class="bubble x5"></div>
-                <div class="bubble x6"></div>
-                <div class="bubble x7"></div>
-                <div class="bubble x8"></div>
-                <div class="bubble x9"></div>
-                <div class="bubble x10"></div>
-              </div>
+              <div id="background-wrap"></div>
             </div>
           </div>
         </div>
@@ -409,296 +398,10 @@ function
 
 /* KEYFRAMES */
 
-@-webkit-keyframes animateBubble {
-  0% {
-    margin-top: 1000px;
-  }
-  100% {
-    margin-top: -100%;
-  }
-}
-
-@-moz-keyframes animateBubble {
-  0% {
-    margin-top: 1000px;
-  }
-  100% {
-    margin-top: -100%;
-  }
-}
-
-@keyframes animateBubble {
-  0% {
-    margin-top: 1000px;
-  }
-  100% {
-    margin-top: -100%;
-  }
-}
-
-@-webkit-keyframes sideWays {
-  0% {
-    margin-left: 0px;
-  }
-  100% {
-    margin-left: 50px;
-  }
-}
-
-@-moz-keyframes sideWays {
-  0% {
-    margin-left: 0px;
-  }
-  100% {
-    margin-left: 50px;
-  }
-}
-
-@keyframes sideWays {
-  0% {
-    margin-left: 0px;
-  }
-  100% {
-    margin-left: 50px;
-  }
-}
-
 /* ANIMATIONS */
-
-.x1 {
-  -webkit-animation: animateBubble 25s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-  -moz-animation: animateBubble 25s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-  animation: animateBubble 25s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-
-  left: -25%;
-  top: 5%;
-
-  -webkit-transform: scale(0.1);
-  -moz-transform: scale(0.1);
-  transform: scale(0.1);
-}
-
-.x2 {
-  -webkit-animation: animateBubble 20s linear infinite,
-    sideWays 4s ease-in-out infinite alternate;
-  -moz-animation: animateBubble 20s linear infinite,
-    sideWays 4s ease-in-out infinite alternate;
-  animation: animateBubble 20s linear infinite,
-    sideWays 4s ease-in-out infinite alternate;
-
-  left: -35%;
-  top: 80%;
-
-  -webkit-transform: scale(0.1);
-  -moz-transform: scale(0.1);
-  transform: scale(0.1);
-}
-
-.x3 {
-  -webkit-animation: animateBubble 28s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-  -moz-animation: animateBubble 28s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-  animation: animateBubble 28s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-
-  left: -10%;
-  top: 40%;
-
-  -webkit-transform: scale(0.1);
-  -moz-transform: scale(0.1);
-  transform: scale(0.1);
-}
-
-.x4 {
-  -webkit-animation: animateBubble 22s linear infinite,
-    sideWays 3s ease-in-out infinite alternate;
-  -moz-animation: animateBubble 22s linear infinite,
-    sideWays 3s ease-in-out infinite alternate;
-  animation: animateBubble 22s linear infinite,
-    sideWays 3s ease-in-out infinite alternate;
-
-  left: -35%;
-  top: 0;
-
-  -webkit-transform: scale(0.1);
-  -moz-transform: scale(0.1);
-  transform: scale(0.1);
-}
-
-.x5 {
-  -webkit-animation: animateBubble 29s linear infinite,
-    sideWays 4s ease-in-out infinite alternate;
-  -moz-animation: animateBubble 29s linear infinite,
-    sideWays 4s ease-in-out infinite alternate;
-  animation: animateBubble 29s linear infinite,
-    sideWays 4s ease-in-out infinite alternate;
-
-  left: -20%;
-  top: 50%;
-
-  -webkit-transform: scale(0.1);
-  -moz-transform: scale(0.1);
-  transform: scale(0.1);
-}
-
-.x6 {
-  -webkit-animation: animateBubble 21s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-  -moz-animation: animateBubble 21s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-  animation: animateBubble 21s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-
-  left: -30%;
-  top: 0;
-
-  -webkit-transform: scale(0.1);
-  -moz-transform: scale(0.1);
-  transform: scale(0.1);
-}
-
-.x7 {
-  -webkit-animation: animateBubble 20s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-  -moz-animation: animateBubble 20s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-  animation: animateBubble 20s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-
-  left: -45%;
-  top: 70%;
-
-  -webkit-transform: scale(0.1);
-  -moz-transform: scale(0.1);
-  transform: scale(0.1);
-}
-
-.x8 {
-  -webkit-animation: animateBubble 22s linear infinite,
-    sideWays 3s ease-in-out infinite alternate;
-  -moz-animation: animateBubble 22s linear infinite,
-    sideWays 3s ease-in-out infinite alternate;
-  animation: animateBubble 22s linear infinite,
-    sideWays 3s ease-in-out infinite alternate;
-
-  left: -15%;
-  top: 10%;
-
-  -webkit-transform: scale(0.1);
-  -moz-transform: scale(0.1);
-  transform: scale(0.1);
-}
-
-.x9 {
-  -webkit-animation: animateBubble 29s linear infinite,
-    sideWays 4s ease-in-out infinite alternate;
-  -moz-animation: animateBubble 29s linear infinite,
-    sideWays 4s ease-in-out infinite alternate;
-  animation: animateBubble 29s linear infinite,
-    sideWays 4s ease-in-out infinite alternate;
-
-  left: -25%;
-  top: 50%;
-
-  -webkit-transform: scale(0.1);
-  -moz-transform: scale(0.1);
-  transform: scale(0.1);
-}
-
-.x10 {
-  -webkit-animation: animateBubble 26s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-  -moz-animation: animateBubble 26s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-  animation: animateBubble 26s linear infinite,
-    sideWays 2s ease-in-out infinite alternate;
-
-  left: -20%;
-  top: 80%;
-
-  -webkit-transform: scale(0.1);
-  -moz-transform: scale(0.1);
-  transform: scale(0.1);
-}
 
 /* OBJECTS */
 
-.bubble {
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
-
-  -webkit-box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2),
-    inset 0px 10px 30px 5px rgba(255, 255, 255, 1);
-  -moz-box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2),
-    inset 0px 10px 30px 5px rgba(255, 255, 255, 1);
-  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2),
-    inset 0px 10px 30px 5px rgba(255, 255, 255, 1);
-
-  height: 200px;
-  position: absolute;
-  width: 200px;
-}
-
-.bubble:after {
-  background: -moz-radial-gradient(
-    center,
-    ellipse cover,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0) 70%
-  ); /* FF3.6+ */
-  background: -webkit-gradient(
-    radial,
-    center center,
-    0px,
-    center center,
-    100%,
-    color-stop(0%, rgba(255, 255, 255, 0.5)),
-    color-stop(70%, rgba(255, 255, 255, 0))
-  ); /* Chrome,Safari4+ */
-  background: -webkit-radial-gradient(
-    center,
-    ellipse cover,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0) 70%
-  ); /* Chrome10+,Safari5.1+ */
-  background: -o-radial-gradient(
-    center,
-    ellipse cover,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0) 70%
-  ); /* Opera 12+ */
-  background: -ms-radial-gradient(
-    center,
-    ellipse cover,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0) 70%
-  ); /* IE10+ */
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0) 70%
-  ); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80ffffff', endColorstr='#00ffffff',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
-
-  -webkit-box-shadow: inset 0 20px 30px rgba(255, 255, 255, 0.3);
-  -moz-box-shadow: inset 0 20px 30px rgba(255, 255, 255, 0.3);
-  box-shadow: inset 0 20px 30px rgba(255, 255, 255, 0.3);
-
-  content: "";
-  height: 180px;
-  left: 10px;
-  position: absolute;
-  width: 180px;
-}
 .tidcaps {
   position: absolute;
   left: 25%;
@@ -1056,7 +759,7 @@ textarea {
   left: -50%;
   transform: rotate(360deg);
   transition: all 1s ease;
-  animation: wave 50s linear infinite;
+  animation: wave 100s linear infinite;
   box-shadow: inset 2px 0px 5px 5px rgba(154, 252, 255, 0.322);
 }
 @keyframes wave {
@@ -1333,18 +1036,47 @@ export default {
         this.loggedin = result[0];
         this.loggedstatus = this.loggedin.Status;
 
-        this.socketInstance = io("https://mxtime.se:3000/");
-        this.socketInstance.emit("loggedinfo", this.loggedin);
+        this.socketInstance = io("https://mxtime.se:3000/", {
+          transports: ["websocket"],
+          pingInterval: 1000 * 60 * 10,
+          pingTimeout: 1000 * 60 * 5,
+          reconnection: true,
+          reconnectionDelay: 1000,
+          reconnectionDelayMax: 5000,
+          reconnectionAttempts: Infinity,
+        });
+        var socketInstance = this.socketInstance;
+        var loggedin = this.loggedin;
+        socketInstance.on("connect", function () {
+          console.log("Connected to server");
+          socketInstance.emit("loggedinfo", loggedin);
+          socketInstance.emit("mytime", loggedin.Username);
+        });
+
+        this.socketInstance.on("disconnect", function () {
+          console.log("Disconnected from server");
+        });
+
+        this.socketInstance.on("ping", function () {});
+
+        this.socketInstance.on("pong", function () {
+          console.log("Received pong from server");
+        });
+
+        if (this.loggedin.nanoid == undefined) {
+          window.location.reload();
+        }
+
         if (this.loggedin.nanoid == undefined) {
           window.location.reload();
         }
         this.socketInstance.on("specificproject", (specificproject) => {
           this.project = specificproject;
         });
-        this.socketInstance.emit("mytime", this.loggedin.Username);
 
         this.socketInstance.on("mytimedata", (mytimedata) => {
           this.time = mytimedata;
+          console.log(this.time);
 
           this.amountonhours = [];
           this.amountonminutes = [];

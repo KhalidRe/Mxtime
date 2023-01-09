@@ -925,8 +925,33 @@ export default {
           .then((response) => response.json())
           .then((result) => {
             this.userstatus = result[0].Status;
-            this.socketInstance = io("https://mxtime.se:3000/");
+            this.socketInstance = io("https://mxtime.se:3000/", {
+              transports: ["websocket"],
+              pingInterval: 1000 * 60 * 10,
+              pingTimeout: 1000 * 60 * 5,
+              reconnection: true,
+              reconnectionDelay: 1000,
+              reconnectionDelayMax: 5000,
+              reconnectionAttempts: Infinity,
+            });
+            var socketInstance = this.socketInstance;
+            var loggedin = this.loggedin;
             this.socketInstance.emit("loggedinfo", this.loggedin);
+            socketInstance.on("connect", function () {
+              console.log("Connected to server");
+              socketInstance.emit("loggedinfo", loggedin);
+            });
+
+            this.socketInstance.on("disconnect", function () {
+              console.log("Disconnected from server");
+            });
+
+            this.socketInstance.on("ping", function () {});
+
+            this.socketInstance.on("pong", function () {
+              console.log("Received pong from server");
+            });
+
             this.socketInstance.emit("mytime", this.loggedin.Username);
 
             this.socketInstance.on("mytimedata", (mytimedata) => {
