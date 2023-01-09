@@ -31,6 +31,17 @@
               ref="email"
             />
           </div>
+          <div>
+            <label for="">Ange Användarnamn</label>
+            <br />
+            <input
+              type="text"
+              id="Username"
+              name="Username"
+              placeholder="Användarnamn.."
+              ref="Username"
+            />
+          </div>
 
           <div class="errormessage">{{ errormessage.text }}</div>
           <div>
@@ -248,6 +259,7 @@ export default {
         body: JSON.stringify({
           getnano: nanoid(),
           email: this.$refs.email.value,
+          username: this.$refs.Username.value
         }),
       };
 

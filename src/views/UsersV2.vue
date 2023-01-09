@@ -121,7 +121,7 @@
 
             <td>
               <svg
-                v-if="users.Status !== 'Admin'"
+                v-if="users.Status !== 'Admin' && loggedin.Status == 'Admin'"
                 @click="uin(users)"
                 class="kogwheel"
                 width="50"
@@ -548,6 +548,7 @@
               <div @click="sendreset()" class="sendreset">
                 Skicka återställnings länk
               </div>
+              <div class="mailmsg">{{ errormessage.text }}</div>
             </div>
             <div>
               <div>Roll för Användare</div>
@@ -637,7 +638,7 @@
                 selecteduser.Status.length > 1 && selecteduser.email.length > 5
               "
               class="skapaanv"
-              @click="edituserinfo()"
+              @click="edituserinfo(),useredit = !useredit"
             >
               Skapa
             </div>
@@ -692,6 +693,9 @@
   </div>
 </template>
 <style scoped>
+.mailmsg{
+  font-size: 12px;
+}
 .inputs {
   display: flex;
   flex-direction: column;
@@ -1396,6 +1400,7 @@ import Addtime from "../components/Addtime.vue";
 import VueFormulate from "@braid/vue-formulate";
 import io from "socket.io-client";
 import Vue from "vue";
+import { nanoid } from "nanoid";
 Vue.use(VueFormulate);
 export default {
   components: {
@@ -1443,6 +1448,7 @@ export default {
       selecteduser: "",
       suredelete: false,
       checker: "",
+      errormessage:""
     };
   },
   created() {
@@ -1566,8 +1572,18 @@ export default {
       console.log(user);
     },
     edituserinfo() {
-      console.log(this.selecteduser.email);
-      console.log(this.selecteduser.Status);
+      
+      const infodata ={
+        id: this.selecteduser.id,
+        newemail: this.selecteduser.email,
+        newstatus: this.selecteduser.Status,
+        nanoid: this.selecteduser.nanoid
+        
+      }
+      
+      
+     
+      this.socketInstance.emit("givenewinfo", infodata);
     },
     View(id) {
       this.z = id;
@@ -1613,6 +1629,30 @@ export default {
         nanoid: this.loggedin.nanoid,
       };
       this.socketInstance.emit("accountinfo", accountinfo);
+    },
+    sendreset(){
+      var sender = this.selecteduser
+      const auth = {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+
+        body: JSON.stringify({
+          getnano: nanoid(),
+          email: sender.email,
+          username: sender.Username,
+        }),
+      };
+
+      fetch("https://mxtime.se:3000/forgotpassword", auth)
+        .then((response) => response.json())
+        .then((result) => {
+          this.errormessage = result;
+        });
     },
     addtag() {
       const taginfo = {

@@ -9,11 +9,11 @@
             <div class="mh">
               <div>
                 <div>Timmar</div>
-                <input v-model="etime.Hours" type="number" min="0" max="15" />
+                <input v-model="etime.Hours" @input="handlenumbers()" type="number" min="0" max="15" />
               </div>
               <div>
                 <div>Minuter</div>
-                <input v-model="etime.Minutes" type="number" min="0" max="60" />
+                <input v-model="etime.Minutes" @input="handlenumbers()" type="number" min="0" max="60" />
               </div>
             </div>
             <div class="dbcaps">
@@ -209,20 +209,22 @@
                 <div>Timmar</div>
                 <input
                   v-model="Hours"
+                  @input="handlenumbers()"
                   type="number"
                   min="0"
                   max="15"
-                  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                  
                 />
               </div>
               <div>
                 <div>Minuter</div>
                 <input
                   v-model="Minutes"
+                  @input="handlenumbers()"
                   type="number"
                   min="0"
                   max="60"
-                  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                  
                 />
               </div>
             </div>
@@ -1130,6 +1132,20 @@ export default {
       });
   },
   methods: {
+    handlenumbers(){
+      if(this.Hours == ""){
+        this.Hours = 0;
+      }
+      if(this.Minutes == ""){
+        this.Minutes = 0;
+      }
+      if(this.etime.Minutes == ""){
+        this.etime.Minutes = 0;
+      }
+      if(this.etime.Hours == ""){
+        this.etime.Hours = 0;
+      }
+    },
     checkthatbitch(bitch) {
       console.log(indexOf(bitch));
     },
