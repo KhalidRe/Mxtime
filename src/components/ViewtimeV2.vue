@@ -7,21 +7,63 @@
       <div class="topcont">
         <h2>Admin view</h2>
         <div class="inputsflex">
-          <select
-            name="project"
-            id="debited"
-            ref="project"
-            v-model="projectfilter"
+          <dropdown-menu
+            :overlay="false"
+            :withDropdownCloser="true"
+            :closeOnClickOutside="true"
+            class="dropfag"
           >
-            <option value="alla" selected>Alla projekt</option>
-            <option
-              v-for="projects in uniqueproject"
-              :key="projects.index"
-              :value="projects"
+            <div
+              v-if="chosenproject.length == 0"
+              dropdown-closer
+              class="chooseproject"
+              slot="trigger"
             >
-              {{ projects }}
-            </option>
-          </select>
+              Välj projekt
+            </div>
+            <div
+              v-if="chosenproject.length > 0"
+              dropdown-closer
+              class="chooseproject"
+              slot="trigger"
+            >
+              {{ chosenproject }}
+            </div>
+            <div class="droppers" slot="body">
+              <div
+                dropdown-closer
+                class="drop-item allap"
+                @click="dataPrimer('Alla projekt')"
+              >
+                Alla projekt
+              </div>
+              <div
+                dropdown-closer
+                class="drop-item franvaro"
+                @click="dataPrimer('Frånvaro')"
+              >
+                Frånvaro
+              </div>
+              <input
+                class="searchbar"
+                type="text"
+                v-model="search"
+                placeholder="Search"
+              />
+              <div class="dropper" slot="body" dropdown-closer>
+                <div
+                  dropdown-closer
+                  class="drop-item"
+                  v-for="projects in filterFunction"
+                  :key="projects.index"
+                  @click="dataPrimer(projects)"
+                >
+                  {{ projects }}
+                </div>
+              </div>
+            </div>
+          </dropdown-menu>
+
           <select
             name="debited"
             id="debited"
@@ -83,9 +125,9 @@
                   <span class="debinf" v-if="times.debit == 1">(debit)</span>
                   <span class="debinf" v-if="times.debit == 0">(Ejdebit)</span>
                 </td>
-                <td>{{ times.Name }}</td>
+                <td align="center">{{ times.Name }}</td>
                 <td>{{ times.Hours }}</td>
-                <td>{{ times.Minutes }}</td>
+                <td>{{ parseInt(times.Minutes) }}</td>
                 <td>{{ times.Description }}</td>
 
                 <td>{{ parseInt(times.Datum) | moment }}</td>
@@ -157,6 +199,9 @@
   margin-top: 10px;
   cursor: pointer;
 }
+.row:nth-of-type(even) {
+  background: rgb(224, 224, 224);
+}
 .excbtn:hover {
   background: #4dacc1;
 }
@@ -168,6 +213,45 @@
   width: 100px;
   font-size: 10px;
 }
+.drop-item {
+  width: 100%;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  background: white;
+  cursor: pointer;
+}
+.chooseproject {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  background: rgb(238, 244, 249);
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.185);
+  min-width: 80px;
+}
+.allap {
+  background: #dafff0;
+  margin-bottom: 2px;
+  margin-top: 5px;
+}
+.franvaro {
+  background: rgb(255, 218, 218);
+  margin-bottom: 2px;
+}
+.chooseproject:hover {
+  background: rgb(225, 238, 249) !important;
+  box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.32) !important;
+}
+.drop-item:hover {
+  background: rgb(226, 226, 226);
+}
+.v-dropdown-menu__container .v-dropdown-menu__header .v-dropdown-menu__body {
+  margin-left: -50px !important;
+}
+.dropper {
+  height: 250px !important;
+  overflow-y: scroll;
+}
+
 @media only screen and (max-width: 650px) {
   .topcont {
     width: 100%;
@@ -191,6 +275,7 @@
     font-size: 10px;
     font-weight: 400;
   }
+
   th {
     padding: 0px 0px !important;
     text-align: left;
@@ -456,15 +541,18 @@ section {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 </style>
-
+<script src="https://unpkg.com/primevue@^3/core/core.min.js"></script>
 <script>
 import Addtimeform from "@/components/Addtimeform.vue";
 import * as XLSX from "xlsx";
 import TableToExcel from "@linways/table-to-excel";
 import moment from "moment";
+import DropdownMenu from "v-dropdown-menu";
+
 export default {
   components: {
     Addtimeform,
+    DropdownMenu,
   },
   data() {
     return {
@@ -481,11 +569,15 @@ export default {
       startholder: "",
       endholder: "getTime(this.end),",
       debitfilter: "alla",
-      projectfilter: "alla",
+      projectfilter: "Alla projekt",
       sum: 0,
       i: 0,
       subar: [],
       uniqueproject: [],
+      chosenproject: "Alla projekt",
+      chosenid: "",
+      search: "",
+      exporten: "",
     };
   },
 
@@ -561,6 +653,7 @@ export default {
       return moment();
     },
     exportReportToExcel() {
+      /*
       let table = document.getElementsByTagName("table");
       TableToExcel.convert(table[0], {
         name: `${
@@ -575,8 +668,59 @@ export default {
           name: "Sheet 1",
         },
       });
-    },
+      */
+      this.exporten = this.time;
+      for (let i = 0; i < this.exporten.length; i++) {
+        delete this.exporten[i]["id"];
+        delete this.exporten[i]["nanoid"];
+        delete this.exporten[i]["fatherid"];
+        delete this.exporten[i]["Username"];
+        this.exporten[i]["Datum"] = moment(
+          parseInt(this.exporten[i]["Datum"])
+        ).format("YYYY-MM-DD");
+        if (this.exporten[i]["debit"] == "1") {
+          this.exporten[i]["debit"] = "Ja";
+        } else {
+          this.exporten[i]["debit"] = "Nej";
+        }
+      }
+      const columns = [
+        { header: "Datum", key: "Datum" },
 
+        { header: "Title", key: "Title" },
+        { header: "Name", key: "Name" },
+        { header: "Hours", key: "Hours" },
+        { header: "Minutes", key: "Minutes" },
+        { header: "Description", key: "Description" },
+        { header: "debit", key: "debit" },
+      ];
+      const data = this.exporten;
+      const ws = XLSX.utils.json_to_sheet(data);
+
+      var wscols = [
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 50 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 15 },
+      ];
+
+      ws["!cols"] = wscols;
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, `${"MX-TIDRAPPORT - "}`);
+      XLSX.writeFile(
+        wb,
+        `${
+          "MX-TIDRAPPORT - " + this.projectfilter + `-` + this.selectedfilter
+        }.xlsx`
+      );
+    },
+    dataPrimer(title) {
+      this.chosenproject = title;
+      this.projectfilter = title;
+    },
     Remove(id) {
       this.z = id - 1;
       this.x = id;
@@ -584,6 +728,7 @@ export default {
     reloadPage() {
       setTimeout(window.location.reload(), 2000);
     },
+
     filtertime() {
       this.startholder = new Date(this.start).getTime();
       this.endholder = new Date(this.end).getTime();
@@ -610,12 +755,29 @@ export default {
               );
             });
           }
-          if (this.projectfilter !== "alla") {
+          if (this.projectfilter === "Frånvaro") {
+            this.time = this.time.filter((results) => {
+              return (
+                results.Title == "VAB" ||
+                results.Title == "Semester" ||
+                results.Title == "Sjuk" ||
+                results.Title == "Ledig"
+              );
+            });
+            console.log(this.time);
+            this.projectschosen = this.projectfilter;
+          }
+          if (
+            this.projectfilter !== "Alla projekt" &&
+            this.projectfilter !== "Frånvaro"
+          ) {
+            console.log("whut");
             this.time = this.time.filter((results) => {
               return results.Title == this.projectfilter;
             });
             this.projectschosen = this.projectfilter;
           }
+
           if (this.selectedfilter !== "alla") {
             this.time = this.time.filter((results) => {
               return results.Name.includes(this.selectedfilter);
@@ -626,6 +788,7 @@ export default {
               return results.debit == this.debitfilter;
             });
           }
+
           this.subar = [];
           for (this.i = 0; this.time.length > 0; this.i++) {
             this.subar.push(
@@ -640,6 +803,17 @@ export default {
             this.sum = 0;
           }
         });
+    },
+  },
+  computed: {
+    filterFunction() {
+      return this.uniqueproject.filter((p) => {
+        // return true if the product should be visible
+
+        // in this example we just check if the search string
+        // is a substring of the product name (case insensitive)
+        return p.toLowerCase().indexOf(this.search.toLowerCase()) != -1;
+      });
     },
   },
 };

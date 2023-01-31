@@ -103,7 +103,14 @@
             </span>
             <span class="e">
               <span>Tidsbudget</span>
-              <input type="number" value="1" min="1" v-model="timebudget" />
+              <input
+                type="number"
+                value="1"
+                min="1"
+                v-model="timebudget"
+                @input="handlenumbers()"
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+              />
             </span>
             <div
               type="submit"
@@ -481,6 +488,11 @@ export default {
       });
   },
   methods: {
+    handlenumbers() {
+      if (this.timebudget == "") {
+        this.timebudget = 0;
+      }
+    },
     GetSelected() {},
     createProject() {
       var selected = new Array();
