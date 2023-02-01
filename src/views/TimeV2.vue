@@ -365,6 +365,9 @@
                       <div
                         :title="preset.Beskrivning"
                         class="presetitem"
+                        v-bind:class="{
+                          imselected: selecteddescription == preset.Beskrivning,
+                        }"
                         @click="selecteddescription = preset.Beskrivning"
                         v-for="preset in presetfilterFunction"
                         :key="preset.index"
@@ -386,6 +389,14 @@
                           ></path>
                         </svg>
                       </div>
+                      <div class="howtopreset" v-if="presets.length < 1">
+                        <div>Du har inga förinställda arbeten</div>
+                        <div>
+                          Tryck på + nedan för att skapa nya förinställda
+                          arbeten
+                        </div>
+                      </div>
+
                       <div class="presetempty" v-if="presets.length < 1"></div>
                     </div>
                   </div>
@@ -503,6 +514,21 @@
   </div>
 </template>
 <style scoped>
+.howtopreset {
+  width: 330px;
+  height: 100%;
+  justify-self: center !important;
+  align-self: center !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  grid-gap: 20px;
+}
+.imselected {
+  background: rgb(67, 147, 238) !important;
+}
 .delpreset {
   float: right;
   text-align: left;
@@ -1104,6 +1130,9 @@ a:focus {
   border-radius: 20px;
 }
 @media only screen and (max-width: 800px) {
+  .howtopreset {
+    width: 230px;
+  }
   .daypick {
     font-size: 10px;
   }
